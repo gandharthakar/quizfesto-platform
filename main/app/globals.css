@@ -6,7 +6,9 @@
 @tailwind utilities;
 
 @layer base {
-
+    .site-container {
+        @apply max-w-[1280px] mx-auto
+    }
 }
 
 @layer utilities {
@@ -14,5 +16,34 @@
 }
 
 @layer components {
+    .site-nav li a {
+        @apply transition-all delay-75 before:transition-all before:delay-75 relative before:content-[''] before:absolute before:left-0 before:bottom-[4px] before:w-full before:h-[0px];
+    }
+    .site-nav li a.active {
+        @apply text-theme-color-2 before:bg-theme-color-2 font-semibold;
+    }
+}
 
+:root {
+    --hptessw-pgnbgc: #000000;
+}
+
+.home-sw .swiper-pagination-bullet {
+    width: 12px;
+    height: 12px;
+    background-color: var(--hptessw-pgnbgc);
+    opacity: 0.2;
+    margin: 0px 5px !important;
+}
+
+.home-sw .swiper-pagination-bullet-active {
+    opacity: 0.5;
+}
+
+.home-sw .swiper-pagination {
+    bottom: 0px !important;
+}
+
+.dark {
+    --hptessw-pgnbgc: #ffffff;
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Header from './components/header';
+import RedProv from "./redux-service/reduxProvider";
 
 export const metadata: Metadata = {
 	title: "QuizFesto",
@@ -14,10 +15,12 @@ type Children = {
 
 export default function RootLayout({ children, }: Readonly<Children>) {
 	return (
-		<html lang="en">
+		<html lang="en" className="">
 			<body className="">
-				<Header />
-				{children}
+				<RedProv>
+					<Header />
+					{children}
+				</RedProv>
 			</body>
 		</html>
 	);

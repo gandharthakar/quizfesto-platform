@@ -95,7 +95,71 @@ const dump_testimonials_homepage = [
     },
 ];
 
+const dump_team_members = [
+    {
+        id: 1,
+        team_member_name: "Windsor Grey",
+        team_designation: "Chief operations officer (COO)",
+        team_member_photo: "/images/team-members/windsor-grey.jpg",
+    },
+    {
+        id: 2,
+        team_member_name: "Lucas Williams",
+        team_designation: "Director",
+        team_member_photo: "/images/team-members/lucas-williams.jpg",
+    },
+    {
+        id: 3,
+        team_member_name: "Charlotte Murphy",
+        team_designation: "Chief executive officer (CEO)",
+        team_member_photo: "/images/team-members/charlotte-murphy.jpg",
+    },
+    {
+        id: 4,
+        team_member_name: "Alexander Taylor",
+        team_designation: "Chief Marketing Officer",
+        team_member_photo: "/images/team-members/alexander-taylor.jpg",
+    },
+    {
+        id: 5,
+        team_member_name: "Sophia Evans",
+        team_designation: "Managing Director (MD)",
+        team_member_photo: "/images/team-members/sophia-evans.jpg",
+    },
+    {
+        id: 6,
+        team_member_name: "Mia Hughes",
+        team_designation: "Operations Manager",
+        team_member_photo: "/images/team-members/mia-hughes.jpg",
+    },
+];
+
+const dump_event_timeline = [
+    {
+        id: 1,
+        event_year: "2023",
+        event_description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maiores incidunt blanditiis dignissimos, enim earum mollitia."
+    },
+    {
+        id: 2,
+        event_year: "2022",
+        event_description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maiores incidunt "
+    },
+    {
+        id: 3,
+        event_year: "2021",
+        event_description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maiores incidunt blanditiis dignissimos"
+    },
+    {
+        id: 4,
+        event_year: "2020",
+        event_description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maiores incidunt blanditiis dignissimos, enim earum mollitia."
+    },
+];
+
 export {
     dump_cats_homepage,
-    dump_testimonials_homepage
+    dump_testimonials_homepage,
+    dump_team_members,
+    dump_event_timeline,
 }

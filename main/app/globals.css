@@ -9,6 +9,9 @@
     .site-container {
         @apply max-w-[1280px] mx-auto
     }
+    .about-content-1 p {
+        @apply font-noto_sans text-zinc-600 text-[16px] last:pb-0 pb-[20px] dark:text-zinc-400;
+    }
 }
 
 @layer utilities {
@@ -21,6 +24,9 @@
     }
     .site-nav li a.active {
         @apply text-theme-color-2 before:bg-theme-color-2 font-semibold;
+    }
+    .footer-navs li a.active {
+        @apply text-theme-color-2 dark:text-theme-color-2;
     }
 }
 
@@ -46,4 +52,17 @@
 
 .dark {
     --hptessw-pgnbgc: #ffffff;
+}
+
+.concard {
+    background: rgb(0,175,79);
+    background: linear-gradient(149deg, rgba(0,175,79,1) 0%, rgba(46,49,146,1) 100%);
+}
+
+.text-grd-1 {
+    background: #00AF4F;
+    background: linear-gradient(to right, #00AF4F 0%, #2E3192 74%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }

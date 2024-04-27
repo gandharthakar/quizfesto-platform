@@ -15,7 +15,7 @@ export default function Home() {
 
 				<div className="max-w-[1000px] w-full z-[3]">
 					<div className="text-center pb-[20px] md:pb-[20px]">
-						<h1 className="font-noto_sans text-zinc-900 font-bold text-[28px] md:text-[48px] leading-[38px] md:leading-[58px] dark:text-zinc-200">
+						<h1 className="font-noto_sans font-bold text-[28px] md:text-[48px] leading-[38px] md:leading-[58px] text-grd-1">
 							Register & participate in various quizzes and win exciting prizes with QuizFesto.
 						</h1>
 					</div>

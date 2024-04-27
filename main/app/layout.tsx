@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from './components/header';
 import RedProv from "./redux-service/reduxProvider";
+import Footer from "./components/footer";
 
 export const metadata: Metadata = {
 	title: "QuizFesto",
@@ -20,6 +21,7 @@ export default function RootLayout({ children, }: Readonly<Children>) {
 				<RedProv>
 					<Header />
 					{children}
+					<Footer />
 				</RedProv>
 			</body>
 		</html>

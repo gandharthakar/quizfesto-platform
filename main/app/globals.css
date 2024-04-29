@@ -12,10 +12,23 @@
     .about-content-1 p {
         @apply font-noto_sans text-zinc-600 text-[16px] last:pb-0 pb-[20px] dark:text-zinc-400;
     }
+    .capitalize-first::first-letter {
+        initial-letter: 2;
+        font-weight: bold;
+        margin-right: .75em;
+    }
 }
 
 @layer utilities {
-
+    .faq-content p {
+        @apply transition-all delay-75 font-noto_sans last:pb-0 pb-[20px] text-[16px] md:text-[18px] text-zinc-900 dark:text-zinc-300;
+    }
+    .terms-privacy-content p {
+        @apply transition-all delay-75 font-noto_sans last:pb-0 pb-[20px] text-[16px] md:text-[18px] text-zinc-900 dark:text-zinc-300;
+    }
+    .terms-privacy-content h2 {
+        @apply transition-all delay-75 font-noto_sans font-bold last:pb-0 pb-[20px] text-[25px] md:text-[30px] text-zinc-900 dark:text-zinc-300;
+    }
 }
 
 @layer components {
@@ -57,6 +70,11 @@
 .concard {
     background: rgb(0,175,79);
     background: linear-gradient(149deg, rgba(0,175,79,1) 0%, rgba(46,49,146,1) 100%);
+}
+
+.concard-rev {
+    background: rgb(46,49,146);
+    background: linear-gradient(149deg, rgba(46,49,146,1) 0%, rgba(0,175,79,1) 100%);
 }
 
 .text-grd-1 {

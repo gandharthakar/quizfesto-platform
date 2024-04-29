@@ -45,8 +45,8 @@ export default function Header(props: CompProp) {
                         </Link>
                     </li>
                     <li className="w-full menu-ms-1:w-auto px-[20px] menu-ms-1:px-0">
-                        <Link href="/faqs" title="FAQs" className={`block font-ubuntu font-medium text-[16px] menu-ms-1:text-[20px] text-zinc-800 hover:text-theme-color-2 dark:hover:text-theme-color-2 hover:before:bg-theme-color-2 dark:text-zinc-300 ${pathname === '/faqs' ? 'active' : ''}`}>
-                            FAQs
+                        <Link href="/winners" title="Winners" className={`block font-ubuntu font-medium text-[16px] menu-ms-1:text-[20px] text-zinc-800 hover:text-theme-color-2 dark:hover:text-theme-color-2 hover:before:bg-theme-color-2 dark:text-zinc-300 ${pathname === '/winners' ? 'active' : ''}`}>
+                            Winners
                         </Link>
                     </li>
                     <li className="w-full menu-ms-1:w-auto px-[20px] menu-ms-1:px-0">

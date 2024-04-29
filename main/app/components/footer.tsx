@@ -43,6 +43,11 @@ export default function Footer() {
                                         </Link>
                                     </li>
                                     <li className="last:pb-0 pb-[10px]">
+                                        <Link href="/winners" title="Winners" className={`transition-all delay-75 font-noto_sans text-[16px] font-semibold text-zinc-800 hover:text-theme-color-2 dark:text-zinc-200 dark:hover:text-theme-color-2 ${pathname === '/winners' ? 'active' : ''}`}>
+                                            Winners
+                                        </Link>
+                                    </li>
+                                    <li className="last:pb-0 pb-[10px]">
                                         <Link href="/contact" title="Contact Us" className={`transition-all delay-75 font-noto_sans text-[16px] font-semibold text-zinc-800 hover:text-theme-color-2 dark:text-zinc-200 dark:hover:text-theme-color-2 ${pathname === '/contact' ? 'active' : ''}`}>
                                             Contact Us
                                         </Link>

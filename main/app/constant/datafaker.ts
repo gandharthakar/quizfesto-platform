@@ -157,9 +157,38 @@ const dump_event_timeline = [
     },
 ];
 
+const dump_faqs_content = [
+    {
+        id: 1,
+        question: "Is every quiz participation is free ?",
+        answer: '<p>Yes every quiz we offer or announce is free for everyone and anyone can register themselves and participate.</p>'
+    },
+    {
+        id: 2,
+        question: "What are the prizes winners will get ?",
+        answer: '<p>Every month we declare 1<sup>st</sup>, 2<sup>nd</sup> & 3<sup>rd</sup> winners publically. you can find prizes in homepage. we have dedicated section over there in homepage. Prizes may varry for every compitition for each month.</p>'
+    },
+    {
+        id: 3,
+        question: "Where can i find winners of the month ?",
+        answer: '<p>You can find winners by navigation menu item called "Winners". Also you can find same link in footer (at end of the page section) too.</p>'
+    },
+    {
+        id: 4,
+        question: "What is the criteria for winning prizes ?",
+        answer: '<p>We follow 1<sup>st</sup> come 1<sup>st</sup> serve strategy. 1<sup>st</sup> winner needs to complete the quizzes within month and get score 10000 to win 1st prize. To get 2<sup>nd</sup> winner prize user needs to do score 8000 within month. And lastly to get 3<sup>rd</sup> winner prize user needs to score 6000 within month.</p>'
+    },
+    {
+        id: 5,
+        question: "What will happened if a current month passes ?",
+        answer: '<p>If a current month get passes away the your current score will get automatically reset.</p>'
+    },
+];
+
 export {
     dump_cats_homepage,
     dump_testimonials_homepage,
     dump_team_members,
     dump_event_timeline,
+    dump_faqs_content,
 }

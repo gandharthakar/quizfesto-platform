@@ -5,7 +5,7 @@ import { MdOutlineLocationOn } from "react-icons/md";
 export default function Page() {
     return (
         <>
-            <div className="transition-all delay-75 relative px-[15px] py-[100px] overflow-hidden bg-zinc-100 dark:bg-zinc-950">
+            <div className="transition-all delay-75 relative px-[15px] py-[100px] overflow-hidden bg-zinc-100 dark:bg-zinc-900">
                 <div className="w-[400px] h-[400px] absolute left-[1%] top-[50%] bg-theme-color-1 blur-[70px] opacity-[0.1] dark:opacity-[0.1] z-[1] rounded-full translate-y-[-50%]"></div>
                 <div className="w-[600px] h-[600px] absolute left-[20%] top-[50%] bg-theme-color-2 blur-[70px] opacity-[0.1] dark:opacity-[0.1] z-[1] rounded-full translate-y-[-50%]"></div>
 

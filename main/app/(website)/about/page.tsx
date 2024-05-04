@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { dump_event_timeline, dump_team_members } from "../constant/datafaker";
+import { dump_event_timeline, dump_team_members } from "../../constant/datafaker";
 
 export default function page() {
     return (

@@ -9,7 +9,7 @@ import { set_dark_mode, unset_dark_mode } from "../redux-service/slices/theme-mo
 
 export default function ThemeSwitchHeaderDesktop() {
 
-    let isDarkMode:boolean = false;
+    // let isDarkMode:boolean = false;
     const dispatch = useDispatch();
     const ThemeMode = useSelector((state: RootState) => state.site_theme_mode.dark_theme_mode);
 

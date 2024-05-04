@@ -1,10 +1,10 @@
 import Link from "next/link";
-import { dump_cats_homepage } from "./constant/datafaker";
+import { dump_cats_homepage } from "../constant/datafaker";
 import { CiUser } from "react-icons/ci";
 import { BsCompass } from "react-icons/bs";
 import { MdOutlineSportsScore } from "react-icons/md";
 import Image from "next/image";
-import HomeTestimonialsSection from "./components/homeTestimonialsSection";
+import HomeTestimonialsSection from "../components/homeTestimonialsSection";
 
 export default function Home() {
 	return (
@@ -25,7 +25,7 @@ export default function Home() {
 						</h2>
 					</div>
 					<div className="text-center">
-						<Link href="#" title="Sign Up Today" className="transition-all delay-100 inline-block bg-theme-color-1 text-white hover:bg-theme-color-1-hover-dark font-medium text-[16px] md:text-[18px] py-[13px] md:py-[15px] px-[25px] md:px-[35px] rounded-full">
+						<Link href="/sign-up" title="Sign Up Today" className="transition-all delay-100 inline-block bg-theme-color-1 text-white hover:bg-theme-color-1-hover-dark font-medium text-[16px] md:text-[18px] py-[13px] md:py-[15px] px-[25px] md:px-[35px] rounded-full">
 							Sign Up Today
 						</Link>
 					</div>

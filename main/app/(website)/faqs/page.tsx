@@ -1,10 +1,10 @@
 'use client';
 
 import { useState } from "react";
-import FAQAccordion from "../components/FAQAccordion";
+import FAQAccordion from "../../components/FAQAccordion";
 import Link from "next/link";
 import parse from 'html-react-parser';
-import { dump_faqs_content } from "../constant/datafaker";
+import { dump_faqs_content } from "../../constant/datafaker";
 
 export default function page() {
 

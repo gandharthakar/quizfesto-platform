@@ -29,6 +29,9 @@
     .terms-privacy-content h2 {
         @apply transition-all delay-75 font-noto_sans font-bold last:pb-0 pb-[20px] text-[25px] md:text-[30px] text-zinc-900 dark:text-zinc-300;
     }
+    .user-area-nav li a.active {
+        @apply bg-zinc-100 border-theme-color-2 dark:bg-zinc-900;
+    }
 }
 
 @layer components {

@@ -3,10 +3,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 
 import themeModeReducer from './slices/theme-mode/themeSwitcherSlice';
+import userAreaMenuToggleReducer from './slices/user-area/userAreaMenuToggleSlice';
 
 const store = configureStore({
     reducer: {
-        site_theme_mode: themeModeReducer
+        site_theme_mode: themeModeReducer,
+        user_area_menu_toggle: userAreaMenuToggleReducer
     },
     devTools: false,
 });

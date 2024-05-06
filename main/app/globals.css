@@ -32,6 +32,12 @@
     .user-area-nav li a.active {
         @apply bg-zinc-100 border-theme-color-2 dark:bg-zinc-900;
     }
+    .user-area-set-nav li a {
+        @apply transition-all delay-75 inline-block font-noto_sans text-[16px] md:text-[18px] text-zinc-800 font-semibold py-[10px] md:py-[15px] px-[15px] bg-zinc-200 min-w-[140px] md:min-w-[180px] text-center hover:bg-theme-color-1 hover:text-zinc-200 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-theme-color-1;
+    }
+    .user-area-set-nav li a.active {
+        @apply bg-theme-color-1 text-zinc-200;
+    }
 }
 
 @layer components {

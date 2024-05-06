@@ -20,6 +20,8 @@ export default function UserAreaNavBar() {
     const user_id = params?.user_id[0];
     const isMenuOpen = useSelector((state: RootState) => state.user_area_menu_toggle.is_user_area_menu_open);
 
+    const settingRoutes:string[] = [`/user/settings/${user_id}`, `/user/settings/password/${user_id}`, `/user/settings/profle-photo/${user_id}`];
+
     return (
         <>
             <div className="hidden fixed top-0 left-0 w-full h-full z-[20] bg-black opacity-[0.4]"></div>
@@ -94,9 +96,9 @@ export default function UserAreaNavBar() {
                                 </li>
                                 <li className="w-full">
                                     <Link 
-                                        href={`/settings/1`} 
+                                        href={`/user/settings/1`} 
                                         title="Settings" 
-                                        className={`transition-all delay-75 py-[10px] md:py-[15px] block px-[15px] border-l-[4px] border-solid border-transparent font-noto_sans font-semibold text-[16px] md:text-[18px] text-zinc-800 hover:bg-zinc-100 hover:border-theme-color-2 dark:text-zinc-400 dark:hover:bg-zinc-900 ${pathName === '/settings/'+user_id ? 'active' : ''}`}
+                                        className={`transition-all delay-75 py-[10px] md:py-[15px] block px-[15px] border-l-[4px] border-solid border-transparent font-noto_sans font-semibold text-[16px] md:text-[18px] text-zinc-800 hover:bg-zinc-100 hover:border-theme-color-2 dark:text-zinc-400 dark:hover:bg-zinc-900 ${settingRoutes.includes(pathName) ? 'active' : ''}`}
                                         onClick={() => dispatch(close_user_area_menu())}
                                     >
                                         <div className="flex gap-x-[10px] items-center">

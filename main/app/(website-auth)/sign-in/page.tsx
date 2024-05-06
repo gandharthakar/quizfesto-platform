@@ -37,6 +37,7 @@ export default function page() {
 
     const handleFormSubmit: SubmitHandler<validationSchema> = (formdata) => {
         console.log(formdata);
+        reset();
     }
     
     useEffect(() => {

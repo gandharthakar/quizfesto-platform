@@ -11,7 +11,7 @@ export default function UserAreaSettingsTabs() {
 
     return (
         <>
-            <ul className="user-area-set-nav flex flex-wrap">
+            <ul className="user-area-set-nav flex flex-wrap flex-row lg:flex-col">
                 <li>
                     <Link
                         href={`/user/settings/1`}
@@ -25,9 +25,18 @@ export default function UserAreaSettingsTabs() {
                     <Link
                         href={`/user/settings/password/1`}
                         title="Password"
-                        className={`${pathName === '/user/settings/password'+user_id ? 'active' : ''}`}
+                        className={`${pathName === '/user/settings/password/'+user_id ? 'active' : ''}`}
                     >
                         Password
+                    </Link>
+                </li>
+                <li>
+                    <Link
+                        href={`/user/settings/phone/1`}
+                        title="Phone"
+                        className={`${pathName === '/user/settings/phone/'+user_id ? 'active' : ''}`}
+                    >
+                        Phone
                     </Link>
                 </li>
                 <li>

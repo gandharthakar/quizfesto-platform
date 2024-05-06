@@ -20,7 +20,7 @@ export default function UserAreaNavBar() {
     const user_id = params?.user_id[0];
     const isMenuOpen = useSelector((state: RootState) => state.user_area_menu_toggle.is_user_area_menu_open);
 
-    const settingRoutes:string[] = [`/user/settings/${user_id}`, `/user/settings/password/${user_id}`, `/user/settings/profle-photo/${user_id}`];
+    const settingRoutes:string[] = [`/user/settings/${user_id}`, `/user/settings/password/${user_id}`, `/user/settings/phone/${user_id}`, `/user/settings/profle-photo/${user_id}`];
 
     return (
         <>
@@ -66,9 +66,9 @@ export default function UserAreaNavBar() {
                                 </li>
                                 <li className="w-full">
                                     <Link 
-                                        href={`/my-winnings/1`} 
+                                        href={`/user/my-winnings/1`} 
                                         title="My Winnings" 
-                                        className={`transition-all delay-75 py-[10px] md:py-[15px] block px-[15px] border-l-[4px] border-solid border-transparent font-noto_sans font-semibold text-[16px] md:text-[18px] text-zinc-800 hover:bg-zinc-100 hover:border-theme-color-2 dark:text-zinc-400 dark:hover:bg-zinc-900 ${pathName === '/my-winnings/'+user_id ? 'active' : ''}`}
+                                        className={`transition-all delay-75 py-[10px] md:py-[15px] block px-[15px] border-l-[4px] border-solid border-transparent font-noto_sans font-semibold text-[16px] md:text-[18px] text-zinc-800 hover:bg-zinc-100 hover:border-theme-color-2 dark:text-zinc-400 dark:hover:bg-zinc-900 ${pathName === '/user/my-winnings/'+user_id ? 'active' : ''}`}
                                         onClick={() => dispatch(close_user_area_menu())}
                                     >
                                         <div className="flex gap-x-[10px] items-center">
@@ -81,9 +81,9 @@ export default function UserAreaNavBar() {
                                 </li>
                                 <li className="w-full">
                                     <Link 
-                                        href={`/my-participation/1`} 
+                                        href={`/user/my-participation/1`} 
                                         title="My Participation" 
-                                        className={`transition-all delay-75 py-[10px] md:py-[15px] block px-[15px] border-l-[4px] border-solid border-transparent font-noto_sans font-semibold text-[16px] md:text-[18px] text-zinc-800 hover:bg-zinc-100 hover:border-theme-color-2 dark:text-zinc-400 dark:hover:bg-zinc-900 ${pathName === '/my-participation/'+user_id ? 'active' : ''}`}
+                                        className={`transition-all delay-75 py-[10px] md:py-[15px] block px-[15px] border-l-[4px] border-solid border-transparent font-noto_sans font-semibold text-[16px] md:text-[18px] text-zinc-800 hover:bg-zinc-100 hover:border-theme-color-2 dark:text-zinc-400 dark:hover:bg-zinc-900 ${pathName === '/user/my-participation/'+user_id ? 'active' : ''}`}
                                         onClick={() => dispatch(close_user_area_menu())}
                                     >
                                         <div className="flex gap-x-[10px] items-center">

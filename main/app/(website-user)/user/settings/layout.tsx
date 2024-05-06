@@ -11,8 +11,12 @@ export default function RootLayout({ children, }: Readonly<Children>) {
 		<div>
             <RedProv>
                 <div className="py-[25px]">
-                    <UserAreaSettingsTabs />
-                    {children}
+                    <div className="flex flex-col lg:flex-row gap-x-[25px]">
+                        <UserAreaSettingsTabs />
+                        <div className="w-full lg:flex-1">
+                            {children}
+                        </div>
+                    </div>
                 </div>
             </RedProv>
         </div>

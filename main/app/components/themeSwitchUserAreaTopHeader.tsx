@@ -23,7 +23,7 @@ export default function ThemeSwitchUserAreaTopHeader() {
         } else {
             dispatch(unset_dark_mode());
         }
-    }, []);
+    });
 
     const toggleTheme = () => {
         if(!ThemeMode) {

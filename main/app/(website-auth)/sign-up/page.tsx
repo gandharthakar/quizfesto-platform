@@ -11,7 +11,7 @@ import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 
-export default function page() {
+export default function Page() {
 
     const dispatch = useDispatch();
     const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -66,7 +66,7 @@ export default function page() {
         } else {
             dispatch(unset_dark_mode());
         }
-    }, []);
+    });
 
     return (
         <>

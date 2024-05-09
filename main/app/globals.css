@@ -63,7 +63,7 @@
         @apply transition-all delay-75 inline-block bg-theme-color-1 py-[10px] px-[20px] md:py-[10px] md:px-[25px] font-noto_sans text-[16px] md:text-[18px] text-white hover:bg-theme-color-1-hover-dark;
     }
     .goggle-lsbtn {
-        @apply transition-all delay-75 block w-full max-w-[250px] mx-auto md:max-w-none md:mx-0 border-[2px] border-solid border-zinc-800 rounded-full py-[10px] md:py-[12px] px-[15px] font-noto_sans text-[17px] md:text-[18px] font-semibold dark:border-zinc-300 dark:text-zinc-300;
+        @apply transition-all delay-75 block w-full max-w-[250px] mx-auto md:max-w-none md:mx-0 border-[2px] border-solid border-zinc-800 rounded-full py-[10px] md:py-[12px] px-[15px] font-noto_sans text-[17px] md:text-[18px] font-semibold hover:bg-zinc-200 dark:border-zinc-300 dark:text-zinc-300 dark:hover:bg-zinc-800;
     }
 }
 

@@ -25,7 +25,7 @@ export default function ThemeSwitchHeaderDesktop() {
         } else {
             dispatch(unset_dark_mode());
         }
-    }, []);
+    });
 
     const toggleTheme = () => {
         if(!ThemeMode) {

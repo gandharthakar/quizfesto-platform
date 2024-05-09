@@ -19,7 +19,7 @@ export default function Footer() {
                     <div className="w-full md:w-auto">
                         <div>
                             <Link href="/" title="QuizFesto Home">
-                                <Image src="images/quizfesto-logo-final.svg" alt="logo" width="180" height="38" className="w-[135px] h-[28px] menu-ms-1:w-[180px] menu-ms-1:h-[38px]" priority={true} />
+                                <Image src="/images/quizfesto-logo-final.svg" alt="logo" width="180" height="38" className="w-[135px] h-[28px] menu-ms-1:w-[180px] menu-ms-1:h-[38px]" priority={true} />
                             </Link>
                         </div>
                         <div className="hidden md:block pt-[5px]">

@@ -11,7 +11,7 @@ import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 
-export default function page() {
+export default function Page() {
 
     const dispatch = useDispatch();
     const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -48,7 +48,7 @@ export default function page() {
         } else {
             dispatch(unset_dark_mode());
         }
-    }, []);
+    });
 
     return (
         <>
@@ -137,7 +137,7 @@ export default function page() {
                     </div>
                     <div className="w-full text-center">
                         <p className="font-noto_sans text-zinc-600 text-[14px] md:text-[16px] font-semibold dark:text-zinc-400">
-                            Don't have an account ?&nbsp;
+                            {`Don't have an account ?`}&nbsp;
                             <span className="font-bold dark:text-zinc-300">
                                 Please <Link href="/sign-up" title="Sign In" className="underline">Sign Up</Link>
                             </span>

@@ -6,7 +6,7 @@ import Link from "next/link";
 import parse from 'html-react-parser';
 import { dump_faqs_content } from "../../constant/datafaker";
 
-export default function page() {
+export default function Page() {
 
     const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
@@ -56,7 +56,7 @@ export default function page() {
                 <div className="site-container">
                     <div className="pb-[10px] md:pb-[20px] text-center">
                         <h2 className="transition-all delay-75 inline-block font-ubuntu font-bold text-[25px] md:text-[30px] text-zinc-100">
-                            Can't find what you're looking for ?
+                            {`Can't find what you're looking for ?`}
                         </h2>
                     </div>
                     <div className="text-center">

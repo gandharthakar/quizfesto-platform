@@ -13,7 +13,7 @@ export default function Page() {
                     <div className="lg:min-h-[calc(100vh-200px)] flex items-start lg:items-center lg:justify-between gap-x-[50px] gap-y-[20px] flex-col lg:flex-row">
                         <div className="w-full lg:flex-1">
                             <h1 className="transition-all delay-75 font-ubuntu text-[25px] md:text-[50px] text-zinc-800 font-bold dark:text-zinc-200">
-                                Let's Talk!
+                                {`Let's Talk!`}
                             </h1>
                         </div>
 

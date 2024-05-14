@@ -17,6 +17,33 @@
         font-weight: bold;
         margin-right: .75em;
     }
+    .quizques-options-list {
+        @apply flex flex-col gap-y-[20px];
+        & li {
+            @apply w-full;
+            & .option-btn {
+                @apply transition-all delay-75 w-full flex items-start gap-x-[10px] py-[10px] md:py-[12px] px-[10px] md:px-[15px] border-2 border-solid border-zinc-200 font-noto_sans text-[14px] md:text-[16px] font-semibold text-zinc-800 hover:border-zinc-800 hover:bg-zinc-100 dark:text-zinc-200 dark:border-zinc-800 dark:hover:border-zinc-400 dark:hover:bg-zinc-800;
+                & .check-round {
+                    @apply relative inline-block w-[20px] h-[20px] md:w-[25px] md:h-[25px] border-2 border-solid border-zinc-400 text-zinc-800 rounded-full dark:border-zinc-700;
+                    & .tick-icon {
+                        @apply inline-block opacity-0 absolute w-[21px] h-[21px] md:w-[26px] md:h-[26px] top-[50%] left-[50%] translate-x-[calc(-50%-0.1px)] md:translate-x-[calc(-50%-0.5px)] translate-y-[calc(-50%-0.1px)] md:translate-y-[calc(-50%-0.5px)] z-[2];
+                    }
+                }
+            }
+            & .radio-btn {
+                @apply hidden;
+                &:checked + .option-btn {
+                    @apply border-zinc-800 bg-zinc-100 dark:bg-zinc-800 dark:border-zinc-400;
+                    & .check-round {
+                        @apply dark:text-zinc-200 dark:border-zinc-200;
+                        & .tick-icon {
+                            @apply opacity-[1];
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 @layer utilities {

@@ -27,6 +27,7 @@ export default function QuizCard(props: QuizCardPropsTypes) {
 
     let { quiz_id, quiz_cover_photo="", quiz_title, quiz_categories, quiz_summary, quiz_description, number_of_question, quiz_duration, quiz_terms } = props;
     let defaultImage = "https://placehold.co/1000x700/png";
+    let user_id = "1";
 
     return (
         <>
@@ -105,7 +106,7 @@ export default function QuizCard(props: QuizCardPropsTypes) {
                                 T & C Applied.
                             </div>
                             <div>
-                                <Link href={`/play-quiz/${quiz_id}`} title="Participate" className="transition-all delay-75 inline-block px-[15px] py-[6px] md:px-[25px] md:py-[8px] font-ubuntu text-[16px] md:text-[18px] text-white bg-theme-color-1 hover:bg-theme-color-1-hover-dark">
+                                <Link href={`/play-quiz/${quiz_id}/${user_id}`} title="Participate" className="transition-all delay-75 inline-block px-[15px] py-[6px] md:px-[25px] md:py-[8px] font-ubuntu text-[16px] md:text-[18px] text-white bg-theme-color-1 hover:bg-theme-color-1-hover-dark">
                                     Participate
                                 </Link>
                             </div>

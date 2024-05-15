@@ -7,7 +7,8 @@ const nextConfig = {
                 hostname: 'placehold.co',
             },
         ]
-    }
+    },
+    reactStrictMode: false,
 };
 
 export default nextConfig;

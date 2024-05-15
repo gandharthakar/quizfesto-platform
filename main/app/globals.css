@@ -84,7 +84,7 @@
         @apply transition-all delay-75 block w-full pl-[15px] pr-[35px] py-[8px] border border-solid border-zinc-600 bg-white text-[16px] md:text-[18px] font-noto_sans font-semibold focus:outline-[0] focus:border-theme-color-2 placeholder-zinc-500 dark:bg-zinc-800 dark:placeholder-zinc-500 dark:text-zinc-200;
     }
     .ws-input-error {
-        @apply block font-noto_sans text-[14px] text-red-600 font-semibold;
+        @apply block font-noto_sans text-[12px] md:text-[14px] text-red-600 font-semibold;
     }
     .ws-button-m1 {
         @apply transition-all delay-75 inline-block bg-theme-color-1 py-[10px] px-[20px] md:py-[10px] md:px-[25px] font-noto_sans text-[16px] md:text-[18px] text-white hover:bg-theme-color-1-hover-dark;
@@ -135,3 +135,19 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+
+.spinner {
+    --spinner-width: 6px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: radial-gradient(farthest-side,#00af4f 94%,#0000) top/var(--spinner-width) var(--spinner-width) no-repeat,conic-gradient(#0000 30%,#00af4f);
+    mask: radial-gradient(farthest-side,#0000 calc(100% - var(--spinner-width)),#000 0);
+    animation: spinner-c7wet2 1s infinite linear;
+ }
+ 
+ @keyframes spinner-c7wet2 {
+    100% {
+       transform: rotate(1turn);
+    }
+ }

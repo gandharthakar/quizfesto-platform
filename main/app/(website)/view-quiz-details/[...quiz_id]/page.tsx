@@ -23,6 +23,7 @@ export default function Page() {
     const params = useParams();
     const qz_id = params.quiz_id[0];
     const data = dump_quizzes_list.filter((dt) => dt.quiz_id.toString() === qz_id);
+    let user_id = "1";
     let defaultImage = "https://placehold.co/1000x700/png";
 
     const prepTermsArr = (data:string) => {
@@ -233,7 +234,7 @@ export default function Page() {
                                 </div>
                             </div>
                             <div className="block lg:hidden">
-                                <Link href={`/play-quiz/${qz_id}`} title="Participate" className="transition-all delay-75 block w-full text-center px-[15px] py-[8px] md:px-[25px] md:py-[10px] font-ubuntu text-[18px] md:text-[20px] text-white bg-theme-color-1 hover:bg-theme-color-1-hover-dark">
+                                <Link href={`/play-quiz/${qz_id}/${user_id}`} title="Participate" className="transition-all delay-75 block w-full text-center px-[15px] py-[8px] md:px-[25px] md:py-[10px] font-ubuntu text-[18px] md:text-[20px] text-white bg-theme-color-1 hover:bg-theme-color-1-hover-dark">
                                     Participate
                                 </Link>
                             </div>
@@ -324,7 +325,7 @@ export default function Page() {
                                         </div>
                                     </div>
                                     <div>
-                                        <Link href={`/play-quiz/${qz_id}`} title="Participate" className="transition-all delay-75 block w-full text-center px-[15px] py-[8px] md:px-[25px] md:py-[10px] font-ubuntu text-[18px] md:text-[20px] text-white bg-theme-color-1 hover:bg-theme-color-1-hover-dark">
+                                        <Link href={`/play-quiz/${qz_id}/${user_id}`} title="Participate" className="transition-all delay-75 block w-full text-center px-[15px] py-[8px] md:px-[25px] md:py-[10px] font-ubuntu text-[18px] md:text-[20px] text-white bg-theme-color-1 hover:bg-theme-color-1-hover-dark">
                                             Participate
                                         </Link>
                                     </div>

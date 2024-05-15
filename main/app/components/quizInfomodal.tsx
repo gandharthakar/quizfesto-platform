@@ -1,12 +1,13 @@
 'use client';
 
-import { useEffect } from "react";
+import React from "react";
+import { useEffect, useState } from "react";
 import { IoCloseSharp } from "react-icons/io5";
 
 interface CompProp {
     open_modal_on_page_load?: boolean,
-    openState: boolean,
-    setOpenState: any,
+    openState?: boolean,
+    setOpenState?: any,
     modal_heading: string,
     backdrop?: boolean,
     hide_modal_on_backdrop_click?: boolean,
@@ -14,7 +15,7 @@ interface CompProp {
     children: React.ReactNode
 }
 
-export default function QuizInfoModal(props: CompProp) {
+function QuizInfoModal(props: CompProp) {
 
     let { open_modal_on_page_load=false, openState, setOpenState, modal_heading, backdrop=true, hide_modal_on_backdrop_click, modal_max_width=600, children } = props;
 
@@ -68,3 +69,5 @@ export default function QuizInfoModal(props: CompProp) {
         </>
     )
 }
+
+export default React.memo(QuizInfoModal);

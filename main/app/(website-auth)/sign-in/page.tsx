@@ -135,11 +135,18 @@ export default function Page() {
                             </div>
                         </div>
                     </div>
-                    <div className="w-full text-center">
+                    <div className="w-full text-center pb-[10px]">
                         <p className="font-noto_sans text-zinc-600 text-[14px] md:text-[16px] font-semibold dark:text-zinc-400">
                             {`Don't have an account ?`}&nbsp;
                             <span className="font-bold dark:text-zinc-300">
                                 Please <Link href="/sign-up" title="Sign In" className="underline">Sign Up</Link>
+                            </span>
+                        </p>
+                    </div>
+                    <div className="w-full text-center">
+                        <p className="font-noto_sans text-zinc-600 text-[14px] md:text-[16px] font-semibold dark:text-zinc-400">
+                            <span className="font-bold dark:text-zinc-300">
+                                <Link href="#" title="Forgot Your Password ?" className="underline">Forgot Your Password ?</Link>
                             </span>
                         </p>
                     </div>

@@ -274,11 +274,14 @@ const dump_quiz_data = {
     quiz_id: "quiz-1",
     quiz_dev_time: "00:01:00",
     quiz_total_question: 5,
+    quiz_total_marks: 5,
+    quiz_estimated_time: "00:02:00",
+    quiz_display_time: '2 Mins',
     only_q_a_opts: [
         {
             question_id: "ques-1",
             question_text: "Q1 This is demo question text ?",
-            question_mark: 1,
+            question_marks: 1,
             question_options: [
                 {
                     option_id: "ques-1-opt-1",
@@ -301,7 +304,7 @@ const dump_quiz_data = {
         {
             question_id: "ques-2",
             question_text: "Q2 This is demo question text ?",
-            question_mark: 1,
+            question_marks: 1,
             question_options: [
                 {
                     option_id: "ques-2-opt-1",
@@ -324,7 +327,7 @@ const dump_quiz_data = {
         {
             question_id: "ques-3",
             question_text: "Q3 This is demo question text ?",
-            question_mark: 1,
+            question_marks: 1,
             question_options: [
                 {
                     option_id: "ques-3-opt-1",
@@ -347,7 +350,7 @@ const dump_quiz_data = {
         {
             question_id: "ques-4",
             question_text: "Q4 This is demo question text ?",
-            question_mark: 1,
+            question_marks: 1,
             question_options: [
                 {
                     option_id: "ques-4-opt-1",
@@ -370,7 +373,7 @@ const dump_quiz_data = {
         {
             question_id: "ques-5",
             question_text: "Q5 This is demo question text ?",
-            question_mark: 1,
+            question_marks: 1,
             question_options: [
                 {
                     option_id: "ques-5-opt-1",

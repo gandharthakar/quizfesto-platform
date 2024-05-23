@@ -46,7 +46,7 @@ export default function Page() {
         ? window.location.origin
         : '';
         setWin(win);
-    });
+    }, [setWin]);
 
     let share_uri =  `${win}/view-quiz-details/${qz_id}`;
     const copyURI = () => {

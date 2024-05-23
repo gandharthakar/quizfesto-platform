@@ -83,22 +83,22 @@ export default function Footer() {
                                 <ul className="flex flex-wrap gap-x-[20px] md:gap-x-[20px] gap-y-[10px]">
                                     <li>
                                         <Link href="#" title="Follow us on Facebook" target="_blank">
-                                            <FaFacebook size={30} className="text-zinc-800 dark:text-zinc-200 w-[30px] h-[30px] md:w-[30px] md:h-[30px]" />
+                                            <FaFacebook size={30} className="transition-all delay-75 text-zinc-800 dark:text-zinc-200 w-[30px] h-[30px] md:w-[30px] md:h-[30px] hover:text-theme-color-2 dark:hover:text-theme-color-2" />
                                         </Link>
                                     </li>
                                     <li>
                                         <Link href="#" title="Follow us on Twitter" target="_blank">
-                                            <BsTwitterX size={30} className="text-zinc-800 dark:text-zinc-200 w-[30px] h-[30px] md:w-[30px] md:h-[30px]" />
+                                            <BsTwitterX size={30} className="transition-all delay-75 text-zinc-800 dark:text-zinc-200 w-[30px] h-[30px] md:w-[30px] md:h-[30px] hover:text-theme-color-2 dark:hover:text-theme-color-2" />
                                         </Link>
                                     </li>
                                     <li>
                                         <Link href="#" title="Chat with us on WhatsApp" target="_blank">
-                                            <BsWhatsapp size={30} className="text-zinc-800 dark:text-zinc-200 w-[30px] h-[30px] md:w-[30px] md:h-[30px]" />
+                                            <BsWhatsapp size={30} className="transition-all delay-75 text-zinc-800 dark:text-zinc-200 w-[30px] h-[30px] md:w-[30px] md:h-[30px] hover:text-theme-color-2 dark:hover:text-theme-color-2" />
                                         </Link>
                                     </li>
                                     <li>
                                         <Link href="#" title="Follow us on Instagram" target="_blank">
-                                            <GrInstagram size={30} className="text-zinc-800 dark:text-zinc-200 w-[30px] h-[30px] md:w-[30px] md:h-[30px]" />
+                                            <GrInstagram size={30} className="transition-all delay-75 text-zinc-800 dark:text-zinc-200 w-[30px] h-[30px] md:w-[30px] md:h-[30px] hover:text-theme-color-2 dark:hover:text-theme-color-2" />
                                         </Link>
                                     </li>
                                 </ul>

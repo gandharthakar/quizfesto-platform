@@ -1,7 +1,7 @@
 'use client';
 
 import React from "react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { IoCloseSharp } from "react-icons/io5";
 
 interface CompProp {
@@ -13,15 +13,17 @@ interface CompProp {
     hide_modal_on_backdrop_click?: boolean,
     modal_max_width?: number,
     children: React.ReactNode
+    callBackAfterModalClose?: any,
 }
 
 function QuizInfoModal(props: CompProp) {
 
-    let { open_modal_on_page_load=false, openState, setOpenState, modal_heading, backdrop=true, hide_modal_on_backdrop_click, modal_max_width=600, children } = props;
+    let { open_modal_on_page_load=false, openState, setOpenState, modal_heading, backdrop=true, hide_modal_on_backdrop_click, modal_max_width=600, children, callBackAfterModalClose } = props;
 
     const handleBackDropClick = () => {
         if(hide_modal_on_backdrop_click) {
             setOpenState(false);
+            callBackAfterModalClose();
         }
     }
     let calcmaxw = `calc(100% - 30px)`;
@@ -30,7 +32,7 @@ function QuizInfoModal(props: CompProp) {
         if(open_modal_on_page_load) {
             setOpenState(true);
         }
-    }, [open_modal_on_page_load]);
+    }, [open_modal_on_page_load, setOpenState]);
 
     return (
         <>

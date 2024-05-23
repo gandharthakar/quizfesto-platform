@@ -1,7 +1,7 @@
 'use client';
 
 import { set_dark_mode, unset_dark_mode } from "@/app/redux-service/slices/theme-mode/themeSwitcherSlice";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useStopwatch } from "react-timer-hook";
 import { FaClock } from "react-icons/fa6";
@@ -9,10 +9,19 @@ import { IoIosCheckmarkCircle } from "react-icons/io";
 import QuizInfoModal from "@/app/components/quizInfomodal";
 import { useRouter, useParams } from "next/navigation";
 import { dump_quiz_data } from "@/app/constant/datafaker";
+import { clear_tqd, set_tqd } from "@/app/redux-service/slices/quiz-playground/transferQuizDataslice";
+
+interface AnswObj {
+    question_id: string,
+    user_choosen_option_id: string
+}
 
 let currentQuestionIndex:number = 0;
+let atm_data:AnswObj[] = [];
+
 export default function Page() {
 
+    // console.log("comp re-render.");
     const router = useRouter();
     const params = useParams();
     let quiz_id = params.quiz_id[0];
@@ -24,18 +33,22 @@ export default function Page() {
     const [currentQuestionCount, setCurrentQuestionCount] = useState<number>(1);
     // const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
     const [totalQuestions, setTotalQuestions] = useState<number>(dump_quiz_data.quiz_total_question);
+    const [totalMarks, setTotalMarks] = useState<string | number>(dump_quiz_data.quiz_total_marks);
+    const [quizEstTime, setQuizEstTime] = useState<string>(dump_quiz_data.quiz_estimated_time);
     const [selectedAnswer, setSelectedAnswer] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isError, setIsError] = useState<boolean>(false);
     const [isFinishing, setIsFinishing] = useState<boolean>(false);
     interface QuizQuestion {
         question_id: string,
-        question_text: string
+        question_text: string,
+        question_marks: number | string
     }
     const [currentQuestion, setCurrentQuestion] = useState<QuizQuestion>(
         {
             question_id: dump_quiz_data.only_q_a_opts[currentQuestionIndex].question_id,
-            question_text: dump_quiz_data.only_q_a_opts[currentQuestionIndex].question_text
+            question_text: dump_quiz_data.only_q_a_opts[currentQuestionIndex].question_text,
+            question_marks: dump_quiz_data.only_q_a_opts[currentQuestionIndex].question_marks,
         }
     );
 
@@ -44,6 +57,7 @@ export default function Page() {
         option_text: string
     }
     const [currentQuestionOptions, setCurrentQuestionOptions] = useState<QuizQuestionOpts[]>(dump_quiz_data.only_q_a_opts[currentQuestionIndex].question_options);
+    const [timing, setTiming] = useState<string>('');
 
     const CreateRadioButton = (opt_id:string, opt_txt:string, sa:string, ch:any) => {
         return (
@@ -71,13 +85,12 @@ export default function Page() {
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSelectedAnswer(event.target.value);
-        // console.log(event.target.value);
         setIsError(false);
     };
 
     const Radio = useMemo(() => {
         return currentQuestionOptions.map((itm) => (<li key={itm.option_id}>{CreateRadioButton(itm.option_id, itm.option_text, selectedAnswer, handleChange)}</li>));
-    }, [handleChange]);
+    }, [currentQuestionOptions, selectedAnswer]);
 
     const handleClick = (e: any) => {
         e.preventDefault();
@@ -104,19 +117,49 @@ export default function Page() {
             setCurrentQuestion(() => {
                 return {
                     question_id: dump_quiz_data.only_q_a_opts[currentQuestionIndex].question_id,
-                    question_text: dump_quiz_data.only_q_a_opts[currentQuestionIndex].question_text
+                    question_text: dump_quiz_data.only_q_a_opts[currentQuestionIndex].question_text,
+                    question_marks: dump_quiz_data.only_q_a_opts[currentQuestionIndex].question_marks,
                 }
             });
             setCurrentQuestionOptions(dump_quiz_data.only_q_a_opts[currentQuestionIndex].question_options);
-            // Reset Radio Buttons.
+            
+            let obj = {
+                question_id: currentQuestion.question_id,
+                user_choosen_option_id: selectedAnswer,
+                question_marks: currentQuestion.question_marks,
+            }
+            atm_data.push(obj);
+            // console.log(atm_data);
+
             if(currentQuestionCount === totalQuestions) {
-                // console.log("This is last");
+                pause();
                 router.push(`/submit-score/${quiz_id}/${user_id}`);
                 setIsFinishing(true);
+                const prepData = {
+                    time_taken: timing,
+                    attempted_data: atm_data,
+                    quiz_total_marks: totalMarks,
+                    quiz_estimated_time: quizEstTime,
+                }
+                // console.log(prepData);
+
+                let temp_ls_dt = localStorage.getItem('transfer_quiz_data');
+                if(temp_ls_dt) {
+                    localStorage.removeItem('transfer_quiz_data');
+                    localStorage.setItem('transfer_quiz_data', JSON.stringify(prepData));
+                }
+                dispatch(clear_tqd());
+                dispatch(set_tqd(prepData));
             } else {
+                // Reset Radio Buttons.
                 setSelectedAnswer('');
             }
         }
+    }
+
+    const hideModalOnClick = () => {
+        setShowInfoModal(false);
+        start();
     }
 
     useEffect(() => {
@@ -127,7 +170,14 @@ export default function Page() {
         } else {
             dispatch(unset_dark_mode());
         }
-    });
+
+        let temp_ls_dt = localStorage.getItem('transfer_quiz_data');
+        if(!temp_ls_dt) {
+            localStorage.setItem('transfer_quiz_data', JSON.stringify({}));
+        }
+
+        setTiming(`${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`);
+    }, [hours, minutes, seconds, setTiming, dispatch]);
 
     return (
         <>
@@ -139,6 +189,7 @@ export default function Page() {
                 modal_max_width={400}
                 openState={showInfoModal} 
                 setOpenState={setShowInfoModal}
+                callBackAfterModalClose={start}
             >
                 <div className="px-[20px] md:px-[25px] py-[20px]">
                     <ul className="flex flex-col gap-y-[15px] list-disc pl-[15px] md:pl-[20px]">
@@ -158,7 +209,7 @@ export default function Page() {
                             type="button" 
                             title="Ok I Understood" 
                             className="transition-all delay-75 w-full py-[10px] px-[15px] font-noto_sans text-[16px] font-semibold text-white bg-theme-color-1 hover:bg-theme-color-1-hover-dark" 
-                            onClick={() => setShowInfoModal(false)}
+                            onClick={hideModalOnClick}
                         >
                             Ok I Understood
                         </button>

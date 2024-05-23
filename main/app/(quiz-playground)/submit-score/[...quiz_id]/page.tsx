@@ -1,14 +1,76 @@
 'use client';
 
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { set_dark_mode, unset_dark_mode } from "@/app/redux-service/slices/theme-mode/themeSwitcherSlice";
 import Link from "next/link";
 import Image from "next/image";
+import { RootState } from "@/app/redux-service/store";
+import { dump_quiz_data } from "@/app/constant/datafaker";
+
+interface QuizGivenAns {
+    question_id: string,
+    user_choosen_option_id: string,
+    question_marks: number
+}
+
+interface QuizQues {
+    question_id: string,
+    correct_option_id: string
+}
 
 export default function Page() {
 
     const dispatch = useDispatch();
+    const trqzdt = useSelector((state: RootState) => state.transfer_quiz_data);
+
+    const [corrQAArr, setCorrQAArr] = useState<QuizQues[]>(dump_quiz_data.only_corr_answ);
+    const [usrAnsw, setUserAnsw] = useState<QuizGivenAns[]>([]);
+
+    const [timeTaken, setTimeTaken] = useState<string>("00:00:00");
+    const [estTime, setEstTime] = useState<string>("00:00:00");
+    const [totalMarks, setTotalMarks] = useState<string>("0");
+    const [correctAnswers, setCorectAnswers] = useState<number>(0);
+    const [totalScore, setTotalScore] = useState<number>(0);
+
+    function countCorrectAnswers(questions: QuizQues[], answers: QuizGivenAns[]) {
+        // Initialize a counter for correct answers
+        let correctCount = 0;
+        let totalMarks = 0;
+        let arr = [];
+
+        // Loop through each user answer
+        for (const answer of answers) {
+            const questionId = answer.question_id;
+            const userOptionId = answer.user_choosen_option_id;
+
+            // Find the corresponding question object
+            const matchingQuestion = questions.find(question => question.question_id === questionId);
+
+            // Check if question exists and user option matches correct answer
+            if (matchingQuestion && matchingQuestion.correct_option_id === userOptionId) {
+                correctCount++;
+                arr.push(answer);
+            }
+        }
+
+        for (const mark of arr) {
+            totalMarks += mark.question_marks;
+        }
+
+        return {
+            correct_answers: correctCount,
+            total_mark: totalMarks
+        };
+    }
+
+    const handleScoreSubmissionClick = () => {
+        if(trqzdt.attempted_data.length > 0) {
+            console.log(trqzdt);
+        } else {
+            alert("No Data Found.");
+        }
+    }
 
     useEffect(() => {
         let glsi = localStorage.getItem('site-dark-mode');
@@ -18,7 +80,20 @@ export default function Page() {
         } else {
             dispatch(unset_dark_mode());
         }
-    });
+
+        let ls_fiqdata = localStorage.getItem('transfer_quiz_data');
+        const prsfid = ls_fiqdata ? JSON.parse(ls_fiqdata) : '';
+        if(prsfid) {
+            setTimeTaken(prsfid.time_taken);
+            setEstTime(prsfid.quiz_estimated_time);
+            setTotalMarks(prsfid.quiz_total_marks);
+            setUserAnsw(prsfid.attempted_data);
+
+            setCorectAnswers(countCorrectAnswers(corrQAArr, usrAnsw).correct_answers);
+            setTotalScore(countCorrectAnswers(corrQAArr, usrAnsw).total_mark);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <>
@@ -37,18 +112,18 @@ export default function Page() {
                         </div>
                         <div className="pb-[0px] text-center">
                             <h2 className="transition-all delay-75 font-noto_sans text-[30px] md:text-[40px] font-semibold text-zinc-900 dark:text-zinc-200">
-                                12 / 20
+                                {totalScore} / {totalMarks}
                             </h2>
                         </div>
                         <div className="pb-[10px] text-center">
                             <h3 className="transition-all delay-75 font-noto_sans text-[14px] md:text-[16px] text-zinc-900 dark:text-zinc-200">
-                                Time Taken : <span className={`text-green-500`}>00:03:34</span> / <span>00:05:00</span>
+                                Time Taken : <span className={`${timeTaken > estTime ? 'text-red-500' : 'text-green-500'}`}>{timeTaken}</span> / <span>{estTime}</span>
                             </h3>
                         </div>
 
                         <div className="pb-[0px] text-center">
                             <h4 className="transition-all delay-75 font-noto_sans text-[18px] md:text-[20px] font-semibold text-zinc-600 dark:text-zinc-400">
-                                You Answered <span>12</span> questions correctly.
+                                You Answered <span>{correctAnswers}</span> questions correctly.
                             </h4>
                         </div>
                     </div>
@@ -67,7 +142,8 @@ export default function Page() {
                                 <button 
                                     type="button" 
                                     title="Submit Score" 
-                                    className="inline-block transition-all delay-75 border-[2px] border-solid border-theme-color-1 text-white bg-theme-color-1 py-[8px] md:py-[10px] px-[20px] md:px-[25px] rounded-full font-ubuntu font-semibold text-[16px] md:text-[18px] hover:bg-theme-color-1-hover-dark hover:text-white"
+                                    className="inline-block transition-all delay-75 border-[2px] border-solid border-theme-color-1 text-white bg-theme-color-1 py-[8px] md:py-[10px] px-[20px] md:px-[25px] rounded-full font-ubuntu font-semibold text-[16px] md:text-[18px] hover:bg-theme-color-1-hover-dark hover:text-white" 
+                                    onClick={handleScoreSubmissionClick}
                                 >
                                     Submit Score
                                 </button>

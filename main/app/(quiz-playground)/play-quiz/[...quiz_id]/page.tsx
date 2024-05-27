@@ -51,6 +51,7 @@ export default function Page() {
             question_marks: dump_quiz_data.only_q_a_opts[currentQuestionIndex].question_marks,
         }
     );
+    const [currentQuestionMarks, setCurrentQuestionMarks] = useState<number>(dump_quiz_data.only_q_a_opts[currentQuestionIndex].question_marks);
 
     type QuizQuestionOpts = {
         option_id: string,
@@ -121,6 +122,7 @@ export default function Page() {
                     question_marks: dump_quiz_data.only_q_a_opts[currentQuestionIndex].question_marks,
                 }
             });
+            setCurrentQuestionMarks(dump_quiz_data.only_q_a_opts[currentQuestionIndex].question_marks);
             setCurrentQuestionOptions(dump_quiz_data.only_q_a_opts[currentQuestionIndex].question_options);
             
             let obj = {
@@ -143,11 +145,11 @@ export default function Page() {
                 }
                 // console.log(prepData);
 
-                let temp_ls_dt = localStorage.getItem('transfer_quiz_data');
-                if(temp_ls_dt) {
-                    localStorage.removeItem('transfer_quiz_data');
-                    localStorage.setItem('transfer_quiz_data', JSON.stringify(prepData));
-                }
+                // let temp_ls_dt = localStorage.getItem('transfer_quiz_data');
+                // if(temp_ls_dt) {
+                //     localStorage.removeItem('transfer_quiz_data');
+                //     localStorage.setItem('transfer_quiz_data', JSON.stringify(prepData));
+                // }
                 dispatch(clear_tqd());
                 dispatch(set_tqd(prepData));
             } else {
@@ -171,10 +173,10 @@ export default function Page() {
             dispatch(unset_dark_mode());
         }
 
-        let temp_ls_dt = localStorage.getItem('transfer_quiz_data');
-        if(!temp_ls_dt) {
-            localStorage.setItem('transfer_quiz_data', JSON.stringify({}));
-        }
+        // let temp_ls_dt = localStorage.getItem('transfer_quiz_data');
+        // if(!temp_ls_dt) {
+        //     localStorage.setItem('transfer_quiz_data', JSON.stringify({}));
+        // }
 
         setTiming(`${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`);
     }, [hours, minutes, seconds, setTiming, dispatch]);
@@ -310,6 +312,11 @@ export default function Page() {
                                         </label>
                                     </li> */}
                                 </ul>
+                            </div>
+                            <div className="pb-[10px]">
+                                <p className="transition-all delay-75 font-noto_sans text-[14px] md:text-[16px] text-zinc-800 dark:text-zinc-300">
+                                    Marks : {currentQuestionMarks}
+                                </p>
                             </div>
                             {isError && (<div className="ws-input-error">Please Select One Option.</div>)}
                         </div>

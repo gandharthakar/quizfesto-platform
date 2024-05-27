@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { RiQuestionFill } from "react-icons/ri";
 import { MdOutlineAccessTimeFilled } from "react-icons/md";
+import { FaLock } from "react-icons/fa";
 
 type quizCategoriesType = {
     cat_id: number | string,
@@ -21,13 +22,26 @@ interface QuizCardPropsTypes {
     number_of_question: number | string,
     quiz_duration: string,
     quiz_terms?: string,
+    quiz_already_played_by_user?: boolean
 }
 
 export default function QuizCard(props: QuizCardPropsTypes) {
 
-    let { quiz_id, quiz_cover_photo="", quiz_title, quiz_categories, quiz_summary, quiz_description, number_of_question, quiz_duration, quiz_terms } = props;
-    let defaultImage = "https://placehold.co/1000x700/png";
-    let user_id = "1";
+    const { 
+        quiz_id, 
+        quiz_cover_photo="", 
+        quiz_title, 
+        quiz_categories, 
+        quiz_summary, 
+        quiz_description, 
+        number_of_question, 
+        quiz_duration, 
+        quiz_terms, 
+        quiz_already_played_by_user=false 
+    } = props;
+
+    const defaultImage = "https://placehold.co/1000x700/png";
+    const user_id = "1";
 
     return (
         <>
@@ -48,7 +62,7 @@ export default function QuizCard(props: QuizCardPropsTypes) {
                                             quiz_categories.map((cat) => (
                                                 <li key={cat.cat_id}>
                                                     <Link 
-                                                        href={`/view-category/${cat.cat_id}`} 
+                                                        href={`/view-category/${cat.category_slug}`} 
                                                         title={cat.category_title}
                                                         className="transition-all delay-75 inline-block concard text-white font-semibold font-ubuntu text-[12px] md:text-[16px] px-[10px] md:px-[15px] py-[4px] md:py-[6px] rounded-full"
                                                     >
@@ -106,9 +120,24 @@ export default function QuizCard(props: QuizCardPropsTypes) {
                                 T & C Applied.
                             </div>
                             <div>
-                                <Link href={`/play-quiz/${quiz_id}/${user_id}`} title="Participate" className="transition-all delay-75 inline-block px-[15px] py-[6px] md:px-[25px] md:py-[8px] font-ubuntu text-[16px] md:text-[18px] text-white bg-theme-color-1 hover:bg-theme-color-1-hover-dark">
-                                    Participate
-                                </Link>
+                                {
+                                    quiz_already_played_by_user ? 
+                                    (
+                                        <div className="flex gap-x-[5px] items-center">
+                                            <FaLock size={18} className="w-[16px] h-[16px] md:w-[18px] md:h-[18px] text-theme-color-2" />
+                                            <div className="transition-all delay-75 font-noto_sans text-[14px] md:text-[16px] text-zinc-700 dark:text-zinc-300">
+                                                Locked
+                                            </div>
+                                        </div>
+                                    ) 
+                                    : 
+                                    (
+                                        <Link href={`/play-quiz/${quiz_id}/${user_id}`} title="Participate" className="transition-all delay-75 inline-block px-[15px] py-[6px] md:px-[25px] md:py-[8px] font-ubuntu text-[16px] md:text-[18px] text-white bg-theme-color-1 hover:bg-theme-color-1-hover-dark">
+                                            Participate
+                                        </Link>
+                                    )
+                                }
+                                
                             </div>
                         </div>
                     </div>

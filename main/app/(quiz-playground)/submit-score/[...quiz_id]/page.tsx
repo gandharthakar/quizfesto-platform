@@ -29,9 +29,10 @@ export default function Page() {
 
     const [timeTaken, setTimeTaken] = useState<string>("00:00:00");
     const [estTime, setEstTime] = useState<string>("00:00:00");
-    const [totalMarks, setTotalMarks] = useState<string>("0");
+    const [totalMarks, setTotalMarks] = useState<number>(0);
     const [correctAnswers, setCorectAnswers] = useState<number>(0);
     const [totalScore, setTotalScore] = useState<number>(0);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     function countCorrectAnswers(questions: QuizQues[], answers: QuizGivenAns[]) {
         // Initialize a counter for correct answers
@@ -73,6 +74,38 @@ export default function Page() {
     }
 
     useEffect(() => {
+
+        function ppc(questions: QuizQues[], answers: QuizGivenAns[]) {
+            // Initialize a counter for correct answers
+            let correctCount = 0;
+            let totalMarks = 0;
+            let arr = [];
+    
+            // Loop through each user answer
+            for (const answer of answers) {
+                const questionId = answer.question_id;
+                const userOptionId = answer.user_choosen_option_id;
+    
+                // Find the corresponding question object
+                const matchingQuestion = questions.find(question => question.question_id === questionId);
+    
+                // Check if question exists and user option matches correct answer
+                if (matchingQuestion && matchingQuestion.correct_option_id === userOptionId) {
+                    correctCount++;
+                    arr.push(answer);
+                }
+            }
+    
+            for (const mark of arr) {
+                totalMarks += mark.question_marks;
+            }
+    
+            return {
+                correct_answers: correctCount,
+                total_mark: totalMarks
+            };
+        }
+
         let glsi = localStorage.getItem('site-dark-mode');
         const checkDM = glsi ? JSON.parse(glsi) : '';
         if(checkDM) {
@@ -81,19 +114,33 @@ export default function Page() {
             dispatch(unset_dark_mode());
         }
 
-        let ls_fiqdata = localStorage.getItem('transfer_quiz_data');
-        const prsfid = ls_fiqdata ? JSON.parse(ls_fiqdata) : '';
-        if(prsfid) {
-            setTimeTaken(prsfid.time_taken);
-            setEstTime(prsfid.quiz_estimated_time);
-            setTotalMarks(prsfid.quiz_total_marks);
-            setUserAnsw(prsfid.attempted_data);
+        // const ls_fiqdata = localStorage.getItem('transfer_quiz_data');
+        // const prsfid = ls_fiqdata ? JSON.parse(ls_fiqdata) : '';
+        // if(prsfid) {
+        //     setTimeTaken(prsfid.time_taken);
+        //     setEstTime(prsfid.quiz_estimated_time);
+        //     setTotalMarks(prsfid.quiz_total_marks);
+        //     setUserAnsw(prsfid.attempted_data);
+
+        //     setCorectAnswers(countCorrectAnswers(corrQAArr, usrAnsw).correct_answers);
+        //     setTotalScore(countCorrectAnswers(corrQAArr, usrAnsw).total_mark);
+        // }
+        if(trqzdt.attempted_data.length > 0) {
+            setTimeTaken(trqzdt.time_taken);
+            setEstTime(trqzdt.quiz_estimated_time);
+            setTotalMarks(trqzdt.quiz_total_marks);
+            setUserAnsw(trqzdt.attempted_data);
 
             setCorectAnswers(countCorrectAnswers(corrQAArr, usrAnsw).correct_answers);
             setTotalScore(countCorrectAnswers(corrQAArr, usrAnsw).total_mark);
         }
+        let st = setTimeout(() => {
+            setIsLoading(false);
+            clearTimeout(st);
+        }, 200);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [isLoading]);
 
     return (
         <>
@@ -104,7 +151,19 @@ export default function Page() {
                     </div>
                 </div>
                 <div className="w-full pb-[15px]">
-                    <div className="w-full max-w-[800px] mx-auto py-[20px] px-[15px] border-[1px] border-solid border-zinc-400 bg-zinc-100 dark:border-zinc-600 dark:bg-zinc-900">
+                    <div className="w-full relative max-w-[800px] mx-auto py-[20px] px-[15px] border-[1px] border-solid border-zinc-400 bg-zinc-100 dark:border-zinc-600 dark:bg-zinc-900">
+
+                        {
+                            isLoading ? 
+                            (
+                                <div className={`transition-all delay-75 absolute left-0 top-0 z-[5] bg-[rgba(255,255,255,0.90)] w-full h-full dark:bg-[rgba(9,9,11,0.95)] justify-center items-center flex`}>
+                                    <div className="spinner"></div>
+                                </div>
+                            ) 
+                            : 
+                            ('')
+                        }
+
                         <div className="pb-[0px] text-center">
                             <h1 className="transition-all delay-75 font-noto_sans text-[18px] md:text-[20px] font-semibold text-zinc-800 dark:text-zinc-300">
                                 Your Score
@@ -132,25 +191,37 @@ export default function Page() {
                 <div>
                     <div className="w-full max-w-[800px] mx-auto py-[20px] px-[15px]">
                         <div className="pb-[15px] text-center">
-                            <h5 className="transition-all delay-75 font-ubuntu text-[12px] md:text-[14px] text-zinc-500 dark:text-zinc-500">
+                            <p className="transition-all delay-75 font-ubuntu text-[14px] md:text-[16px] text-[#ff0000] font-bold">
+                                Don't refresh or press back button of this page otherwise you will loose quiz data played by you.
+                            </p>
+                        </div>
+                        <div className="pb-[15px] text-center">
+                            <h5 className="transition-all delay-75 font-ubuntu text-[12px] font-semibold md:text-[14px] text-zinc-500 dark:text-zinc-500">
                                 Your Score Will Be Saved Only After Your Submit.
                             </h5>
                         </div>
 
                         <div className="flex flex-wrap gap-[15px] justify-center">
+                            {
+                                trqzdt.attempted_data.length > 0 ? 
+                                (
+                                    <div>
+                                        <button 
+                                            type="button" 
+                                            title="Submit Score" 
+                                            className="inline-block transition-all delay-75 border-[2px] border-solid border-theme-color-1 text-white bg-theme-color-1 py-[8px] md:py-[10px] px-[20px] md:px-[25px] rounded-full font-ubuntu font-semibold text-[16px] md:text-[18px] hover:bg-theme-color-1-hover-dark hover:text-white" 
+                                            onClick={handleScoreSubmissionClick}
+                                        >
+                                            Submit Score
+                                        </button>
+                                    </div>
+                                ) 
+                                : 
+                                ('')
+                            }
                             <div>
-                                <button 
-                                    type="button" 
-                                    title="Submit Score" 
-                                    className="inline-block transition-all delay-75 border-[2px] border-solid border-theme-color-1 text-white bg-theme-color-1 py-[8px] md:py-[10px] px-[20px] md:px-[25px] rounded-full font-ubuntu font-semibold text-[16px] md:text-[18px] hover:bg-theme-color-1-hover-dark hover:text-white" 
-                                    onClick={handleScoreSubmissionClick}
-                                >
-                                    Submit Score
-                                </button>
-                            </div>
-                            <div>
-                                <Link href="/" title="Back To Home" className="inline-block transition-all delay-75 border-[2px] border-solid border-theme-color-2 text-theme-color-2 py-[8px] md:py-[10px] px-[20px] md:px-[25px] rounded-full font-ubuntu font-semibold text-[16px] md:text-[18px] hover:bg-theme-color-2 hover:text-white">
-                                    Back To Home
+                                <Link href="/all-quizzes" title="Play Another Quiz" className="inline-block transition-all delay-75 border-[2px] border-solid border-theme-color-2 text-theme-color-2 py-[8px] md:py-[10px] px-[20px] md:px-[25px] rounded-full font-ubuntu font-semibold text-[16px] md:text-[18px] hover:bg-theme-color-2 hover:text-white">
+                                    Play Another Quiz
                                 </Link>
                             </div>
                         </div>

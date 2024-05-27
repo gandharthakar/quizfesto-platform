@@ -1,54 +1,54 @@
 
 const dump_cats_homepage = [
     {
-        id: 1,
-        name: "Web",
-        slug: "#"
+        cat_id: 1,
+        category_title: "Web",
+        category_slug: "web"
     },
     {
-        id: 2,
-        name: "Web 3.0",
-        slug: "#"
+        cat_id: 2,
+        category_title: "Web 3.0",
+        category_slug: "web-3-0"
     },
     {
-        id: 3,
-        name: "General Knowledge",
-        slug: "#"
+        cat_id: 3,
+        category_title: "General Knowledge",
+        category_slug: "general-knowledge"
     },
     {
-        id: 4,
-        name: "UPSC",
-        slug: "#"
+        cat_id: 4,
+        category_title: "UPSC",
+        category_slug: "upsc"
     },
     {
-        id: 5,
-        name: "Climate Change",
-        slug: "#"
+        cat_id: 5,
+        category_title: "Climate Change",
+        category_slug: "climate-change"
     },
     {
-        id: 6,
-        name: "Technology",
-        slug: "#"
+        cat_id: 6,
+        category_title: "Technology",
+        category_slug: "technology"
     },
     {
-        id: 7,
-        name: "Startups",
-        slug: "#"
+        cat_id: 7,
+        category_title: "Startups",
+        category_slug: "startups"
     },
     {
-        id: 8,
-        name: "Business",
-        slug: "#"
+        cat_id: 8,
+        category_title: "Business",
+        category_slug: "business"
     },
     {
-        id: 9,
-        name: "Economy",
-        slug: "#"
+        cat_id: 9,
+        category_title: "Economy",
+        category_slug: "economy"
     },
     {
-        id: 10,
-        name: "History",
-        slug: "#"
+        cat_id: 10,
+        category_title: "History",
+        category_slug: "history"
     },
 ];
 
@@ -274,14 +274,14 @@ const dump_quiz_data = {
     quiz_id: "quiz-1",
     quiz_dev_time: "00:01:00",
     quiz_total_question: 5,
-    quiz_total_marks: 5,
+    quiz_total_marks: 10,
     quiz_estimated_time: "00:02:00",
     quiz_display_time: '2 Mins',
     only_q_a_opts: [
         {
             question_id: "ques-1",
             question_text: "Q1 This is demo question text ?",
-            question_marks: 1,
+            question_marks: 2,
             question_options: [
                 {
                     option_id: "ques-1-opt-1",
@@ -304,7 +304,7 @@ const dump_quiz_data = {
         {
             question_id: "ques-2",
             question_text: "Q2 This is demo question text ?",
-            question_marks: 1,
+            question_marks: 2,
             question_options: [
                 {
                     option_id: "ques-2-opt-1",
@@ -327,7 +327,7 @@ const dump_quiz_data = {
         {
             question_id: "ques-3",
             question_text: "Q3 This is demo question text ?",
-            question_marks: 1,
+            question_marks: 2,
             question_options: [
                 {
                     option_id: "ques-3-opt-1",
@@ -350,7 +350,7 @@ const dump_quiz_data = {
         {
             question_id: "ques-4",
             question_text: "Q4 This is demo question text ?",
-            question_marks: 1,
+            question_marks: 2,
             question_options: [
                 {
                     option_id: "ques-4-opt-1",
@@ -373,7 +373,7 @@ const dump_quiz_data = {
         {
             question_id: "ques-5",
             question_text: "Q5 This is demo question text ?",
-            question_marks: 1,
+            question_marks: 2,
             question_options: [
                 {
                     option_id: "ques-5-opt-1",
@@ -418,6 +418,69 @@ const dump_quiz_data = {
     ],
 }
 
+const dump_my_participation = [
+    {
+        id: 250,
+        quiz_title: "This Is Quiz 1 Title.",
+        quiz_cover_photo: '',
+        quiz_display_time: "5 Mins",
+        quiz_total_questions: 20,
+        quiz_total_marks: 100,
+        quiz_estimate_time: "00:05:00",
+        quiz_time_taken_by_user: "00:03:26",
+        quiz_correct_question_attempted_by_user: 15,
+        user_score_of_this_quiz: 75
+    },
+    {
+        id: 251,
+        quiz_title: "This Is Quiz 2 Title.",
+        quiz_cover_photo: '',
+        quiz_display_time: "7 Mins",
+        quiz_total_questions: 25,
+        quiz_total_marks: 150,
+        quiz_estimate_time: "00:07:00",
+        quiz_time_taken_by_user: "00:09:13",
+        quiz_correct_question_attempted_by_user: 8,
+        user_score_of_this_quiz: 40
+    },
+    {
+        id: 252,
+        quiz_title: "This Is Quiz 3 Title.",
+        quiz_cover_photo: '',
+        quiz_display_time: "3 Mins",
+        quiz_total_questions: 10,
+        quiz_total_marks: 50,
+        quiz_estimate_time: "00:03:00",
+        quiz_time_taken_by_user: "00:04:45",
+        quiz_correct_question_attempted_by_user: 4,
+        user_score_of_this_quiz: 20
+    },
+    {
+        id: 253,
+        quiz_title: "This Is Quiz 4 Title.",
+        quiz_cover_photo: '',
+        quiz_display_time: "10 Mins",
+        quiz_total_questions: 40,
+        quiz_total_marks: 200,
+        quiz_estimate_time: "00:10:00",
+        quiz_time_taken_by_user: "00:08:00",
+        quiz_correct_question_attempted_by_user: 16,
+        user_score_of_this_quiz: 80
+    },
+    {
+        id: 254,
+        quiz_title: "This Is Quiz 5 Title.",
+        quiz_cover_photo: '',
+        quiz_display_time: "12 Mins",
+        quiz_total_questions: 50,
+        quiz_total_marks: 250,
+        quiz_estimate_time: "00:12:00",
+        quiz_time_taken_by_user: "00:016:39",
+        quiz_correct_question_attempted_by_user: 10,
+        user_score_of_this_quiz: 50
+    }
+];
+
 export {
     dump_cats_homepage,
     dump_testimonials_homepage,
@@ -426,4 +489,5 @@ export {
     dump_faqs_content,
     dump_quizzes_list,
     dump_quiz_data,
+    dump_my_participation,
 }

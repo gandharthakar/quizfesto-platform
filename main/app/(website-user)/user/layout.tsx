@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import "../globals.css";
-import RedProv from "../redux-service/reduxProvider";
-import UserAreaTopHeader from "../components/userAreaTopHeader";
-import UserAreaNavBar from "../components/userAreaNavBar";
+import "@/app/globals.css";
+import RedProv from "@/app/redux-service/reduxProvider";
+import UserAreaTopHeader from "@/app/components/userAreaTopHeader";
+import UserAreaNavBar from "@/app/components/userAreaNavBar";
 
 export const metadata: Metadata = {
 	title: "QuizFesto - User Area",
@@ -16,8 +16,8 @@ type Children = {
 
 export default function RootLayout({ children, }: Readonly<Children>) {
 	return (
-		<html lang="en" className="">
-			<body className="">
+		<html lang="en">
+			<body>
 				<RedProv>
 					<div className="flex overflow-hidden">
 						<UserAreaNavBar />

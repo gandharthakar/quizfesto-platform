@@ -56,7 +56,7 @@ export default function Page() {
                             />
                             {errors.full_name && (<div className="ws-input-error">{errors.full_name.message}</div>)}
                         </div>
-                        <div className="pb-[15px]">
+                        <div className="pb-[15px] hidden">
                             <label 
                                 className="block transition-all delay-75 font-ubuntu font-semibold text-[16px] md:text-[18px] text-zinc-800 dark:text-zinc-300 mb-[5px]"
                             >

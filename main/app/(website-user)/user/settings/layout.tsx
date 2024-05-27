@@ -1,5 +1,5 @@
 import UserAreaSettingsTabs from "@/app/components/userAreaSettingsTabs";
-import "@/app/globals.css";
+// import "@/app/globals.css";
 import RedProv from "@/app/redux-service/reduxProvider";
 
 type Children = {

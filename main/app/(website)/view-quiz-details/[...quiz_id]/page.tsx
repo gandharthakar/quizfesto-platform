@@ -11,6 +11,8 @@ import { MdOutlineAccessTimeFilled } from "react-icons/md";
 import copy from "copy-to-clipboard";
 import Swal from 'sweetalert2';
 import QuizCard from "@/app/components/quizCard";
+import { PiExamFill } from "react-icons/pi";
+import { FaLock } from "react-icons/fa6";
 
 type quizCategoriesType = {
     cat_id: number | string,
@@ -40,6 +42,7 @@ export default function Page() {
     const [quizDuration, setQuizDuration] = useState<string>(data[0].quiz_duration);
     const [quizDescription, setQuizDescription] = useState<string>(data[0].quiz_description);
     const [quizTerms, setQuizTerms] = useState<string[]>(prepTermsArr(data[0].quiz_terms));
+    const [alreadyPlayedByUser, setAlreadyPlayedByUser] = useState<boolean>(true);
 
     useEffect(() => {
         let win = typeof window !== 'undefined' && window.location.origin
@@ -121,6 +124,12 @@ export default function Page() {
                                         <RiQuestionFill size={30} className="transition-all delay-75 w-[20px] h-[20px] md:w-[30px] md:h-[30px] text-zinc-600 dark:text-zinc-300" />
                                         <h2 className="transition-all delay-75 font-ubuntu text-[16px] md:text-[25px] text-zinc-600 dark:text-zinc-300">
                                             {quizNOQ} {Number(quizNOQ) > 1 || !["1", "0"].includes(quizNOQ) ? ('Questions') : ("question")}
+                                        </h2>
+                                    </div>
+                                    <div className="flex gap-x-[5px] md:gap-x-[10px] items-center">
+                                        <PiExamFill size={30} className="transition-all delay-75 w-[20px] h-[20px] md:w-[30px] md:h-[30px] text-zinc-600 dark:text-zinc-300" />
+                                        <h2 className="transition-all delay-75 font-ubuntu text-[16px] md:text-[25px] text-zinc-600 dark:text-zinc-300">
+                                            Total Marks Is 50
                                         </h2>
                                     </div>
                                 </div>
@@ -234,9 +243,24 @@ export default function Page() {
                                 </div>
                             </div>
                             <div className="block lg:hidden">
-                                <Link href={`/play-quiz/${qz_id}/${user_id}`} title="Participate" className="transition-all delay-75 block w-full text-center px-[15px] py-[8px] md:px-[25px] md:py-[10px] font-ubuntu text-[18px] md:text-[20px] text-white bg-theme-color-1 hover:bg-theme-color-1-hover-dark">
-                                    Participate
-                                </Link>
+                                {
+                                    alreadyPlayedByUser ? 
+                                    (
+                                        <div className="flex gap-x-[7px] md:gap-x-[10px] items-center justify-center">
+                                            <FaLock size={24} className="w-[18px] h-[18px] md:w-[24px] md:h-[24px] text-theme-color-2" />
+                                            <div className="transition-all delay-75 font-noto_sans text-[16px] md:text-[20px] text-zinc-700 dark:text-zinc-300">
+                                                Locked
+                                            </div>
+                                        </div>
+                                    ) 
+                                    : 
+                                    (
+                                        <Link href={`/play-quiz/${qz_id}/${user_id}`} title="Participate" className="transition-all delay-75 block w-full text-center px-[15px] py-[8px] md:px-[25px] md:py-[10px] font-ubuntu text-[18px] md:text-[20px] text-white bg-theme-color-1 hover:bg-theme-color-1-hover-dark">
+                                            Participate
+                                        </Link>
+                                    )
+                                }
+                                
                             </div>
                         </div>
                         <div className="w-full lg:w-[350px] hidden lg:block">
@@ -316,7 +340,7 @@ export default function Page() {
                                             </h2>
                                         </div>
                                     </div>
-                                    <div className="hidden lg:block pb-[20px]">
+                                    <div className="hidden lg:block pb-[5px]">
                                         <div className="flex gap-x-[5px] md:gap-x-[10px] items-center">
                                             <RiQuestionFill size={30} className="transition-all delay-75 w-[20px] h-[20px] md:w-[30px] md:h-[30px] text-zinc-600 dark:text-zinc-300" />
                                             <h2 className="transition-all delay-75 font-ubuntu text-[16px] md:text-[25px] text-zinc-600 dark:text-zinc-300">
@@ -324,10 +348,33 @@ export default function Page() {
                                             </h2>
                                         </div>
                                     </div>
+                                    <div className="hidden lg:block pb-[20px]">
+                                        <div className="flex gap-x-[5px] md:gap-x-[10px] items-center">
+                                            <PiExamFill size={30} className="transition-all delay-75 w-[20px] h-[20px] md:w-[30px] md:h-[30px] text-zinc-600 dark:text-zinc-300" />
+                                            <h2 className="transition-all delay-75 font-ubuntu text-[16px] md:text-[25px] text-zinc-600 dark:text-zinc-300">
+                                                Total Marks Is 50
+                                            </h2>
+                                        </div>
+                                    </div>
                                     <div>
-                                        <Link href={`/play-quiz/${qz_id}/${user_id}`} title="Participate" className="transition-all delay-75 block w-full text-center px-[15px] py-[8px] md:px-[25px] md:py-[10px] font-ubuntu text-[18px] md:text-[20px] text-white bg-theme-color-1 hover:bg-theme-color-1-hover-dark">
-                                            Participate
-                                        </Link>
+                                        {
+                                            alreadyPlayedByUser ? 
+                                            (
+                                                <div className="flex gap-x-[7px] md:gap-x-[10px] items-center justify-center">
+                                                    <FaLock size={24} className="w-[18px] h-[18px] md:w-[24px] md:h-[24px] text-theme-color-2" />
+                                                    <div className="transition-all delay-75 font-noto_sans text-[16px] md:text-[20px] text-zinc-700 dark:text-zinc-300">
+                                                        Locked
+                                                    </div>
+                                                </div>
+                                            ) 
+                                            : 
+                                            (
+                                                <Link href={`/play-quiz/${qz_id}/${user_id}`} title="Participate" className="transition-all delay-75 block w-full text-center px-[15px] py-[8px] md:px-[25px] md:py-[10px] font-ubuntu text-[18px] md:text-[20px] text-white bg-theme-color-1 hover:bg-theme-color-1-hover-dark">
+                                                    Participate
+                                                </Link>
+                                            )
+                                        }
+                                        
                                     </div>
                                 </div>
                             </div>

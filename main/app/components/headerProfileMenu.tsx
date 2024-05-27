@@ -6,7 +6,7 @@ import Image from "next/image";
 
 export default function HeaderProfileMenu() {
 
-    let isUserLoggedIn:boolean = false;
+    let isUserLoggedIn:boolean = true;
 
     return (
         <>
@@ -14,7 +14,7 @@ export default function HeaderProfileMenu() {
                 isUserLoggedIn ? 
                 (
                     <>
-                        <Link href="/" title="profile" className="transition-all delay-75 relative bg-white border border-solid border-zinc-800 w-[40px] h-[40px] text-[20px] rounded-full flex items-center justify-center font-noto_sans font-bold text-zinc-800">
+                        <Link href="/user/1" title="profile" className="transition-all delay-75 relative bg-white border border-solid border-zinc-800 w-[40px] h-[40px] text-[20px] rounded-full flex items-center justify-center font-noto_sans font-bold text-zinc-800">
                             <span className="uppercase">g</span>
                             <Image src="/images/testimonials/michael-davis.jpg" width={40} height={40} className="absolute left-0 top-0 w-full h-full rounded-full z-[2]" alt="photo" />
                         </Link>

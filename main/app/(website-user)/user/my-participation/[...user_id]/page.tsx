@@ -8,7 +8,7 @@ export default function Page() {
 
     return (
         <>
-            <section className="py-[50px]">
+            <section className="py-[25px]">
                 <div>
                     {
                         dump_my_participation.map((itm) => (

@@ -39,9 +39,9 @@ export default function UserAreaNavBar() {
                             </div>
 
                             <div className="pb-[15px] text-center">
-                                <h1 className="transition-all delay-75 font-noto_sans text-[14px] md:text-[16px] font-semibold text-zinc-400">
+                                {/* <h1 className="transition-all delay-75 font-noto_sans text-[14px] md:text-[16px] font-semibold text-zinc-400">
                                     @amitThakur224
-                                </h1>
+                                </h1> */}
                                 <h2 className="transition-all delay-75 font-noto_sans text-[18px] md:text-[20px] font-bold text-zinc-800 dark:text-zinc-300">
                                     Amit Thakur
                                 </h2>

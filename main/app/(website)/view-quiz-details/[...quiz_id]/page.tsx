@@ -78,7 +78,7 @@ export default function Page() {
                                                     quizCats.map((cat) => (
                                                         <li key={cat.cat_id}>
                                                             <Link 
-                                                                href={`/view-category/${cat.cat_id}`} 
+                                                                href={`/view-category/${cat.category_slug}`} 
                                                                 title={cat.category_title}
                                                                 className="transition-all delay-75 inline-block concard text-white font-semibold font-ubuntu text-[12px] md:text-[16px] px-[10px] md:px-[15px] py-[4px] md:py-[6px] rounded-full"
                                                             >

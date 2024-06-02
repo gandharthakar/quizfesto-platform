@@ -92,6 +92,52 @@
     .goggle-lsbtn {
         @apply transition-all delay-75 block w-full max-w-[250px] mx-auto md:max-w-none md:mx-0 border-[2px] border-solid border-zinc-800 rounded-full py-[10px] md:py-[12px] px-[15px] font-noto_sans text-[17px] md:text-[18px] font-semibold hover:bg-zinc-200 dark:border-zinc-300 dark:text-zinc-300 dark:hover:bg-zinc-800;
     }
+    .admin-area-nav {
+        @apply flex flex-col gap-y-[5px] md:gap-y-[10px];
+        & .nav-item {
+            @apply transition-all delay-75 block w-full font-noto_sans font-semibold text-[16px] md:text-[18px] py-[12px] md:py-[14px] px-[15px] rounded-xl hover:bg-theme-color-1 hover:text-white dark:text-zinc-200;
+            & .svg-icon {
+                @apply w-[25px] h-[25px] md:w-[30px] md:h-[30px];
+            }
+            &.active {
+                @apply bg-theme-color-1 text-white shadow-xl;
+            }
+        }
+    }
+    .admin-settings-nav {
+        @apply flex flex-nowrap gap-x-[25px] overflow-x-auto whitespace-nowrap relative before:content-[''] before:w-full before:h-[1px] before:absolute before:left-0 before:bottom-0 before:transition-all before:delay-75 before:z-[2] before:bg-zinc-300 dark:before:bg-zinc-600;
+        & .nav-item {
+            @apply transition-all delay-75 inline-block font-ubuntu font-semibold text-[16px] text-zinc-800 py-[10px] relative before:content-[''] before:w-full before:h-[2px] before:absolute before:left-0 before:bottom-0 before:transition-all before:delay-75 before:z-[2] hover:before:bg-theme-color-2 hover:text-theme-color-2 dark:text-zinc-300 dark:hover:text-theme-color-2;
+            &.active {
+                @apply before:bg-theme-color-2 text-theme-color-2;
+            }
+        }
+    }
+    .alqc-chrb {
+        @apply relative;
+        & .input-chrb {
+            @apply absolute top-0 left-0 z-[-1] hidden;
+        }
+        & .label {
+            @apply cursor-pointer flex gap-x-[10px] items-center;
+        }
+        & .svg-icon {
+            @apply transition-all delay-75 inline-block opacity-0 w-[16px] h-[16px] md:w-[18px] md:h-[18px] text-zinc-600 dark:text-zinc-200;
+        }
+        & .squere-box {
+            @apply transition-all delay-75 flex items-center justify-center border-[1px] md:border-[1.5px] border-solid border-zinc-600 w-[20px] h-[20px] md:w-[25px] md:h-[25px] bg-white dark:bg-zinc-700 dark:border-zinc-200;
+        }
+        & .label-text {
+            @apply transition-all delay-75 inline-block font-ubuntu text-[16px] md:text-[18px] text-zinc-900 font-semibold dark:text-zinc-200;
+        }
+        & .input-chrb {
+            &:checked + .label {
+                & .svg-icon {
+                    @apply opacity-100;
+                }
+            }
+        }
+    }
 }
 
 :root {

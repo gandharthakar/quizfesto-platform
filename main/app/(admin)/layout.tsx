@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "@/app/globals.css";
 import RedProv from "@/app/redux-service/reduxProvider";
+import AdminAreaNav from "../components/admin/adminAreaNav";
+import AdminAreaTopHeader from "../components/admin/adminAreaTopHeader";
 
 export const metadata: Metadata = {
 	title: "QuizFesto - Admin",
@@ -15,9 +17,17 @@ type Children = {
 export default function RootLayout({ children, }: Readonly<Children>) {
 	return (
 		<html lang="en" className="">
-			<body className="">
+			<body>
 				<RedProv>
-					{children}
+					<div className="flex overflow-hidden">
+						<AdminAreaNav />
+						<div className="transition-all delay-75 bg-zinc-100 min-h-screen flex-1 dark:bg-zinc-900">
+							<AdminAreaTopHeader />
+							<div className="px-[15px]">
+								{children}
+							</div>
+						</div>
+					</div>
 				</RedProv>
 			</body>
 		</html>

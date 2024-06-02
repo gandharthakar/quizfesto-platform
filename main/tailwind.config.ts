@@ -7,6 +7,7 @@ const config: Config = {
 		"./components/**/*.{js,ts,jsx,tsx,mdx}",
 		"./app/**/*.{js,ts,jsx,tsx,mdx}",
 		"./app/**/layout.{js,ts,jsx,tsx,mdx}",
+		"./node_modules/react-tailwindcss-select/dist/index.esm.js",
 	],
 	theme: {
 		screens: {
@@ -28,6 +29,8 @@ const config: Config = {
 
 			'xl-s1': '1301px',
 
+			'xl-s2': '1401px',
+
 			'xl-1': '1501px',
 
 			'2xl': '1536px',
@@ -40,6 +43,7 @@ const config: Config = {
 				'theme-color-1': "#2e3192",
 				'theme-color-1-hover-dark': "#23267e",
 				'theme-color-2': "#00af4f",
+				'theme-color-2-hover-dark': "#00803a",
 			},
 			fontFamily: {
 				ubuntu: ['Ubuntu', 'sans-serif'],

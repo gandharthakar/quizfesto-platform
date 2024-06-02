@@ -13,6 +13,7 @@ import Swal from 'sweetalert2';
 import QuizCard from "@/app/components/quizCard";
 import { PiExamFill } from "react-icons/pi";
 import { FaLock } from "react-icons/fa6";
+import parse from 'html-react-parser';
 
 type quizCategoriesType = {
     cat_id: number | string,
@@ -211,7 +212,7 @@ export default function Page() {
                                 </div>
                                 <div>
                                     <p className="transition-all delay-75 font-noto_sans text-[16px] md:text-[20px] text-zinc-600 dark:text-zinc-400">
-                                        {quizDescription}
+                                        {parse(quizDescription)}
                                     </p>
                                 </div>
                             </div>

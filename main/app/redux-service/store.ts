@@ -7,6 +7,7 @@ import userAreaMenuToggleReducer from './slices/user-area/userAreaMenuToggleSlic
 import transferQuizDataReducer from './slices/quiz-playground/transferQuizDataslice';
 
 import adminThemeModeReducer from './slices/admin/theme-mode/adminThemeSwitcherSlice';
+import adminAreaMenuToggleReducer from './slices/admin/adminAreaMenuToggleSlice';
 
 const store = configureStore({
     reducer: {
@@ -15,6 +16,7 @@ const store = configureStore({
         transfer_quiz_data: transferQuizDataReducer,
 
         admin_theme_mode: adminThemeModeReducer,
+        admin_area_menu_toggle: adminAreaMenuToggleReducer,
     },
     devTools: false,
 });

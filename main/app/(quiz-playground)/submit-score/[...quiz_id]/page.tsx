@@ -192,7 +192,7 @@ export default function Page() {
                     <div className="w-full max-w-[800px] mx-auto py-[20px] px-[15px]">
                         <div className="pb-[15px] text-center">
                             <p className="transition-all delay-75 font-ubuntu text-[14px] md:text-[16px] text-[#ff0000] font-bold">
-                                Don't refresh or press back button of this page otherwise you will loose quiz data played by you.
+                                {`Don't refresh or press back button of this page otherwise you will loose quiz data played by you.`}
                             </p>
                         </div>
                         <div className="pb-[15px] text-center">

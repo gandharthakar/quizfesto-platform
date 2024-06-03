@@ -13,6 +13,7 @@ import { AiOutlineTrophy } from "react-icons/ai";
 import AdminThemeSwitchButton from "./adminThemeSwitchButton";
 import { IoFlagOutline } from "react-icons/io5";
 import { BiCategory } from "react-icons/bi";
+import AdminSubMenuComp from "./adminSubMenuComp";
 
 function AdminAreaNav() {
 
@@ -21,11 +22,38 @@ function AdminAreaNav() {
     const isMenuOpen = useSelector((state: RootState) => state.admin_area_menu_toggle.is_admin_area_menu_open);
     const isDarkTheme = useSelector((state: RootState) => state.admin_theme_mode.admin_dark_theme_mode);
 
-    const all_quizes_mi: string[] = ["/admin/quizes", "/admin/quizes/create-new-quiz"];
+    const all_quizes_mi: string[] = ["/admin/quizes", "/admin/quizes/create-new-quiz", "/admin/questions", "/admin/options"];
     const all_users_mi: string[] = ["/admin/users"];
     const all_prizes_mi: string[] = ["/admin/prizes"];
     const all_winners_mi: string[] = ["/admin/winners"];
     const all_qzcats_mi: string[] = ["/admin/quiz-categories"];
+
+    const quizes_submenu = [
+        {
+            subMenuItemId: '1',
+            subMenuItemURI: '/admin/quizes',
+            subMenuItemTitle: 'Quizes',
+            subMenuItemActArr: ["/admin/quizes"],
+            subMenuItemPathName: pathName, 
+            subMenuItemOnClickCallBack: () => dispatch(close_admin_area_menu()), 
+        },
+        {
+            subMenuItemId: '2',
+            subMenuItemURI: '/admin/questions',
+            subMenuItemTitle: 'Questions',
+            subMenuItemActArr: ["/admin/questions"],
+            subMenuItemPathName: pathName, 
+            subMenuItemOnClickCallBack: () => dispatch(close_admin_area_menu()), 
+        },
+        {
+            subMenuItemId: '3',
+            subMenuItemURI: '/admin/options',
+            subMenuItemTitle: 'Questions',
+            subMenuItemActArr: ["/admin/options"],
+            subMenuItemPathName: pathName, 
+            subMenuItemOnClickCallBack: () => dispatch(close_admin_area_menu()), 
+        }
+    ];
 
     return (
         <>
@@ -60,7 +88,7 @@ function AdminAreaNav() {
                                         </div>
                                     </Link>
                                 </li>
-                                <li>
+                                {/* <li>
                                     <Link
                                         href="/admin/quizes"
                                         title="Quizes"
@@ -74,7 +102,17 @@ function AdminAreaNav() {
                                             </div>
                                         </div>
                                     </Link>
-                                </li>
+                                </li> */}
+                                <AdminSubMenuComp
+                                    parentMenuItemURI="#" 
+                                    parentMenuItemTitle="Quiz Area" 
+                                    parentMenuItemIcon={<RiMessage2Line size={20} className="svg-icon" />} 
+                                    parentMenuItemActArr={all_quizes_mi} 
+                                    parentMenuItemPathName={pathName} 
+                                    submenu={quizes_submenu} 
+                                    closeMainMenuOnParentItemClick={false} 
+                                    closeMainMenuFunc={() => dispatch(close_admin_area_menu())} 
+                                />
                                 <li>
                                     <Link
                                         href="/admin/quiz-categories"

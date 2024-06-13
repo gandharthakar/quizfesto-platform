@@ -48,7 +48,7 @@ function AdminAreaNav() {
         {
             subMenuItemId: '3',
             subMenuItemURI: '/admin/options',
-            subMenuItemTitle: 'Questions',
+            subMenuItemTitle: 'Options',
             subMenuItemActArr: ["/admin/options"],
             subMenuItemPathName: pathName, 
             subMenuItemOnClickCallBack: () => dispatch(close_admin_area_menu()), 

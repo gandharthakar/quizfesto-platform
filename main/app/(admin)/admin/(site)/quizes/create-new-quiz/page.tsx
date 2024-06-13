@@ -9,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { HiOutlinePlus } from "react-icons/hi";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import Swal from 'sweetalert2';
 
 interface TwSelInt {
     value: string,
@@ -26,6 +27,9 @@ function Page() {
     const [quizTerms, setQuizTerms] = useState<quizTrms[]>([{ quiz_terms: '' }]);
     const [quizAboutContent, setQuizAboutContent] = useState<string>('');
 
+    const [fileInput, setFileInput] = useState<string>('');
+    const [imgPrevFresh, setImgPrevFresh] = useState<string>(defaultImage);
+    const [imgPrevOld, setImgPrevOld] = useState<string>(defaultImage);
     const [fileExt, setFileExt] = useState<string>('');
     const [filSize, setFileSize] = useState<boolean>(false);
     const [fileDimensions, setFileDimensions] = useState<boolean>(false);
@@ -50,6 +54,39 @@ function Page() {
         newArray.splice(index, 1);
         setQuizTerms(newArray);
     };
+
+    const handleFeImgChange = async (e:any) => {
+        const file = e.target.files[0];
+        if(!file) return
+
+        const gfnext = file.name;
+		const fext = gfnext.split('.').pop();
+        // setImgFile(file);
+		setFileExt(fext);
+        setImgPrevFresh(URL.createObjectURL(file));
+        const base64 = await convertBase64(file);
+        // console.log(base64);
+        setFileInput(base64);
+
+        if (file.size > 500 * 1024) {
+            setFileSize(false);
+        } else {
+            setFileSize(true);
+        }
+
+        const img = document.createElement('img');
+        const objectURL = URL.createObjectURL(file);
+        img.src = objectURL;
+        img.onload = function handleLoad() {
+            const {width, height} = img;
+            if(width <= 1000 && height <= 700) {
+                setFileDimensions(true);
+            } else {
+                setFileDimensions(false);
+            }
+            URL.revokeObjectURL(objectURL);
+        }
+    }
 
     const options: TwSelInt[] = [
         { value: "fox", label: "🦊 Fox" },
@@ -116,11 +153,52 @@ function Page() {
         })
     }
 
+    const clearFileInput = () => {
+        setFileInput('');
+        setImgPrevFresh(defaultImage);
+        setFileExt('');
+        setFileSize(false);
+        setFileDimensions(false);
+    }
+
     const handleFormSubmit: SubmitHandler<validationSchema> = (formdata) => {
-        // console.log(formdata);
+
+        // Get file extention.
+        const allowedFileTypes = ["jpg", "png"];
+        let isValidImg = false;
+
+        if(fileInput !== '') {
+            if(!allowedFileTypes.includes(fileExt)) {
+                Swal.fire({
+                    title: "Error!",
+                    text: "Only .jpg and .png files are allowed.",
+                    icon: "error",
+                    timer: 5000
+                });
+            } else {
+                if(!filSize) {
+                    Swal.fire({
+                        title: "Error!",
+                        text: "Image file size is bigger than 500 kb.",
+                        icon: "error",
+                        timer: 5000
+                    });
+                } else {
+                    if(!fileDimensions) {
+                        Swal.fire({
+                            title: "Error!",
+                            text: "Image size is expected 1000px x 700px. (rectangular size)",
+                            icon: "error",
+                            timer: 5000
+                        });
+                    } else {
+                        isValidImg = true;
+                    }
+                }
+            }
+        }        
 
         const terms: string[] = [];
-        // recins.map((item) => ingradients.push(item.recipe_ingredient));
         quizTerms.map((item) => {
             if(item.quiz_terms !== '') {
                 return terms.push(item.quiz_terms)
@@ -132,7 +210,7 @@ function Page() {
         const prepData = {
             quiz_title: formdata.quiz_main_title,
             quiz_categories: quizCats && quizCats.length > 0 ? quizCats.map(item => item.value) : [],
-            quiz_cover_image: '',
+            quiz_cover_image: isValidImg ? fileInput : '',
             quiz_display_time: formdata.quiz_disp_time,
             quiz_estimate_time: formdata.quiz_est_time,
             quiz_total_questions: formdata.quiz_total_ques,
@@ -338,7 +416,7 @@ function Page() {
                                             (
                                                 <>
                                                     <div className="pb-[20px]">
-                                                        <Image src={defaultImage} width={1000} height={700} className="w-full h-auto" alt="photo" priority={true} />
+                                                        <Image src={imgPrevOld} width={1000} height={700} className="w-full h-auto" alt="photo" priority={true} />
                                                     </div>
                                                     <div className="flex gap-x-[15px] justify-end items-center">
                                                         <button type="button" title="Remove" className="transition-all delay-75 font-ubuntu text-[14px] text-red-600 underline dark:text-red-400">
@@ -354,7 +432,7 @@ function Page() {
                                             (
                                                 <>
                                                     <div className="pb-[20px]">
-                                                        <Image src={defaultImage} width={1000} height={700} className="w-full h-auto" alt="photo" priority={true} />
+                                                        <Image src={imgPrevFresh} width={1000} height={700} className="w-full h-auto" alt="photo" priority={true} />
                                                     </div>
                                                     <div className="flex gap-x-[15px] justify-between items-center">
                                                         <label 
@@ -362,11 +440,22 @@ function Page() {
                                                             title="Choose Image" 
                                                             className="transition-all delay-75 inline-block font-ubuntu font-semibold text-[16px] bg-theme-color-1 text-white py-[10px] px-[15px] cursor-pointer" 
                                                         >
-                                                            <input type="file" id="feimg" name="featured_image" className="hidden" />
+                                                            <input 
+                                                                type="file" 
+                                                                id="feimg" 
+                                                                name="featured_image" 
+                                                                className="hidden" 
+                                                                onChange={handleFeImgChange}
+                                                            />
                                                             Choose Image
                                                         </label>
 
-                                                        <button type="button" title="Clear" className="transition-all delay-75 font-ubuntu text-[14px] text-red-600 underline dark:text-red-400">
+                                                        <button 
+                                                            type="button" 
+                                                            title="Clear" 
+                                                            className="transition-all delay-75 font-ubuntu text-[14px] text-red-600 underline dark:text-red-400" 
+                                                            onClick={clearFileInput} 
+                                                        >
                                                             <div className="flex gap-x-[5px] items-center">
                                                                 <FaRegTrashAlt size={16} />
                                                                 <div>Clear</div>

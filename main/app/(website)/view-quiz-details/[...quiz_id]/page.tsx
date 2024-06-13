@@ -59,7 +59,7 @@ export default function Page() {
             title: "Success!",
             text: "Link Copied Successfully!",
             icon: "success",
-            timer: 1500
+            timer: 4000
         });
     }
 
@@ -211,9 +211,9 @@ export default function Page() {
                                     </h2>
                                 </div>
                                 <div>
-                                    <p className="transition-all delay-75 font-noto_sans text-[16px] md:text-[20px] text-zinc-600 dark:text-zinc-400">
+                                    <div className="transition-all delay-75 font-noto_sans text-[16px] md:text-[20px] text-zinc-600 dark:text-zinc-400">
                                         {parse(quizDescription)}
-                                    </p>
+                                    </div>
                                 </div>
                             </div>
                             <div className="pb-[25px] lg:pb-[0]">

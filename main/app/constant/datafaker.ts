@@ -481,6 +481,129 @@ const dump_my_participation = [
     }
 ];
 
+const dump_list_of_quizes = [
+    {
+        quiz_id: 23,
+        quiz_title: "This is quiz number - 1",
+        quiz_status: "draft",
+        isChecked: false,
+    },
+    {
+        quiz_id: 24,
+        quiz_title: "This is quiz number - 2",
+        quiz_status: "published",
+        isChecked: false,
+    },
+    {
+        quiz_id: 25,
+        quiz_title: "This is quiz number - 3",
+        quiz_status: "draft",
+        isChecked: false,
+    },
+    {
+        quiz_id: 26,
+        quiz_title: "This is quiz number - 4",
+        quiz_status: "draft",
+        isChecked: false,
+    },
+    {
+        quiz_id: 27,
+        quiz_title: "This is quiz number - 5",
+        quiz_status: "published",
+        isChecked: false,
+    },
+    {
+        quiz_id: 28,
+        quiz_title: "This is quiz number - 6",
+        quiz_status: "draft",
+        isChecked: false,
+    },
+    {
+        quiz_id: 29,
+        quiz_title: "This is quiz number - 7",
+        quiz_status: "published",
+        isChecked: false,
+    },
+    {
+        quiz_id: 30,
+        quiz_title: "This is quiz number - 8",
+        quiz_status: "published",
+        isChecked: false,
+    },
+    {
+        quiz_id: 31,
+        quiz_title: "This is quiz number - 9",
+        quiz_status: "published",
+        isChecked: false,
+    },
+    {
+        quiz_id: 32,
+        quiz_title: "This is quiz number - 10",
+        quiz_status: "published",
+        isChecked: false,
+    },
+    {
+        quiz_id: 33,
+        quiz_title: "This is quiz number - 11",
+        quiz_status: "draft",
+        isChecked: false,
+    },
+    {
+        quiz_id: 34,
+        quiz_title: "This is quiz number - 12",
+        quiz_status: "draft",
+        isChecked: false,
+    },
+    {
+        quiz_id: 35,
+        quiz_title: "This is quiz number - 13",
+        quiz_status: "published",
+        isChecked: false,
+    },
+    {
+        quiz_id: 36,
+        quiz_title: "This is quiz number - 14",
+        quiz_status: "published",
+        isChecked: false,
+    },
+    {
+        quiz_id: 37,
+        quiz_title: "This is quiz number - 15",
+        quiz_status: "draft",
+        isChecked: false,
+    },
+    {
+        quiz_id: 38,
+        quiz_title: "This is quiz number - 16",
+        quiz_status: "published",
+        isChecked: false,
+    },
+    {
+        quiz_id: 39,
+        quiz_title: "This is quiz number - 17",
+        quiz_status: "draft",
+        isChecked: false,
+    },
+    {
+        quiz_id: 40,
+        quiz_title: "This is quiz number - 18",
+        quiz_status: "draft",
+        isChecked: false,
+    },
+    {
+        quiz_id: 41,
+        quiz_title: "This is quiz number - 19",
+        quiz_status: "published",
+        isChecked: false,
+    },
+    {
+        quiz_id: 42,
+        quiz_title: "This is quiz number - 20",
+        quiz_status: "draft",
+        isChecked: false,
+    },
+];
+
 export {
     dump_cats_homepage,
     dump_testimonials_homepage,
@@ -489,5 +612,6 @@ export {
     dump_faqs_content,
     dump_quizzes_list,
     dump_quiz_data,
-    dump_my_participation,
+    dump_my_participation, 
+    dump_list_of_quizes, 
 }

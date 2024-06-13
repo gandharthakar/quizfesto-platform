@@ -6,29 +6,17 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { MdOutlineModeEdit } from "react-icons/md";
-import copy from "copy-to-clipboard";
 import Swal from "sweetalert2";
+import copy from "copy-to-clipboard";
 
-interface AdmLstQzCd {
-    quizid: string,
-    quiz_title: string,
-    quiz_publish_status: string, 
-    checkboxName?: string,
-    checkboxChecked?: boolean, 
-    checkboxValue?: string, 
-    onCheckboxChange?: any
+interface AdmLstQuesCd {
+    qestion_id: string,
+    quetion_text: string,
 }
 
-function AdminListQuizCard(props: AdmLstQzCd) {
+function AdminListQuestionCard(props: AdmLstQuesCd) {
 
-    const { 
-        quizid, 
-        quiz_title, 
-        quiz_publish_status, 
-        checkboxName, 
-        checkboxChecked, 
-        onCheckboxChange, 
-    } = props;
+    const { qestion_id, quetion_text } = props;
 
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
     const menuRef = useRef<HTMLDivElement>(null);
@@ -43,7 +31,7 @@ function AdminListQuizCard(props: AdmLstQzCd) {
 
     const handleCopyQuizId = () => {
         setIsMenuOpen(false);
-        copy(quizid);
+        copy(qestion_id);
         Swal.fire({
             title: "Success!",
             text: "Link Copied Successfully!",
@@ -73,14 +61,12 @@ function AdminListQuizCard(props: AdmLstQzCd) {
                     <div className="alqc-chrb">
                         <input 
                             type="checkbox" 
-                            id={quizid} 
-                            name={checkboxName}  
-                            className="input-chrb" 
-                            value={quizid} 
-                            checked={checkboxChecked} 
-                            onChange={() => onCheckboxChange(quizid)} 
+                            id={qestion_id} 
+                            name="quiz" 
+                            className="input-chrb"  
+                            value={qestion_id} 
                         />
-                        <label htmlFor={quizid} className="label">
+                        <label htmlFor={qestion_id} className="label">
                             <div>
                                 <div className="squere-box">
                                     <IoMdCheckmark size={18} className="svg-icon" />
@@ -89,16 +75,10 @@ function AdminListQuizCard(props: AdmLstQzCd) {
                         </label>
                     </div>
                     <div className="mr-auto">
-                        <div className="pb-[5px]">
+                        <div className="pb-[0px]">
                             <h1 className="transition-all delay-75 font-noto_sans text-[18px] md:text-[20px] font-semibold text-zinc-800 dark:text-zinc-200 break-words">
-                                {quiz_title}
+                                {quetion_text}
                             </h1>
-                        </div>
-                        <div>
-                            <h6 className="transition-all delay-75 font-noto_sans text-[14px] md:text-[16px] text-zinc-800 dark:text-zinc-200">
-                                <span className="font-semibold">Status : </span> 
-                                {quiz_publish_status == "draft" ? (<span className="text-red-500 font-bold">Draft</span>) : (<span className="text-green-500 font-bold">Published</span>)}
-                            </h6>
                         </div>
                     </div>
                     <div ref={menuRef} className="relative h-[18px]">
@@ -110,11 +90,11 @@ function AdminListQuizCard(props: AdmLstQzCd) {
                         >
                             <FaEllipsisVertical size={18} />
                         </button>
-                        <ul className={`absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-zinc-950 dark:ring-zinc-800 ${isMenuOpen ? 'block' : 'hidden'}`}>
+                        <ul className={`absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-zinc-950 dark:ring-zinc-800 ${isMenuOpen ? 'block' : 'hidden'}`}>
                             <li className="w-full">
                                 <button 
                                     type="button" 
-                                    title="Copy Quiz ID" 
+                                    title="Copy Question ID" 
                                     className="transition-all delay-75 block w-full py-[10px] px-[15px] font-ubuntu text-[16px] text-zinc-900 hover:bg-zinc-100 dark:text-zinc-200 dark:hover:bg-zinc-800" 
                                     onClick={handleCopyQuizId}
                                 >
@@ -130,14 +110,14 @@ function AdminListQuizCard(props: AdmLstQzCd) {
                                             </defs>
                                         </svg>
                                         <div>
-                                            Copy Quiz ID
+                                            Copy Question ID
                                         </div>
                                     </div>
                                 </button>
                             </li>
                             <li className="w-full">
                                 <Link 
-                                    href={`/admin/quizes/edit-quiz/${quizid}`} 
+                                    href={`/admin/questions/edit-question/${qestion_id}`} 
                                     title="Edit"
                                     className="transition-all delay-75 block w-full py-[10px] px-[15px] font-ubuntu text-[16px] text-zinc-900 hover:bg-zinc-100 dark:text-zinc-200 dark:hover:bg-zinc-800" 
                                     onClick={handleClick}
@@ -173,4 +153,4 @@ function AdminListQuizCard(props: AdmLstQzCd) {
     )
 }
 
-export default AdminListQuizCard;
+export default AdminListQuestionCard;

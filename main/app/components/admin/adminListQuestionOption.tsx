@@ -7,24 +7,32 @@ import { useEffect, useRef, useState } from "react";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { MdOutlineModeEdit } from "react-icons/md";
 import Swal from "sweetalert2";
-import copy from "copy-to-clipboard";
+// import copy from "copy-to-clipboard";
 
-interface AdmLstQuesCd {
-    qestion_id: string,
-    quetion_text: string,
-    question_marks: string | number,
+type optionsType = {
+    option_id: string | number,
+    option_text: string,
+    correct_answer: boolean,
+}
+
+interface AdmLstQuesOptsCd {
+    options_id: string,
+    options_data?: optionsType[],
+    question_id: string | number,
+    question_text?: string,
     checkboxName?: string,
     checkboxChecked?: boolean, 
     checkboxValue?: string, 
     onCheckboxChange?: any 
 }
 
-function AdminListQuestionCard(props: AdmLstQuesCd) {
+function AdminListQuestionOption(props: AdmLstQuesOptsCd) {
 
     const { 
-        qestion_id, 
-        quetion_text, 
-        question_marks=5, 
+        options_id, 
+        options_data, 
+        question_id, 
+        question_text, 
         checkboxName, 
         checkboxChecked, 
         checkboxValue, 
@@ -42,16 +50,16 @@ function AdminListQuestionCard(props: AdmLstQuesCd) {
         setIsMenuOpen(false);
     }
 
-    const handleCopyQuizId = () => {
-        setIsMenuOpen(false);
-        copy(qestion_id);
-        Swal.fire({
-            title: "Success!",
-            text: "Link Copied Successfully!",
-            icon: "success",
-            timer: 4000
-        });
-    }
+    // const handleCopyQuizId = () => {
+    //     setIsMenuOpen(false);
+    //     copy(option_id);
+    //     Swal.fire({
+    //         title: "Success!",
+    //         text: "Link Copied Successfully!",
+    //         icon: "success",
+    //         timer: 4000
+    //     });
+    // }
 
     useEffect(()=> {
 
@@ -74,14 +82,14 @@ function AdminListQuestionCard(props: AdmLstQuesCd) {
                     <div className="alqc-chrb">
                         <input 
                             type="checkbox" 
-                            id={qestion_id} 
+                            id={options_id} 
                             name={checkboxName} 
                             className="input-chrb" 
-                            value={qestion_id} 
+                            value={options_id} 
                             checked={checkboxChecked} 
-                            onChange={() => onCheckboxChange(qestion_id)} 
+                            onChange={() => onCheckboxChange(options_id)} 
                         />
-                        <label htmlFor={qestion_id} className="label">
+                        <label htmlFor={options_id} className="label">
                             <div>
                                 <div className="squere-box">
                                     <IoMdCheckmark size={18} className="svg-icon" />
@@ -90,15 +98,36 @@ function AdminListQuestionCard(props: AdmLstQuesCd) {
                         </label>
                     </div>
                     <div className="mr-auto">
-                        <div className="pb-[0px]">
+                        <div className="pb-[10px]">
                             <h1 className="transition-all delay-75 font-noto_sans text-[18px] md:text-[20px] font-semibold text-zinc-800 dark:text-zinc-200 break-words">
-                                {quetion_text}
+                                Option Set
                             </h1>
                         </div>
+                        <div className="pb-[10px]">
+                            <h3 className="transition-all delay-75 font-noto_sans text-[14px] md:text-[16px] text-zinc-800 dark:text-zinc-200 break-words">
+                                <span className="font-semibold">Question :</span> {question_text ? question_text : "This is main question text ?"}
+                            </h3>
+                        </div>
                         <div>
-                            <h6 className="transition-all delay-75 font-noto_sans text-[14px] md:text-[16px] text-zinc-800 dark:text-zinc-200">
-                                <span className="font-semibold">Marks : </span> {question_marks}
-                            </h6>
+                            {
+                                options_data?.length ? 
+                                (
+                                    <ul className="flex flex-col gap-y-[5px]">
+                                        {
+                                            options_data.map((itm) => (
+                                                <li 
+                                                    key={itm.option_id} 
+                                                    className="transition-all delay-75 w-full font-noto_sans text-[14px] md:text-[16px] text-zinc-800 dark:text-zinc-200" 
+                                                >
+                                                    {itm.option_text}
+                                                </li>
+                                            ))
+                                        }
+                                    </ul>
+                                ) 
+                                : 
+                                ("")
+                            }
                         </div>
                     </div>
                     <div ref={menuRef} className="relative h-[18px]">
@@ -111,7 +140,7 @@ function AdminListQuestionCard(props: AdmLstQuesCd) {
                             <FaEllipsisVertical size={18} />
                         </button>
                         <ul className={`absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-zinc-950 dark:ring-zinc-800 ${isMenuOpen ? 'block' : 'hidden'}`}>
-                            <li className="w-full">
+                            {/* <li className="w-full">
                                 <button 
                                     type="button" 
                                     title="Copy Question ID" 
@@ -134,13 +163,13 @@ function AdminListQuestionCard(props: AdmLstQuesCd) {
                                         </div>
                                     </div>
                                 </button>
-                            </li>
+                            </li> */}
                             <li className="w-full">
                                 <Link 
-                                    href={`/admin/questions/edit-question/${qestion_id}`} 
-                                    title="Edit"
+                                    href={`/admin/options/edit-options/${options_id}`} 
+                                    title="Edit" 
                                     className="transition-all delay-75 block w-full py-[10px] px-[15px] font-ubuntu text-[16px] text-zinc-900 hover:bg-zinc-100 dark:text-zinc-200 dark:hover:bg-zinc-800" 
-                                    onClick={handleClick}
+                                    onClick={handleClick} 
                                 >
                                     <div className="flex gap-x-[5px] items-center">
                                         <MdOutlineModeEdit size={20} />
@@ -173,4 +202,4 @@ function AdminListQuestionCard(props: AdmLstQuesCd) {
     )
 }
 
-export default AdminListQuestionCard;
+export default AdminListQuestionOption;

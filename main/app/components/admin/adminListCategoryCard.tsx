@@ -7,27 +7,25 @@ import { useEffect, useRef, useState } from "react";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { MdOutlineModeEdit } from "react-icons/md";
 import Swal from "sweetalert2";
-import copy from "copy-to-clipboard";
 
-interface AdmLstQuesCd {
-    qestion_id: string,
-    quetion_text: string,
-    question_marks: string | number,
+interface AdmLstQzCd {
+    cat_id: string,
+    category_title: string,
+    category_slug: string, 
     checkboxName?: string,
     checkboxChecked?: boolean, 
     checkboxValue?: string, 
-    onCheckboxChange?: any 
+    onCheckboxChange?: any
 }
 
-function AdminListQuestionCard(props: AdmLstQuesCd) {
+function AdminListCategoryCard(props: AdmLstQzCd) {
 
     const { 
-        qestion_id, 
-        quetion_text, 
-        question_marks=5, 
+        cat_id, 
+        category_title, 
+        category_slug, 
         checkboxName, 
         checkboxChecked, 
-        checkboxValue, 
         onCheckboxChange, 
     } = props;
 
@@ -40,17 +38,6 @@ function AdminListQuestionCard(props: AdmLstQuesCd) {
     
     const handleDeleteQuiz = () => {
         setIsMenuOpen(false);
-    }
-
-    const handleCopyQuizId = () => {
-        setIsMenuOpen(false);
-        copy(qestion_id);
-        Swal.fire({
-            title: "Success!",
-            text: "Link Copied Successfully!",
-            icon: "success",
-            timer: 4000
-        });
     }
 
     useEffect(()=> {
@@ -74,14 +61,14 @@ function AdminListQuestionCard(props: AdmLstQuesCd) {
                     <div className="alqc-chrb">
                         <input 
                             type="checkbox" 
-                            id={qestion_id} 
-                            name={checkboxName} 
+                            id={cat_id} 
+                            name={checkboxName}  
                             className="input-chrb" 
-                            value={qestion_id} 
+                            value={cat_id} 
                             checked={checkboxChecked} 
-                            onChange={() => onCheckboxChange(qestion_id)} 
+                            onChange={() => onCheckboxChange(cat_id)} 
                         />
-                        <label htmlFor={qestion_id} className="label">
+                        <label htmlFor={cat_id} className="label">
                             <div>
                                 <div className="squere-box">
                                     <IoMdCheckmark size={18} className="svg-icon" />
@@ -90,14 +77,15 @@ function AdminListQuestionCard(props: AdmLstQuesCd) {
                         </label>
                     </div>
                     <div className="mr-auto">
-                        <div className="pb-[0px]">
+                        <div className="pb-[5px]">
                             <h1 className="transition-all delay-75 font-noto_sans text-[18px] md:text-[20px] font-semibold text-zinc-800 dark:text-zinc-200 break-words">
-                                {quetion_text}
+                                {category_title}
                             </h1>
                         </div>
                         <div>
                             <h6 className="transition-all delay-75 font-noto_sans text-[14px] md:text-[16px] text-zinc-800 dark:text-zinc-200">
-                                <span className="font-semibold">Marks : </span> {question_marks}
+                                <span className="font-semibold">Slug : </span> 
+                                {category_slug}
                             </h6>
                         </div>
                     </div>
@@ -110,34 +98,10 @@ function AdminListQuestionCard(props: AdmLstQuesCd) {
                         >
                             <FaEllipsisVertical size={18} />
                         </button>
-                        <ul className={`absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-zinc-950 dark:ring-zinc-800 ${isMenuOpen ? 'block' : 'hidden'}`}>
-                            <li className="w-full">
-                                <button 
-                                    type="button" 
-                                    title="Copy Question ID" 
-                                    className="transition-all delay-75 block w-full py-[10px] px-[15px] font-ubuntu text-[16px] text-zinc-900 hover:bg-zinc-100 dark:text-zinc-200 dark:hover:bg-zinc-800" 
-                                    onClick={handleCopyQuizId}
-                                >
-                                    <div className="flex gap-x-[5px] items-center">
-                                        <svg width="100" height="100" className="w-[22px] h-[22px] md:w-[22px] md:h-[22px]" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <g clipPath="url(#clip0_2009_9688)">
-                                                <path fill="red" className="transition-all delay-75 fill-zinc-800 dark:fill-zinc-200" d="M5.83333 5.49984V2.99984C5.83333 2.77882 5.92113 2.56686 6.07741 2.41058C6.23369 2.2543 6.44565 2.1665 6.66667 2.1665H16.6667C16.8877 2.1665 17.0996 2.2543 17.2559 2.41058C17.4122 2.56686 17.5 2.77882 17.5 2.99984V14.6665C17.5 14.8875 17.4122 15.0995 17.2559 15.2558C17.0996 15.412 16.8877 15.4998 16.6667 15.4998H14.1667V17.9998C14.1667 18.4598 13.7917 18.8332 13.3275 18.8332H3.33917C3.22927 18.8338 3.12033 18.8128 3.0186 18.7712C2.91687 18.7296 2.82436 18.6684 2.74638 18.5909C2.6684 18.5135 2.60649 18.4214 2.56421 18.32C2.52193 18.2185 2.50011 18.1097 2.5 17.9998L2.5025 6.33317C2.5025 5.87317 2.8775 5.49984 3.34167 5.49984H5.83333ZM4.16917 7.1665L4.16667 17.1665H12.5V7.1665H4.16917ZM7.5 5.49984H14.1667V13.8332H15.8333V3.83317H7.5V5.49984Z"/>
-                                            </g>
-                                            <defs>
-                                                <clipPath id="clip0_2009_9688">
-                                                    <rect width="20" height="20" fill="white" transform="translate(0 0.5)"/>
-                                                </clipPath>
-                                            </defs>
-                                        </svg>
-                                        <div>
-                                            Copy Question ID
-                                        </div>
-                                    </div>
-                                </button>
-                            </li>
+                        <ul className={`absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-zinc-950 dark:ring-zinc-800 ${isMenuOpen ? 'block' : 'hidden'}`}>
                             <li className="w-full">
                                 <Link 
-                                    href={`/admin/questions/edit-question/${qestion_id}`} 
+                                    href={`/admin/categories/edit-category/${cat_id}`} 
                                     title="Edit"
                                     className="transition-all delay-75 block w-full py-[10px] px-[15px] font-ubuntu text-[16px] text-zinc-900 hover:bg-zinc-100 dark:text-zinc-200 dark:hover:bg-zinc-800" 
                                     onClick={handleClick}
@@ -173,4 +137,4 @@ function AdminListQuestionCard(props: AdmLstQuesCd) {
     )
 }
 
-export default AdminListQuestionCard;
+export default AdminListCategoryCard;

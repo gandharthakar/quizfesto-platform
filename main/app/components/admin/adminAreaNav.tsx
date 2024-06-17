@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/redux-service/store";
-import { usePathname } from "next/navigation";
+import { usePathname, useParams } from "next/navigation";
 import { close_admin_area_menu } from "@/app/redux-service/slices/admin/adminAreaMenuToggleSlice";
 import { VscDashboard } from "react-icons/vsc";
 import { RiMessage2Line } from "react-icons/ri";
@@ -19,21 +19,25 @@ function AdminAreaNav() {
 
     const dispatch = useDispatch();
     const pathName = usePathname();
+    const params = useParams();
+    const ques_id = params?.question_id;
+    const opt_id = params?.option_id;
+    const cat_id = params?.category_id;
     const isMenuOpen = useSelector((state: RootState) => state.admin_area_menu_toggle.is_admin_area_menu_open);
     const isDarkTheme = useSelector((state: RootState) => state.admin_theme_mode.admin_dark_theme_mode);
 
-    const all_quizes_mi: string[] = ["/admin/quizes", "/admin/quizes/create-new-quiz", "/admin/questions", "/admin/options"];
+    const all_quizes_mi: string[] = ["/admin/quizes", "/admin/quizes/create-new-quiz", "/admin/questions", "/admin/options", "/admin/questions/create-new-question", `/admin/questions/edit-question/${ques_id}`, "/admin/options/create-new-options", `/admin/options/edit-options/${opt_id}`];
     const all_users_mi: string[] = ["/admin/users"];
     const all_prizes_mi: string[] = ["/admin/prizes"];
     const all_winners_mi: string[] = ["/admin/winners"];
-    const all_qzcats_mi: string[] = ["/admin/quiz-categories"];
+    const all_qzcats_mi: string[] = ["/admin/categories", "/admin/categories/create-new-category", `/admin/categories/edit-category/${cat_id}`];
 
     const quizes_submenu = [
         {
             subMenuItemId: '1',
             subMenuItemURI: '/admin/quizes',
             subMenuItemTitle: 'Quizes',
-            subMenuItemActArr: ["/admin/quizes"],
+            subMenuItemActArr: ["/admin/quizes", "/admin/quizes/create-new-quiz"],
             subMenuItemPathName: pathName, 
             subMenuItemOnClickCallBack: () => dispatch(close_admin_area_menu()), 
         },
@@ -41,7 +45,7 @@ function AdminAreaNav() {
             subMenuItemId: '2',
             subMenuItemURI: '/admin/questions',
             subMenuItemTitle: 'Questions',
-            subMenuItemActArr: ["/admin/questions"],
+            subMenuItemActArr: ["/admin/questions", "/admin/questions/create-new-question", `/admin/questions/edit-question/${ques_id}`],
             subMenuItemPathName: pathName, 
             subMenuItemOnClickCallBack: () => dispatch(close_admin_area_menu()), 
         },
@@ -49,7 +53,7 @@ function AdminAreaNav() {
             subMenuItemId: '3',
             subMenuItemURI: '/admin/options',
             subMenuItemTitle: 'Options',
-            subMenuItemActArr: ["/admin/options"],
+            subMenuItemActArr: ["/admin/options", "/admin/options/create-new-options", `/admin/options/edit-options/${opt_id}`],
             subMenuItemPathName: pathName, 
             subMenuItemOnClickCallBack: () => dispatch(close_admin_area_menu()), 
         }
@@ -115,7 +119,7 @@ function AdminAreaNav() {
                                 />
                                 <li>
                                     <Link
-                                        href="/admin/quiz-categories"
+                                        href="/admin/categories"
                                         title="Categories"
                                         className={`nav-item ${all_qzcats_mi.includes(pathName) ? 'active' : ''}`}
                                         onClick={() => dispatch(close_admin_area_menu())}

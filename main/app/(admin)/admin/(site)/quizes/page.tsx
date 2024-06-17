@@ -5,7 +5,6 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { GrAdd } from "react-icons/gr";
 import AdminListQuizCard from "@/app/components/admin/adminListQuizCard";
 import { IoMdCheckmark } from "react-icons/io";
-import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import AdminSearchPanel from "@/app/components/admin/adminSearchPanel";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
@@ -16,11 +15,6 @@ function GFG(array: any, currPage: number, pageSize: number) {
     const startIndex = (currPage - 1) * pageSize;
     const endIndex = startIndex + pageSize;
     return array.slice(startIndex, endIndex);
-}
-
-interface ChkData {
-    id: string;
-    value: string;
 }
 
 function Page() {
@@ -242,21 +236,6 @@ function Page() {
                         : 
                         ('')
                     }
-                    {/* <CheckboxGroup /> */}
-                    {/* <div className="pb-[20px] last:pb-0">
-                        <AdminListQuizCard 
-                            quizid="1" 
-                            quiz_title="#1 This is the testing quiz title for demo purpose." 
-                            quiz_publish_status="draft"
-                        />
-                    </div>
-                    <div className="pb-[20px] last:pb-0">
-                        <AdminListQuizCard 
-                            quizid="2" 
-                            quiz_title="#2 This is the testing quiz title for demo purpose." 
-                            quiz_publish_status="published"
-                        />
-                    </div> */}
                 </div>
 
                 <SitePagination 
@@ -266,35 +245,6 @@ function Page() {
                     parentClassList="pt-[50px]" 
                     onPageChange={handlePageChange} 
                 />
-                {/* <div className="pt-[50px] max-w-[280px] mx-auto">
-                    <div className="flex justify-between gap-x-[15px] items-center">
-                        <div>
-                            <button 
-                                type="button" 
-                                title="Previous Page" 
-                                className="transition-all delay-75 text-zinc-700 dark:text-zinc-200 disabled:text-zinc-400 dark:disabled:text-zinc-600"
-                                disabled={true}
-                            >
-                                <FaAngleLeft size={35} className="w-[25px] h-[25px] md:w-[35px] md:h-[35px]" />
-                            </button>
-                        </div>
-                        <div>
-                            <div className="transition-all delay-75 font-ubuntu text-[20px] md:text-[22px] text-zinc-800 dark:text-zinc-200">
-                                1 / 3
-                            </div>
-                        </div>
-                        <div>
-                            <button 
-                                type="button" 
-                                title="Next Page" 
-                                className="transition-all delay-75 text-zinc-700 dark:text-zinc-200 disabled:text-zinc-400 dark:disabled:text-zinc-600"
-                                disabled={false}
-                            >
-                                <FaAngleRight size={35} className="w-[25px] h-[25px] md:w-[35px] md:h-[35px]" />
-                            </button>
-                        </div>
-                    </div>
-                </div> */}
             </div>
         </>
     )

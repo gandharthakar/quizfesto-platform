@@ -486,121 +486,506 @@ const dump_list_of_quizes = [
         quiz_id: 23,
         quiz_title: "This is quiz number - 1",
         quiz_status: "draft",
-        isChecked: false,
     },
     {
         quiz_id: 24,
         quiz_title: "This is quiz number - 2",
         quiz_status: "published",
-        isChecked: false,
     },
     {
         quiz_id: 25,
         quiz_title: "This is quiz number - 3",
         quiz_status: "draft",
-        isChecked: false,
     },
     {
         quiz_id: 26,
         quiz_title: "This is quiz number - 4",
         quiz_status: "draft",
-        isChecked: false,
     },
     {
         quiz_id: 27,
         quiz_title: "This is quiz number - 5",
         quiz_status: "published",
-        isChecked: false,
     },
     {
         quiz_id: 28,
         quiz_title: "This is quiz number - 6",
         quiz_status: "draft",
-        isChecked: false,
     },
     {
         quiz_id: 29,
         quiz_title: "This is quiz number - 7",
         quiz_status: "published",
-        isChecked: false,
     },
     {
         quiz_id: 30,
         quiz_title: "This is quiz number - 8",
         quiz_status: "published",
-        isChecked: false,
     },
     {
         quiz_id: 31,
         quiz_title: "This is quiz number - 9",
         quiz_status: "published",
-        isChecked: false,
     },
     {
         quiz_id: 32,
         quiz_title: "This is quiz number - 10",
         quiz_status: "published",
-        isChecked: false,
     },
     {
         quiz_id: 33,
         quiz_title: "This is quiz number - 11",
         quiz_status: "draft",
-        isChecked: false,
     },
     {
         quiz_id: 34,
         quiz_title: "This is quiz number - 12",
         quiz_status: "draft",
-        isChecked: false,
     },
     {
         quiz_id: 35,
         quiz_title: "This is quiz number - 13",
         quiz_status: "published",
-        isChecked: false,
     },
     {
         quiz_id: 36,
         quiz_title: "This is quiz number - 14",
         quiz_status: "published",
-        isChecked: false,
     },
     {
         quiz_id: 37,
         quiz_title: "This is quiz number - 15",
         quiz_status: "draft",
-        isChecked: false,
     },
     {
         quiz_id: 38,
         quiz_title: "This is quiz number - 16",
         quiz_status: "published",
-        isChecked: false,
     },
     {
         quiz_id: 39,
         quiz_title: "This is quiz number - 17",
         quiz_status: "draft",
-        isChecked: false,
     },
     {
         quiz_id: 40,
         quiz_title: "This is quiz number - 18",
         quiz_status: "draft",
-        isChecked: false,
     },
     {
         quiz_id: 41,
         quiz_title: "This is quiz number - 19",
         quiz_status: "published",
-        isChecked: false,
     },
     {
         quiz_id: 42,
         quiz_title: "This is quiz number - 20",
         quiz_status: "draft",
-        isChecked: false,
+    },
+];
+
+const dump_list_of_questions = [
+    {
+        question_id: 21,
+        question_title: "This is question - 1 ?", 
+        question_mark: 2
+    },
+    {
+        question_id: 22,
+        question_title: "This is question - 2 ?", 
+        question_mark: 2
+    },
+    {
+        question_id: 23,
+        question_title: "This is question - 3 ?", 
+        question_mark: 2
+    },
+    {
+        question_id: 24,
+        question_title: "This is question - 4 ?", 
+        question_mark: 2
+    },
+    {
+        question_id: 25,
+        question_title: "This is question - 5 ?", 
+        question_mark: 2
+    },
+    {
+        question_id: 26,
+        question_title: "This is question - 6 ?", 
+        question_mark: 2
+    },
+    {
+        question_id: 27,
+        question_title: "This is question - 7 ?", 
+        question_mark: 2
+    },
+    {
+        question_id: 28,
+        question_title: "This is question - 8 ?", 
+        question_mark: 2
+    },
+    {
+        question_id: 29,
+        question_title: "This is question - 9 ?", 
+        question_mark: 2
+    },
+    {
+        question_id: 30,
+        question_title: "This is question - 10 ?", 
+        question_mark: 2
+    },
+    {
+        question_id: 31,
+        question_title: "This is question - 11 ?", 
+        question_mark: 2
+    },
+    {
+        question_id: 32,
+        question_title: "This is question - 12 ?", 
+        question_mark: 2
+    },
+    {
+        question_id: 33,
+        question_title: "This is question - 13 ?", 
+        question_mark: 2
+    },
+    {
+        question_id: 34,
+        question_title: "This is question - 14 ?", 
+        question_mark: 2
+    },
+    {
+        question_id: 35,
+        question_title: "This is question - 15 ?", 
+        question_mark: 2
+    },
+    {
+        question_id: 36,
+        question_title: "This is question - 16 ?", 
+        question_mark: 2
+    },
+    {
+        question_id: 37,
+        question_title: "This is question - 17 ?", 
+        question_mark: 2
+    },
+    {
+        question_id: 38,
+        question_title: "This is question - 18 ?", 
+        question_mark: 2
+    },
+    {
+        question_id: 39,
+        question_title: "This is question - 19 ?", 
+        question_mark: 2
+    },
+    {
+        question_id: 40,
+        question_title: "This is question - 20 ?", 
+        question_mark: 2
+    },
+];
+
+const dump_list_of_options = [
+    {
+        options_id: "hey_123",
+        options_data: [
+            {
+                option_id: "11", 
+                option_text: "Option 11", 
+                correct_answer: false, 
+            },
+            {
+                option_id: "12", 
+                option_text: "Option 12", 
+                correct_answer: true, 
+            },
+            {
+                option_id: "13", 
+                option_text: "Option 13", 
+                correct_answer: false, 
+            },
+            {
+                option_id: "14", 
+                option_text: "Option 14", 
+                correct_answer: false, 
+            },
+        ],
+        question_id: "69",
+        question_text: "This is main question text - 1 ?",
+        search_tems: ["Option 11", "Option 12", "Option 13", "Option 14"],
+    },
+    {
+        options_id: "hey_224",
+        options_data: [
+            {
+                option_id: "21", 
+                option_text: "Option 21", 
+                correct_answer: true, 
+            },
+            {
+                option_id: "22", 
+                option_text: "Option 22", 
+                correct_answer: false, 
+            },
+            {
+                option_id: "23", 
+                option_text: "Option 23", 
+                correct_answer: false, 
+            },
+            {
+                option_id: "24", 
+                option_text: "Option 24", 
+                correct_answer: false, 
+            },
+        ],
+        question_id: "65",
+        question_text: "This is main question text - 2 ?",
+        search_tems: ["Option 21", "Option 22", "Option 23", "Option 24"],
+    },
+    {
+        options_id: "hey_258",
+        options_data: [
+            {
+                option_id: "31", 
+                option_text: "Option 31", 
+                correct_answer: false, 
+            },
+            {
+                option_id: "32", 
+                option_text: "Option 32", 
+                correct_answer: false, 
+            },
+            {
+                option_id: "33", 
+                option_text: "Option 33", 
+                correct_answer: true, 
+            },
+            {
+                option_id: "34", 
+                option_text: "Option 34", 
+                correct_answer: false, 
+            },
+        ],
+        question_id: "95",
+        question_text: "This is main question text - 3 ?",
+        search_tems: ["Option 31", "Option 32", "Option 33", "Option 34"],
+    },
+    {
+        options_id: "hey_117",
+        options_data: [
+            {
+                option_id: "41", 
+                option_text: "Option 41", 
+                correct_answer: false, 
+            },
+            {
+                option_id: "42", 
+                option_text: "Option 42", 
+                correct_answer: false, 
+            },
+            {
+                option_id: "43", 
+                option_text: "Option 43", 
+                correct_answer: false, 
+            },
+            {
+                option_id: "44", 
+                option_text: "Option 44", 
+                correct_answer: true, 
+            },
+        ],
+        question_id: "12",
+        question_text: "This is main question text - 4 ?",
+        search_tems: ["Option 41", "Option 42", "Option 43", "Option 44"],
+    },
+    {
+        options_id: "hey_745",
+        options_data: [
+            {
+                option_id: "51", 
+                option_text: "Option 51", 
+                correct_answer: true, 
+            },
+            {
+                option_id: "52", 
+                option_text: "Option 52", 
+                correct_answer: false, 
+            },
+            {
+                option_id: "53", 
+                option_text: "Option 53", 
+                correct_answer: false, 
+            },
+            {
+                option_id: "54", 
+                option_text: "Option 54", 
+                correct_answer: false, 
+            },
+        ],
+        question_id: "35",
+        question_text: "This is main question text - 5 ?",
+        search_tems: ["Option 51", "Option 52", "Option 53", "Option 54"],
+    },
+    {
+        options_id: "hey_558",
+        options_data: [
+            {
+                option_id: "61", 
+                option_text: "Option 61", 
+                correct_answer: false, 
+            },
+            {
+                option_id: "62", 
+                option_text: "Option 62", 
+                correct_answer: true, 
+            },
+            {
+                option_id: "63", 
+                option_text: "Option 63", 
+                correct_answer: false, 
+            },
+            {
+                option_id: "64", 
+                option_text: "Option 64", 
+                correct_answer: false, 
+            },
+        ],
+        question_id: "42", 
+        question_text: "This is main question text - 6 ?",
+        search_tems: ["Option 61", "Option 62", "Option 63", "Option 64"],
+    },
+    {
+        options_id: "hey_469",
+        options_data: [
+            {
+                option_id: "71", 
+                option_text: "Option 71", 
+                correct_answer: false, 
+            },
+            {
+                option_id: "72", 
+                option_text: "Option 72", 
+                correct_answer: false, 
+            },
+            {
+                option_id: "73", 
+                option_text: "Option 73", 
+                correct_answer: true, 
+            },
+            {
+                option_id: "74", 
+                option_text: "Option 74", 
+                correct_answer: false, 
+            },
+        ],
+        question_id: "38", 
+        question_text: "This is main question text - 7 ?",
+        search_tems: ["Option 71", "Option 72", "Option 73", "Option 74"],
+    },
+];
+
+const dump_list_of_categories = [
+    {
+        category_id: "cat_id_1",
+        category_title: "Tech",
+        category_slug: "tech",
+    },
+    {
+        category_id: "cat_id_2",
+        category_title: "Game",
+        category_slug: "game",
+    },
+    {
+        category_id: "cat_id_3",
+        category_title: "Economy",
+        category_slug: "economy",
+    },
+    {
+        category_id: "cat_id_4",
+        category_title: "Gate",
+        category_slug: "gate",
+    },
+    {
+        category_id: "cat_id_5",
+        category_title: "Maths",
+        category_slug: "maths",
+    },
+    {
+        category_id: "cat_id_6",
+        category_title: "Science",
+        category_slug: "science",
+    },
+    {
+        category_id: "cat_id_7",
+        category_title: "Global",
+        category_slug: "global",
+    },
+    {
+        category_id: "cat_id_8",
+        category_title: "GDP",
+        category_slug: "gdp",
+    },
+    {
+        category_id: "cat_id_9",
+        category_title: "Income Tax",
+        category_slug: "income_tax",
+    },
+    {
+        category_id: "cat_id_10",
+        category_title: "Civil",
+        category_slug: "civil",
+    },
+    {
+        category_id: "cat_id_11",
+        category_title: "Court",
+        category_slug: "court",
+    },
+    {
+        category_id: "cat_id_12",
+        category_title: "Leadership",
+        category_slug: "leadership",
+    },
+    {
+        category_id: "cat_id_13",
+        category_title: "PHP",
+        category_slug: "php",
+    },
+    {
+        category_id: "cat_id_14",
+        category_title: "MySQL",
+        category_slug: "mysql",
+    },
+    {
+        category_id: "cat_id_15",
+        category_title: "PostgreSQL",
+        category_slug: "postgresql",
+    },
+    {
+        category_id: "cat_id_16",
+        category_title: "HTML",
+        category_slug: "html",
+    },
+    {
+        category_id: "cat_id_17",
+        category_title: "CSS",
+        category_slug: "css",
+    },
+    {
+        category_id: "cat_id_18",
+        category_title: "HTML5",
+        category_slug: "html5",
+    },
+    {
+        category_id: "cat_id_19",
+        category_title: "JavaScript",
+        category_slug: "javascript",
+    },
+    {
+        category_id: "cat_id_20",
+        category_title: "TypeScript",
+        category_slug: "typescript",
     },
 ];
 
@@ -614,4 +999,7 @@ export {
     dump_quiz_data,
     dump_my_participation, 
     dump_list_of_quizes, 
+    dump_list_of_questions, 
+    dump_list_of_options, 
+    dump_list_of_categories, 
 }

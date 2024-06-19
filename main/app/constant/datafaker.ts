@@ -989,6 +989,109 @@ const dump_list_of_categories = [
     },
 ];
 
+const dump_list_of_users = [
+    {
+        user_id: "user_1",
+        user_name: "Amit Jain",
+        user_role: "Normal",
+    },
+    {
+        user_id: "user_2",
+        user_name: "Ali Fazal",
+        user_role: "Normal",
+    },
+    {
+        user_id: "user_3",
+        user_name: "Anuj Joshi",
+        user_role: "Normal",
+    },
+    {
+        user_id: "user_4",
+        user_name: "Anup Tiwari",
+        user_role: "Normal",
+    },
+    {
+        user_id: "user_5",
+        user_name: "Eshwar Yogi",
+        user_role: "Normal",
+    },
+    {
+        user_id: "user_6",
+        user_name: "Aman Roy",
+        user_role: "Normal",
+    },
+    {
+        user_id: "user_7",
+        user_name: "Om Prakash",
+        user_role: "Normal",
+    },
+    {
+        user_id: "user_8",
+        user_name: "Naresh Dhawle",
+        user_role: "Normal",
+    },
+    {
+        user_id: "user_9",
+        user_name: "Amay Thakur",
+        user_role: "Normal",
+    },
+    {
+        user_id: "user_10",
+        user_name: "Alok Puri",
+        user_role: "Normal",
+    },
+    {
+        user_id: "user_11",
+        user_name: "Shreya Joshi",
+        user_role: "Normal",
+    },
+    {
+        user_id: "user_12",
+        user_name: "Meena Kumari",
+        user_role: "Normal",
+    },
+    {
+        user_id: "user_13",
+        user_name: "Priya Jadhav",
+        user_role: "Normal",
+    },
+    {
+        user_id: "user_14",
+        user_name: "Pratibha Ranta",
+        user_role: "Normal",
+    },
+    {
+        user_id: "user_15",
+        user_name: "Sheetal Jha",
+        user_role: "Normal",
+    },
+    {
+        user_id: "user_16",
+        user_name: "Riya Patil",
+        user_role: "Normal",
+    },
+    {
+        user_id: "user_17",
+        user_name: "Tejas Garg",
+        user_role: "Normal",
+    },
+    {
+        user_id: "user_18",
+        user_name: "Pritam Singh",
+        user_role: "Normal",
+    },
+    {
+        user_id: "user_19",
+        user_name: "Mansi Dhule",
+        user_role: "Normal",
+    },
+    {
+        user_id: "user_20",
+        user_name: "Farhan Khan",
+        user_role: "Normal",
+    },
+];
+
 export {
     dump_cats_homepage,
     dump_testimonials_homepage,
@@ -1002,4 +1105,5 @@ export {
     dump_list_of_questions, 
     dump_list_of_options, 
     dump_list_of_categories, 
+    dump_list_of_users, 
 }

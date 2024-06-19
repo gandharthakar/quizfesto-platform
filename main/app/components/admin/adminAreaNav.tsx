@@ -23,14 +23,15 @@ function AdminAreaNav() {
     const ques_id = params?.question_id;
     const opt_id = params?.option_id;
     const cat_id = params?.category_id;
+    const usr_id = params?.user_id;
     const isMenuOpen = useSelector((state: RootState) => state.admin_area_menu_toggle.is_admin_area_menu_open);
     const isDarkTheme = useSelector((state: RootState) => state.admin_theme_mode.admin_dark_theme_mode);
 
     const all_quizes_mi: string[] = ["/admin/quizes", "/admin/quizes/create-new-quiz", "/admin/questions", "/admin/options", "/admin/questions/create-new-question", `/admin/questions/edit-question/${ques_id}`, "/admin/options/create-new-options", `/admin/options/edit-options/${opt_id}`];
-    const all_users_mi: string[] = ["/admin/users"];
+    const all_users_mi: string[] = ["/admin/users", "/admin/users/create-new-user", `/admin/users/edit-user/${usr_id}`];
     const all_prizes_mi: string[] = ["/admin/prizes"];
     const all_winners_mi: string[] = ["/admin/winners"];
-    const all_qzcats_mi: string[] = ["/admin/categories", "/admin/categories/create-new-category", `/admin/categories/edit-category/${cat_id}`];
+    const all_qzcats_mi: string[] = ["/admin/categories", "/admin/categories/create-new-category", `/admin/categories/edit-category/${cat_id}`, "/admin/categories/set_home_categories"];
 
     const quizes_submenu = [
         {
@@ -57,6 +58,25 @@ function AdminAreaNav() {
             subMenuItemPathName: pathName, 
             subMenuItemOnClickCallBack: () => dispatch(close_admin_area_menu()), 
         }
+    ];
+
+    const category_submenu = [
+        {
+            subMenuItemId: '1',
+            subMenuItemURI: '/admin/categories',
+            subMenuItemTitle: 'Categories',
+            subMenuItemActArr: ["/admin/categories", "/admin/categories/create-new-category", `/admin/categories/edit-category/${cat_id}`],
+            subMenuItemPathName: pathName, 
+            subMenuItemOnClickCallBack: () => dispatch(close_admin_area_menu()), 
+        },
+        {
+            subMenuItemId: '2',
+            subMenuItemURI: '/admin/categories/set_home_categories',
+            subMenuItemTitle: 'Home Categories',
+            subMenuItemActArr: ["/admin/categories/set_home_categories"],
+            subMenuItemPathName: pathName, 
+            subMenuItemOnClickCallBack: () => dispatch(close_admin_area_menu()), 
+        },
     ];
 
     return (
@@ -117,7 +137,17 @@ function AdminAreaNav() {
                                     closeMainMenuOnParentItemClick={false} 
                                     closeMainMenuFunc={() => dispatch(close_admin_area_menu())} 
                                 />
-                                <li>
+                                <AdminSubMenuComp
+                                    parentMenuItemURI="#" 
+                                    parentMenuItemTitle="Categories" 
+                                    parentMenuItemIcon={<BiCategory size={20} className="svg-icon" />} 
+                                    parentMenuItemActArr={all_qzcats_mi} 
+                                    parentMenuItemPathName={pathName} 
+                                    submenu={category_submenu} 
+                                    closeMainMenuOnParentItemClick={false} 
+                                    closeMainMenuFunc={() => dispatch(close_admin_area_menu())} 
+                                />
+                                {/* <li>
                                     <Link
                                         href="/admin/categories"
                                         title="Categories"
@@ -131,7 +161,7 @@ function AdminAreaNav() {
                                             </div>
                                         </div>
                                     </Link>
-                                </li>
+                                </li> */}
                                 <li>
                                     <Link
                                         href="/admin/users"

@@ -10,9 +10,14 @@ import { MdOutlineAddAPhoto } from "react-icons/md";
 import { FaRegTrashCan } from "react-icons/fa6";
 
 function validatePhone(phoneNumber: string){
-    var phoneNumberPattern = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;  
+    let phoneNumberPattern = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
     return phoneNumberPattern.test(phoneNumber); 
- }
+}
+
+function validPassword(pwd: string) {
+    let pwdPattern = /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[@#$%^&*-+]).{8,16}$/;
+    return pwdPattern.test(pwd);
+}
 
 function Page() {
 
@@ -45,8 +50,33 @@ function Page() {
         }
     }
 
-    const handleConfPwdChange = () => {
+    const handlePwdChange = (e: any) => {
+        let value = e.target.value;
+        setPassword(value);
+        if(value !== '') {
+            const valPwd = validPassword(value);
+            if(!valPwd) {
+                setPwdError("Password contains minimum 8 characters and maximum 16 characters.");
+            } else {
+                setPwdError("");
+            }
+        }
+    }
 
+    const handleConfPwdChange = (e: any) => {
+        let value = e.target.value;
+        setConfirmPassword(value);
+        if(value !== '') {
+            if(password === '') {
+                setConfPwdError("Password Field is blank");
+            } else {
+                if(value !== password) {
+                    setConfPwdError("Password is missmatched.");
+                } else {
+                    setConfPwdError("");
+                }
+            }
+        }
     }
 
     const removeButtonClick = () => {
@@ -112,7 +142,7 @@ function Page() {
         full_name: z.string({
 			required_error: "Please enter Full Name",
 			invalid_type_error: "Full Name must be in string format."
-		}).min(10, {message: "Full name must be contains at least 10 characters."}),
+		}).min(1, {message: "Full name must be contains at least 1 characters."}),
 
         email: z.string({
 			required_error: "Please enter email address.",
@@ -226,7 +256,10 @@ function Page() {
                                         id="cq-qpwd" 
                                         className="ws-input-pwd-m1-v1" 
                                         autoComplete="off" 
+                                        value={password} 
+                                        onChange={handlePwdChange} 
                                     />
+                                    {pwdError && (<div className="ws-input-error mt-[2px]">{pwdError}</div>)}
                                 </div>
                                 <div className="pb-[20px]">
                                     <label 
@@ -240,7 +273,10 @@ function Page() {
                                         id="cq-qcnfpwd" 
                                         className="ws-input-pwd-m1-v1" 
                                         autoComplete="off" 
+                                        value={confirmPassword} 
+                                        onChange={handleConfPwdChange} 
                                     />
+                                    {confPwdError && (<div className="ws-input-error mt-[2px]">{confPwdError}</div>)}
                                 </div>
                                 <div className="pb-[20px]">
                                     <label 

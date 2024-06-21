@@ -102,7 +102,7 @@ function Page() {
         full_name: z.string({
 			required_error: "Please enter Full Name",
 			invalid_type_error: "Full Name must be in string format."
-		}).min(10, {message: "Full name must be contains at least 10 characters."}),
+		}).min(1, {message: "Full name must be contains at least 1 characters."}),
 
         email: z.string({
 			required_error: "Please enter email address.",
@@ -292,27 +292,6 @@ function Page() {
                                         </button>
                                     </div>
                                     {errorFileInput && (<div className="ws-input-error mt-[5px]">{errorFileInput}</div>)}
-                                </div>
-                                <div className="pb-[20px]">
-                                    <label 
-                                        className="transition-all delay-75 block mb-[5px] font-noto_sans text-[16px] font-semibold text-zinc-900 dark:text-zinc-300"
-                                    >
-                                        Reset Data
-                                    </label>
-                                    <div>
-                                        <div className="pb-[5px]">
-                                            <button 
-                                                type="button" 
-                                                title="Reset Data" 
-                                                className="transition-all delay-75 inline-block py-[8px] md:py-[10px] px-[15px] md:px-[20px] font-noto_sans text-[14px] md:text-[16px] bg-red-600 hover:bg-red-700 text-zinc-100"
-                                            >
-                                                <div className="flex gap-x-[5px] items-center">
-                                                    <FaRegTrashCan size={18} />
-                                                    Reset Data
-                                                </div>
-                                            </button>
-                                        </div>
-                                    </div>
                                 </div>
                                 <div className="text-right">
                                     <button type="submit" title="Create User" className="transition-all delay-75 inline-block concard px-[20px] md:px-[25px] py-[10px] md:py-[12px] text-center text-white font-noto_sans font-semibold text-[16px] md:text-[18px] hover:shadow-lg">

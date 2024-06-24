@@ -1,9 +1,11 @@
+'use client';
 
 import { FaTrophy } from "react-icons/fa6";
 import { IoChatboxEllipses } from "react-icons/io5";
 import { FaFlag } from "react-icons/fa6";
 
 export default function Page() {
+
     return (
         <>
             <div className="py-[25px]">
@@ -21,7 +23,7 @@ export default function Page() {
                                 </h2>
                                 <div>
                                     <h2 className="transition-all delay-75 block font-ubuntu text-[30px] md:text-[40px] font-semibold text-zinc-900 dark:text-zinc-200 leading-[30px] md:leading-[45px]">
-                                        100
+                                        0
                                     </h2>
                                 </div>
                             </div>
@@ -59,7 +61,7 @@ export default function Page() {
                                 </h2>
                                 <div>
                                     <h2 className="transition-all delay-75 block font-ubuntu text-[30px] md:text-[40px] font-semibold text-zinc-900 dark:text-zinc-200 leading-[30px] md:leading-[45px]">
-                                        6
+                                        0
                                     </h2>
                                 </div>
                             </div>

@@ -10,11 +10,23 @@ import { IoIosEyeOff } from "react-icons/io";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { jwtDecode } from "jwt-decode";
+import { getCookie, setCookie } from 'cookies-next';
+import { signIn } from "next-auth/react";
+
+interface JWTDec {
+    is_auth_user: string,
+    exp: bigint,
+    iat: bigint
+}
 
 export default function Page() {
 
+    const router = useRouter();
     const dispatch = useDispatch();
     const [showPassword, setShowPassword] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const validationSchema = z.object({
         email: z.string({
@@ -35,9 +47,21 @@ export default function Page() {
 		resolver: zodResolver(validationSchema)
 	});
 
-    const handleFormSubmit: SubmitHandler<validationSchema> = (formdata) => {
-        console.log(formdata);
-        reset();
+    const handleFormSubmit: SubmitHandler<validationSchema> = async (formdata) => {
+        setIsLoading(true);
+        const respData = await fetch('/api/site/auth-user/sign-in', {
+            method: 'POST',
+            body: JSON.stringify(formdata),
+        });
+        const dt = await respData.json();
+
+        if(dt.success) {
+            setIsLoading(false);
+            let uid: JWTDec = jwtDecode(dt.token);
+            setCookie('is_auth_user', dt.token);
+            router.push(`/user/${uid}`);
+            reset();
+        }
     }
     
     useEffect(() => {
@@ -102,9 +126,16 @@ export default function Page() {
                                     </div>
 
                                     <div className="pb-[15px] md:pb-[15px] text-right">
-                                        <button type="submit" title="Sign In" className="ws-button-m1">
-                                            Sign In
-                                        </button>
+                                        {
+                                            isLoading ? 
+                                            (<div className="transition-all delay-75 font-noto_sans text-[14px] md:text-[16px] text-zinc-800 dark:text-zinc-200 font-semibold">Loading...</div>) 
+                                            : 
+                                            (
+                                                <button type="submit" title="Sign In" className="ws-button-m1">
+                                                    Sign In
+                                                </button>
+                                            )
+                                        }
                                     </div>
 
                                     <div className="text-center py-[10px]">
@@ -114,7 +145,7 @@ export default function Page() {
                                     </div>
 
                                     <div className="pt-[15px] md:pt-[15px]">
-                                        <button type="button" title="Sign in With Google" className="goggle-lsbtn">
+                                        <button type="button" title="Sign in With Google" className="goggle-lsbtn" onClick={() => signIn("google", {callbackUrl: '/'})}>
                                             <div className="flex gap-x-[15px] md:gap-x-[20px] items-center">
                                                 <div>
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">

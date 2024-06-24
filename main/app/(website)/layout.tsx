@@ -3,6 +3,8 @@ import "../globals.css";
 import Header from '../components/header';
 import RedProv from "../redux-service/reduxProvider";
 import Footer from "../components/footer";
+import CheckAuthUser from "../lib/checkAuthUser";
+import GoogleAuthSessionProvider from "../lib/googleAuthSessionProvider";
 
 export const metadata: Metadata = {
 	title: "QuizFesto",
@@ -18,11 +20,15 @@ export default function RootLayout({ children, }: Readonly<Children>) {
 	return (
 		<html lang="en" className="">
 			<body className="">
-				<RedProv>
-					<Header />
-					{children}
-					<Footer />
-				</RedProv>
+				<GoogleAuthSessionProvider>
+					<RedProv>
+						<CheckAuthUser>
+							<Header />
+								{children}
+							<Footer />
+						</CheckAuthUser>
+					</RedProv>
+				</GoogleAuthSessionProvider>
 			</body>
 		</html>
 	);

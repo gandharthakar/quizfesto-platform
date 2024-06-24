@@ -3,20 +3,41 @@
 import Link from "next/link";
 import { FaRegUser } from "react-icons/fa";
 import Image from "next/image";
+import { RootState } from "@/app/redux-service/store";
+import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 
 export default function HeaderProfileMenu() {
 
-    let isUserLoggedIn:boolean = true;
+    const AuthUser = useSelector((state: RootState) => state.auth_user_id.auth_user_id);
+    const [nameLetter, setNameLetter] = useState<string>('');
+    const [profilePict, setProfilePict] = useState<string>("");
+
+    const getUser = async () => {
+        const resp = await fetch('http://localhost:3000/api/site/get-single-user', {
+            method: 'POST',
+            body: JSON.stringify({ user_id: AuthUser })
+        });
+        let body = await resp.json();
+        setNameLetter(body.user_full_name.charAt(0));
+        setProfilePict(body.user_photo);
+    }
+
+    useEffect(() => {
+        if(AuthUser !== '') {
+            getUser();
+        }
+    }, [getUser]);
 
     return (
         <>
             {
-                isUserLoggedIn ? 
+                AuthUser ? 
                 (
                     <>
-                        <Link href="/user/1" title="profile" className="transition-all delay-75 relative bg-white border border-solid border-zinc-800 w-[40px] h-[40px] text-[20px] rounded-full flex items-center justify-center font-noto_sans font-bold text-zinc-800">
-                            <span className="uppercase">g</span>
-                            <Image src="/images/testimonials/michael-davis.jpg" width={40} height={40} className="absolute left-0 top-0 w-full h-full rounded-full z-[2]" alt="photo" />
+                        <Link href={`/user/${AuthUser}`} title="profile" className="transition-all delay-75 relative bg-white border border-solid border-zinc-800 w-[40px] h-[40px] text-[20px] rounded-full flex items-center justify-center font-noto_sans font-bold text-zinc-800">
+                            <span className="uppercase">{nameLetter}</span>
+                            {profilePict && (<Image src={profilePict} width={40} height={40} className="absolute left-0 top-0 w-full h-full rounded-full z-[2]" alt="photo" />)}
                         </Link>
                     </>
                 ) 

@@ -3,6 +3,8 @@ import "@/app/globals.css";
 import RedProv from "@/app/redux-service/reduxProvider";
 import UserAreaTopHeader from "@/app/components/userAreaTopHeader";
 import UserAreaNavBar from "@/app/components/userAreaNavBar";
+import GoogleAuthSessionProvider from "@/app/lib/googleAuthSessionProvider";
+import CheckAuthUser from "@/app/lib/checkAuthUser";
 
 export const metadata: Metadata = {
 	title: "QuizFesto - User Area",
@@ -18,17 +20,21 @@ export default function RootLayout({ children, }: Readonly<Children>) {
 	return (
 		<html lang="en">
 			<body>
-				<RedProv>
-					<div className="flex overflow-hidden">
-						<UserAreaNavBar />
-						<div className="transition-all delay-75 bg-zinc-100 min-h-screen flex-1 dark:bg-zinc-900">
-							<UserAreaTopHeader />
-							<div className="px-[15px]">
-								{children}
+				<GoogleAuthSessionProvider>
+					<RedProv>
+						<CheckAuthUser>
+							<div className="flex overflow-hidden">
+								<UserAreaNavBar />
+								<div className="transition-all delay-75 bg-zinc-100 min-h-screen flex-1 dark:bg-zinc-900">
+									<UserAreaTopHeader />
+									<div className="px-[15px]">
+										{children}
+									</div>
+								</div>
 							</div>
-						</div>
-					</div>
-				</RedProv>
+						</CheckAuthUser>
+					</RedProv>
+				</GoogleAuthSessionProvider>
 			</body>
 		</html>
 	);

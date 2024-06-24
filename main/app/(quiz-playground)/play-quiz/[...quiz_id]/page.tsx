@@ -10,6 +10,8 @@ import QuizInfoModal from "@/app/components/quizInfomodal";
 import { useRouter, useParams } from "next/navigation";
 import { dump_quiz_data } from "@/app/constant/datafaker";
 import { clear_tqd, set_tqd } from "@/app/redux-service/slices/quiz-playground/transferQuizDataslice";
+import { RootState } from "@/app/redux-service/store";
+import { useSelector } from "react-redux";
 
 interface AnswObj {
     question_id: string,
@@ -179,7 +181,18 @@ export default function Page() {
         // }
 
         setTiming(`${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`);
+
+        
     }, [hours, minutes, seconds, setTiming, dispatch]);
+
+    const AuthUser = useSelector((state: RootState) => state.auth_user_id);
+    useEffect(() => {
+        if(!AuthUser) {
+
+        } else {
+            router.push("/sign-in");
+        }
+    }, []);
 
     return (
         <>

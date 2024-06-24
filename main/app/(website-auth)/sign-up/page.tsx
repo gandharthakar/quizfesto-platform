@@ -10,12 +10,14 @@ import { IoIosEyeOff } from "react-icons/io";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
+import Swal from "sweetalert2";
 
 export default function Page() {
 
     const dispatch = useDispatch();
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [showConfPassword, setShowConfPassword] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const validationSchema = z.object({
         full_name: z.string({
@@ -34,11 +36,11 @@ export default function Page() {
 			invalid_type_error: "Password must be in string format."
 		}).min(8).max(16),
 	
-		confirmPassword: z.string({
+		confirm_password: z.string({
 			invalid_type_error: "Confirm password must be in string format."
 		}).min(8).max(16)
-    }).refine((data) => data.password === data.confirmPassword, {
-		path: ["confirmPassword"],
+    }).refine((data) => data.password === data.confirm_password, {
+		path: ["confirm_password"],
 		message: "Your password didn't match."
 	});
 
@@ -48,9 +50,23 @@ export default function Page() {
 		resolver: zodResolver(validationSchema)
 	});
 
-    const handleFormSubmit: SubmitHandler<validationSchema> = (formdata) => {
-        console.log(formdata);
-        reset();
+    const handleFormSubmit: SubmitHandler<validationSchema> = async (formdata) => {
+        setIsLoading(true);
+        const respData = await fetch('/api/site/auth-user/sign-up', {
+            method: 'POST',
+            body: JSON.stringify(formdata),
+        });
+        const dt = await respData.json();
+        if(dt.success) {
+            setIsLoading(false);
+            reset();
+            Swal.fire({
+                title: "Success!",
+                text: "Registration Completed Successfully!",
+                icon: "success",
+                timer: 4000
+            });
+        }
     }
     
     useEffect(() => {
@@ -130,7 +146,7 @@ export default function Page() {
                                                 autoComplete="off" 
                                                 className="ws-input-pwd-m1"
                                                 placeholder="Confirm Password"
-                                                {...register("confirmPassword")}
+                                                {...register("confirm_password")}
                                             />
                                             {
                                                 showConfPassword ? 
@@ -139,14 +155,23 @@ export default function Page() {
                                                 (<> <IoIosEye size={20} className="transition-all delay-75 cursor-pointer text-zinc-700 hover:text-theme-color-2 absolute top-[11px] md:top-[13px] right-[10px] z-[2] dark:text-zinc-400 dark:hover:text-theme-color-2" onClick={() => setShowConfPassword(true)} /> </>)
                                             }
                                         </div>
-                                        {errors.confirmPassword && (<div className="ws-input-error">{errors.confirmPassword.message}</div>)}
+                                        {errors.confirm_password && (<div className="ws-input-error">{errors.confirm_password.message}</div>)}
                                     </div>
 
                                     {/* <div className="pb-[15px] md:pb-[15px] text-right"> */}
                                     <div className="text-right pt-[10px]">
-                                        <button type="submit" title="Sign Up" className="ws-button-m1">
-                                            Sign Up
-                                        </button>
+                                        {
+                                            isLoading ? 
+                                            (<div className="transition-all delay-75 font-noto_sans text-[14px] md:text-[16px] text-zinc-800 dark:text-zinc-200 font-semibold">Loading...</div>) 
+                                            : 
+                                            (
+                                                <>
+                                                    <button type="submit" title="Sign Up" className="ws-button-m1">
+                                                        Sign Up
+                                                    </button>
+                                                </>
+                                            )
+                                        }
                                     </div>
 
                                     {/* <div className="text-center py-[10px]">

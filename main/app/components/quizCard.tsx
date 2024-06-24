@@ -5,6 +5,8 @@ import Link from "next/link";
 import { RiQuestionFill } from "react-icons/ri";
 import { MdOutlineAccessTimeFilled } from "react-icons/md";
 import { FaLock } from "react-icons/fa";
+import { RootState } from "@/app/redux-service/store";
+import { useSelector } from "react-redux";
 
 type quizCategoriesType = {
     cat_id: number | string,
@@ -41,7 +43,10 @@ export default function QuizCard(props: QuizCardPropsTypes) {
     } = props;
 
     const defaultImage = "https://placehold.co/1000x700/png";
-    const user_id = "1";
+    // const user_id = "1";`/play-quiz/${quiz_id}/${userID}`
+    const AuthUser = useSelector((state: RootState) => state.auth_user_id.auth_user_id);
+    let userID = AuthUser !== '' ? AuthUser : '1';
+    let prtLink = userID !== '1' ? `/play-quiz/${quiz_id}/${userID}` : '/sign-in';
 
     return (
         <>
@@ -132,12 +137,11 @@ export default function QuizCard(props: QuizCardPropsTypes) {
                                     ) 
                                     : 
                                     (
-                                        <Link href={`/play-quiz/${quiz_id}/${user_id}`} title="Participate" className="transition-all delay-75 inline-block px-[15px] py-[6px] md:px-[25px] md:py-[8px] font-ubuntu text-[16px] md:text-[18px] text-white bg-theme-color-1 hover:bg-theme-color-1-hover-dark">
+                                        <Link href={prtLink} title="Participate" className="transition-all delay-75 inline-block px-[15px] py-[6px] md:px-[25px] md:py-[8px] font-ubuntu text-[16px] md:text-[18px] text-white bg-theme-color-1 hover:bg-theme-color-1-hover-dark">
                                             Participate
                                         </Link>
                                     )
                                 }
-                                
                             </div>
                         </div>
                     </div>

@@ -9,18 +9,42 @@ import { FaPowerOff } from "react-icons/fa6";
 import { ImCog } from "react-icons/im";
 import { IoChatboxEllipses } from "react-icons/io5";
 import { AiOutlineTrophy } from "react-icons/ai";
-import { useParams, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { close_user_area_menu } from "../redux-service/slices/user-area/userAreaMenuToggleSlice";
+import { useEffect, useState } from "react";
+import { signOut } from "next-auth/react";
 
 export default function UserAreaNavBar() {
     
     const dispatch = useDispatch();
     const pathName = usePathname();
-    const params = useParams();
-    const user_id = params?.user_id[0];
     const isMenuOpen = useSelector((state: RootState) => state.user_area_menu_toggle.is_user_area_menu_open);
+    const AuthUser = useSelector((state: RootState) => state.auth_user_id.auth_user_id);
+    const [nameLetter, setNameLetter] = useState<string>('');
+    const [profilePict, setProfilePict] = useState<string>("");
+    const [userName, setUserName] = useState<string>("");
+    const settingRoutes:string[] = [`/user/settings/${AuthUser}`, `/user/settings/password/${AuthUser}`, `/user/settings/phone/${AuthUser}`, `/user/settings/profle-photo/${AuthUser}`];
 
-    const settingRoutes:string[] = [`/user/settings/${user_id}`, `/user/settings/password/${user_id}`, `/user/settings/phone/${user_id}`, `/user/settings/profle-photo/${user_id}`];
+    const getUser = async () => {
+        const resp = await fetch('http://localhost:3000/api/site/get-single-user', {
+            method: 'POST',
+            body: JSON.stringify({ user_id: AuthUser })
+        });
+        let body = await resp.json();
+        setNameLetter(body.user_full_name.charAt(0));
+        setProfilePict(body.user_photo);
+        setUserName(body.user_full_name);
+    }
+
+    const handleLogout = () => {
+        signOut();
+    }
+
+    useEffect(() => {
+        if(AuthUser !== '') {
+            getUser();
+        }
+    }, [getUser]);
 
     return (
         <>
@@ -32,8 +56,8 @@ export default function UserAreaNavBar() {
                             <div className="pb-[5px] text-center">
                                 <div className="concard p-[4px] inline-block rounded-full">
                                     <div className="transition-all delay-75 w-[70px] h-[70px] md:w-[100px] md:h-[100px] relative flex items-center justify-center border-[4px] border-solid border-white bg-zinc-200 rounded-full dark:bg-zinc-800 dark:border-zinc-950 font-ubuntu text-[30px] md:text-[40px] text-zinc-800 dark:text-zinc-300">
-                                        <span className="uppercase">a</span>
-                                        <Image src="/images/testimonials/john-smith.jpg" width={100} height={100} className="absolute left-0 top-0 z-[2] w-full h-full rounded-full" alt="photo" priority={true} />
+                                        <span className="uppercase">{nameLetter}</span>
+                                        {profilePict && (<Image src={profilePict} width={100} height={100} className="absolute left-0 top-0 z-[2] w-full h-full rounded-full" alt="photo" priority={true} />)}
                                     </div>
                                 </div>
                             </div>
@@ -43,7 +67,7 @@ export default function UserAreaNavBar() {
                                     @amitThakur224
                                 </h1> */}
                                 <h2 className="transition-all delay-75 font-noto_sans text-[18px] md:text-[20px] font-bold text-zinc-800 dark:text-zinc-300">
-                                    Amit Thakur
+                                    {userName}
                                 </h2>
                             </div>
                         </div>
@@ -51,9 +75,9 @@ export default function UserAreaNavBar() {
                             <ul className="flex flex-col user-area-nav">
                                 <li className="w-full">
                                     <Link 
-                                        href={`/user/1`} 
+                                        href={`/user/${AuthUser}`} 
                                         title="Profile" 
-                                        className={`transition-all delay-75 py-[10px] md:py-[15px] block px-[15px] border-l-[4px] border-solid border-transparent font-noto_sans font-semibold text-[16px] md:text-[18px] text-zinc-800 hover:bg-zinc-100 hover:border-theme-color-2 dark:text-zinc-400 dark:hover:bg-zinc-900 ${pathName === '/user/'+user_id ? 'active' : ''}`}
+                                        className={`transition-all delay-75 py-[10px] md:py-[15px] block px-[15px] border-l-[4px] border-solid border-transparent font-noto_sans font-semibold text-[16px] md:text-[18px] text-zinc-800 hover:bg-zinc-100 hover:border-theme-color-2 dark:text-zinc-400 dark:hover:bg-zinc-900 ${pathName === '/user/'+AuthUser ? 'active' : ''}`}
                                         onClick={() => dispatch(close_user_area_menu())}
                                     >
                                         <div className="flex gap-x-[10px] items-center">
@@ -66,9 +90,9 @@ export default function UserAreaNavBar() {
                                 </li>
                                 <li className="w-full">
                                     <Link 
-                                        href={`/user/my-winnings/1`} 
+                                        href={`/user/my-winnings/${AuthUser}`} 
                                         title="My Winnings" 
-                                        className={`transition-all delay-75 py-[10px] md:py-[15px] block px-[15px] border-l-[4px] border-solid border-transparent font-noto_sans font-semibold text-[16px] md:text-[18px] text-zinc-800 hover:bg-zinc-100 hover:border-theme-color-2 dark:text-zinc-400 dark:hover:bg-zinc-900 ${pathName === '/user/my-winnings/'+user_id ? 'active' : ''}`}
+                                        className={`transition-all delay-75 py-[10px] md:py-[15px] block px-[15px] border-l-[4px] border-solid border-transparent font-noto_sans font-semibold text-[16px] md:text-[18px] text-zinc-800 hover:bg-zinc-100 hover:border-theme-color-2 dark:text-zinc-400 dark:hover:bg-zinc-900 ${pathName === '/user/my-winnings/'+AuthUser ? 'active' : ''}`}
                                         onClick={() => dispatch(close_user_area_menu())}
                                     >
                                         <div className="flex gap-x-[10px] items-center">
@@ -81,9 +105,9 @@ export default function UserAreaNavBar() {
                                 </li>
                                 <li className="w-full">
                                     <Link 
-                                        href={`/user/my-participation/1`} 
+                                        href={`/user/my-participation/${AuthUser}`} 
                                         title="My Participation" 
-                                        className={`transition-all delay-75 py-[10px] md:py-[15px] block px-[15px] border-l-[4px] border-solid border-transparent font-noto_sans font-semibold text-[16px] md:text-[18px] text-zinc-800 hover:bg-zinc-100 hover:border-theme-color-2 dark:text-zinc-400 dark:hover:bg-zinc-900 ${pathName === '/user/my-participation/'+user_id ? 'active' : ''}`}
+                                        className={`transition-all delay-75 py-[10px] md:py-[15px] block px-[15px] border-l-[4px] border-solid border-transparent font-noto_sans font-semibold text-[16px] md:text-[18px] text-zinc-800 hover:bg-zinc-100 hover:border-theme-color-2 dark:text-zinc-400 dark:hover:bg-zinc-900 ${pathName === '/user/my-participation/'+AuthUser ? 'active' : ''}`}
                                         onClick={() => dispatch(close_user_area_menu())}
                                     >
                                         <div className="flex gap-x-[10px] items-center">
@@ -96,7 +120,7 @@ export default function UserAreaNavBar() {
                                 </li>
                                 <li className="w-full">
                                     <Link 
-                                        href={`/user/settings/1`} 
+                                        href={`/user/settings/${AuthUser}`} 
                                         title="Settings" 
                                         className={`transition-all delay-75 py-[10px] md:py-[15px] block px-[15px] border-l-[4px] border-solid border-transparent font-noto_sans font-semibold text-[16px] md:text-[18px] text-zinc-800 hover:bg-zinc-100 hover:border-theme-color-2 dark:text-zinc-400 dark:hover:bg-zinc-900 ${settingRoutes.includes(pathName) ? 'active' : ''}`}
                                         onClick={() => dispatch(close_user_area_menu())}
@@ -117,7 +141,12 @@ export default function UserAreaNavBar() {
                         <div className="pb-[10px] w-full">
                             <ul className="flex flex-col w-full">
                                 <li className="w-full">
-                                    <button type="button" title="Logout" className="transition-all delay-75 py-[10px] md:py-[15px] block w-full px-[15px] border-l-[4px] border-solid border-transparent font-noto_sans font-semibold text-[16px] md:text-[18px] text-red-600 hover:bg-zinc-100 hover:border-red-600 dark:text-red-600 dark:hover:bg-zinc-900">
+                                    <button 
+                                        type="button" 
+                                        title="Logout" 
+                                        className="transition-all delay-75 py-[10px] md:py-[15px] block w-full px-[15px] border-l-[4px] border-solid border-transparent font-noto_sans font-semibold text-[16px] md:text-[18px] text-red-600 hover:bg-zinc-100 hover:border-red-600 dark:text-red-600 dark:hover:bg-zinc-900" 
+                                        onClick={handleLogout} 
+                                    >
                                         <div className="flex gap-x-[10px] items-center">
                                             <FaPowerOff size={25} />
                                             <div>

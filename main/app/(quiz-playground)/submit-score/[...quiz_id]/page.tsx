@@ -7,6 +7,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { RootState } from "@/app/redux-service/store";
 import { dump_quiz_data } from "@/app/constant/datafaker";
+import { useRouter } from "next/navigation";
 
 interface QuizGivenAns {
     question_id: string,
@@ -21,6 +22,7 @@ interface QuizQues {
 
 export default function Page() {
 
+    const router = useRouter();
     const dispatch = useDispatch();
     const trqzdt = useSelector((state: RootState) => state.transfer_quiz_data);
 
@@ -141,6 +143,15 @@ export default function Page() {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isLoading]);
+
+    const AuthUser = useSelector((state: RootState) => state.auth_user_id);
+    useEffect(() => {
+        if(!AuthUser) {
+
+        } else {
+            router.push("/sign-in");
+        }
+    }, []);
 
     return (
         <>

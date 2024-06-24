@@ -82,7 +82,7 @@ function Page() {
                                     category_slug: "finance"
                                 },
                                 {
-                                    cat_id: 84,
+                                    cat_id: 89,
                                     category_title: "GST",
                                     category_slug: "gst"
                                 }

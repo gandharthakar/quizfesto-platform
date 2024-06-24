@@ -14,6 +14,8 @@ import QuizCard from "@/app/components/quizCard";
 import { PiExamFill } from "react-icons/pi";
 import { FaLock } from "react-icons/fa6";
 import parse from 'html-react-parser';
+import { RootState } from "@/app/redux-service/store";
+import { useSelector } from "react-redux";
 
 type quizCategoriesType = {
     cat_id: number | string,
@@ -26,7 +28,6 @@ export default function Page() {
     const params = useParams();
     const qz_id = params.quiz_id[0];
     const data = dump_quizzes_list.filter((dt) => dt.quiz_id.toString() === qz_id);
-    let user_id = "1";
     let defaultImage = "https://placehold.co/1000x700/png";
 
     const prepTermsArr = (data:string) => {
@@ -43,7 +44,11 @@ export default function Page() {
     const [quizDuration, setQuizDuration] = useState<string>(data[0].quiz_duration);
     const [quizDescription, setQuizDescription] = useState<string>(data[0].quiz_description);
     const [quizTerms, setQuizTerms] = useState<string[]>(prepTermsArr(data[0].quiz_terms));
-    const [alreadyPlayedByUser, setAlreadyPlayedByUser] = useState<boolean>(true);
+    const [alreadyPlayedByUser, setAlreadyPlayedByUser] = useState<boolean>(false);
+
+    const AuthUser = useSelector((state: RootState) => state.auth_user_id);
+    let userID = !AuthUser ? AuthUser : '1';
+    let prtLink = userID !== '1' ? `/play-quiz/${qz_id}/${userID}` : '/sign-in';
 
     useEffect(() => {
         let win = typeof window !== 'undefined' && window.location.origin
@@ -256,12 +261,11 @@ export default function Page() {
                                     ) 
                                     : 
                                     (
-                                        <Link href={`/play-quiz/${qz_id}/${user_id}`} title="Participate" className="transition-all delay-75 block w-full text-center px-[15px] py-[8px] md:px-[25px] md:py-[10px] font-ubuntu text-[18px] md:text-[20px] text-white bg-theme-color-1 hover:bg-theme-color-1-hover-dark">
+                                        <Link href={prtLink} title="Participate" className="transition-all delay-75 block w-full text-center px-[15px] py-[8px] md:px-[25px] md:py-[10px] font-ubuntu text-[18px] md:text-[20px] text-white bg-theme-color-1 hover:bg-theme-color-1-hover-dark">
                                             Participate
                                         </Link>
                                     )
                                 }
-                                
                             </div>
                         </div>
                         <div className="w-full lg:w-[350px] hidden lg:block">
@@ -370,12 +374,11 @@ export default function Page() {
                                             ) 
                                             : 
                                             (
-                                                <Link href={`/play-quiz/${qz_id}/${user_id}`} title="Participate" className="transition-all delay-75 block w-full text-center px-[15px] py-[8px] md:px-[25px] md:py-[10px] font-ubuntu text-[18px] md:text-[20px] text-white bg-theme-color-1 hover:bg-theme-color-1-hover-dark">
+                                                <Link href={prtLink} title="Participate" className="transition-all delay-75 block w-full text-center px-[15px] py-[8px] md:px-[25px] md:py-[10px] font-ubuntu text-[18px] md:text-[20px] text-white bg-theme-color-1 hover:bg-theme-color-1-hover-dark">
                                                     Participate
                                                 </Link>
                                             )
                                         }
-                                        
                                     </div>
                                 </div>
                             </div>

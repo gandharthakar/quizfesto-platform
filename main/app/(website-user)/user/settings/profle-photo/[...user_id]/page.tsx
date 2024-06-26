@@ -1,21 +1,30 @@
 'use client';
 
+import { RootState } from "@/app/redux-service/store";
 import Image from "next/image";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { FaCloudUploadAlt } from "react-icons/fa";
+import { useSelector } from "react-redux";
+import Swal from "sweetalert2";
 
 export default function Page() {
 
-    let hasOwnImage:boolean = false;
     let defaultImage = "https://placehold.co/1000x1000/png";
 
+    const router = useRouter();
+    const AuthUser = useSelector((state: RootState) => state.auth_user_id.auth_user_id);
     const [prevImageURI, setPrevImageURI] = useState<string>(defaultImage);
     const [imageFile, setImageFile] = useState<string>('');
     const [fileExt, setFileExt] = useState<string>('');
     const [imageFileSize, setImageFileSize] = useState<boolean>(false);
     const [imageDimensions, setImageDimensions] = useState<boolean>(false);
     const [errorInput, setErrorInput] = useState<string>('');
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [alreadyHaveImage, setAlreadyHaveImage] = useState<boolean>(false);
+    const [userImage, setUserImage] = useState<string>("");
+    const [isLoadRmv, setIsLoadRmv] = useState<boolean>(false);
 
     const handleFileChange = async (e:any) => {
         let file = e.target.files[0];
@@ -39,7 +48,7 @@ export default function Page() {
             img.src = objectURL;
             img.onload = function handleLoad() {
                 let {width, height} = img;
-                if(width <= 500 && height <= 500) {
+                if(width == 1000 && height == 1000) {
                     setImageDimensions(true);
                 } else {
                     setImageDimensions(false);
@@ -67,8 +76,45 @@ export default function Page() {
         })
     }
 
+    const removeImageButtonClick = async () => {
+        setIsLoadRmv(true);
+        const resp = await fetch('http://localhost:3000/api/site/update-single-user/profile-photo', {
+            method: 'POST',
+            body: JSON.stringify({ user_id: AuthUser, user_photo: '' })
+        });
+        let body = await resp.json();
+        if(body.success) {
+            Swal.fire({
+                title: "Success!",
+                text: body.message,
+                icon: "success",
+                timer: 4000
+            });
+            router.refresh();
+            setUserImage("");
+            setAlreadyHaveImage(false);
+            setIsLoadRmv(false);
+        }
+    }
+
+    const getUser = async () => {
+        const resp = await fetch('http://localhost:3000/api/site/get-single-user', {
+            method: 'POST',
+            body: JSON.stringify({ user_id: AuthUser })
+        });
+        let body = await resp.json();
+        setUserImage(body.user_photo);
+        if(body.user_photo == '') {
+            setAlreadyHaveImage(false);
+        } else {
+            setAlreadyHaveImage(true);
+        }
+    }
+
     const handleSubmit = async (e:any) => {
         e.preventDefault();
+
+        let isValidImage:boolean = false;
 
         // Get file extention.
         const allowedFileTypes = ["jpg", "png", "jpeg"];
@@ -86,32 +132,79 @@ export default function Page() {
                         setErrorInput("Image dimensions is expected 1000px x 1000px. (square size)");
                     } else {
                         setErrorInput("");
+                        isValidImage = true;
                     }
                 }
             }
         }
+
+        if(isValidImage) {
+            setIsLoading(true);
+            const resp = await fetch('http://localhost:3000/api/site/update-single-user/profile-photo', {
+                method: 'POST',
+                body: JSON.stringify({ user_id: AuthUser, user_photo: imageFile })
+            });
+            let body = await resp.json();
+            if(body.success) {
+                Swal.fire({
+                    title: "Success!",
+                    text: body.message,
+                    icon: "success",
+                    timer: 4000
+                });
+                //this will reload the page without doing SSR
+                router.refresh();
+                setIsLoading(false);
+                setAlreadyHaveImage(true);
+            } else {
+                Swal.fire({
+                    title: "Error!",
+                    text: body.message,
+                    icon: "error",
+                    timer: 4000
+                });
+                setIsLoading(false);
+            }
+        }
     }
+
+    useEffect(() => {
+        getUser();
+    }, [getUser]);
 
     return (
         <>
             <div className="pt-[25px] lg:pt-0">
                 <div className="transition-all delay-75 bg-white border-[2px] border-solid border-zinc-300 px-[20px] py-[20px] md:px-[40px] md:py-[30px] lg:max-w-[800px] dark:bg-zinc-950 dark:border-zinc-700">
                     {
-                        hasOwnImage ? 
+                        alreadyHaveImage ? 
                         (
                             <>
                                 <div className="text-center pb-[10px]">
-                                    <Image src="/images/testimonials/john-smith.jpg" width={100} height={100} alt="photo" className="inline-block w-[100px] h-[100px] md:w-[150px] md:h-[150px] rounded-full" priority={true} />
+                                    <Image src={`${userImage ? userImage : defaultImage}`} width={100} height={100} alt="photo" className="inline-block w-[100px] h-[100px] md:w-[150px] md:h-[150px] rounded-full" priority={true} />
                                 </div>
                                 <div className="text-center">
-                                    <button type="button" title="Remove Photo" className="inline-block font-ubuntu text-[18x] md:text-[20x] font-medium text-red-600 dark:text-red-500">
-                                        <div className="flex gap-x-[10px] items-center">
-                                            <FaRegTrashAlt size={17} />
-                                            <div>
-                                                Remove Photo
-                                            </div>
-                                        </div>
-                                    </button>
+                                    {
+                                        isLoadRmv ? 
+                                        (<div className="transition-all delay-75 font-noto_sans text-[14px] md:text-[16px] text-zinc-800 dark:text-zinc-200 font-semibold">Loading...</div>) 
+                                        : 
+                                        (
+                                            
+                                            <button 
+                                                type="button" 
+                                                title="Remove Photo" 
+                                                className="inline-block font-ubuntu text-[18x] md:text-[20x] font-medium text-red-600 dark:text-red-500" 
+                                                onClick={removeImageButtonClick} 
+                                            >
+                                                <div className="flex gap-x-[10px] items-center">
+                                                    <FaRegTrashAlt size={17} />
+                                                    <div>
+                                                        Remove Photo
+                                                    </div>
+                                                </div>
+                                            </button>
+                                        )
+                                    }
                                 </div>
                             </>
                         ) 
@@ -190,9 +283,17 @@ export default function Page() {
                                     }
 
                                     <div className="text-right pt-[25px]">
-                                        <button type="submit" title="Save Changes" className="ws-button-m1">
-                                            Save Changes
-                                        </button>
+                                        {
+                                            isLoading ? 
+                                            (<div className="transition-all delay-75 font-noto_sans text-[14px] md:text-[16px] text-zinc-800 dark:text-zinc-200 font-semibold">Loading...</div>) 
+                                            : 
+                                            (
+                                                <button type="submit" title="Save Changes" className="ws-button-m1">
+                                                    Save Changes
+                                                </button>
+                                            )
+                                        }
+                                        
                                     </div>
                                 </form>
                             </>

@@ -3,30 +3,40 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { set_dark_mode, unset_dark_mode } from "@/app/redux-service/slices/theme-mode/themeSwitcherSlice";
 import { IoIosEye } from "react-icons/io";
 import { IoIosEyeOff } from "react-icons/io";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { RootState } from "@/app/redux-service/store";
+import { useParams, useRouter } from "next/navigation";
+import Swal from "sweetalert2";
 
 export default function Page() {
 
+    const router = useRouter();
+    const AuthUser = useSelector((state: RootState) => state.auth_user_id.auth_user_id);
     const dispatch = useDispatch();
+    const params = useParams();
+    const userID = params.userid[0];
+    const token = params.userid[1];
+    
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [showConfPassword, setShowConfPassword] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const validationSchema = z.object({
         password: z.string({
 			invalid_type_error: "Password must be in string format."
 		}).min(8).max(16),
 	
-		confirmPassword: z.string({
+		confirm_password: z.string({
 			invalid_type_error: "Confirm password must be in string format."
 		}).min(8).max(16)
-    }).refine((data) => data.password === data.confirmPassword, {
-		path: ["confirmPassword"],
+    }).refine((data) => data.password === data.confirm_password, {
+		path: ["confirm_password"],
 		message: "Your password didn't match."
 	});
 
@@ -36,11 +46,33 @@ export default function Page() {
 		resolver: zodResolver(validationSchema)
 	});
 
-    const handleFormSubmit: SubmitHandler<validationSchema> = (formdata) => {
-        console.log(formdata);
-        reset();
+    const handleFormSubmit: SubmitHandler<validationSchema> = async (formdata) => {
+        setIsLoading(true);
+        const resp = await fetch('/api/site/auth-user/reset-password', {
+            method: "POST",
+            body: JSON.stringify({ user_password: formdata.password, confirm_password: formdata.confirm_password, user_id: userID, token })
+        });
+        const body = await resp.json();
+        if(body.success) {
+            Swal.fire({
+                title: "Success!",
+                text: body.message,
+                icon: "success",
+                timer: 4000
+            });
+            setIsLoading(false);
+            reset();
+        } else {
+            Swal.fire({
+                title: "Error!",
+                text: body.message,
+                icon: "error",
+                timer: 4000
+            });
+            setIsLoading(false);
+        }
     }
-    
+
     useEffect(() => {
         let glsi = localStorage.getItem('site-dark-mode');
         const checkDM = glsi ? JSON.parse(glsi) : '';
@@ -50,6 +82,16 @@ export default function Page() {
             dispatch(unset_dark_mode());
         }
     });
+
+    const checkAuthUser = () => {
+        if(AuthUser !== '') {
+            router.push("/");
+        }
+    }
+
+    useEffect(() => {
+        checkAuthUser();
+    }, [checkAuthUser]);
 
     return (
         <>
@@ -98,7 +140,7 @@ export default function Page() {
                                                 autoComplete="off" 
                                                 className="ws-input-pwd-m1"
                                                 placeholder="Confirm New Password"
-                                                {...register("confirmPassword")}
+                                                {...register("confirm_password")}
                                             />
                                             {
                                                 showConfPassword ? 
@@ -107,14 +149,21 @@ export default function Page() {
                                                 (<> <IoIosEye size={20} className="transition-all delay-75 cursor-pointer text-zinc-700 hover:text-theme-color-2 absolute top-[11px] md:top-[13px] right-[10px] z-[2] dark:text-zinc-400 dark:hover:text-theme-color-2" onClick={() => setShowConfPassword(true)} /> </>)
                                             }
                                         </div>
-                                        {errors.confirmPassword && (<div className="ws-input-error">{errors.confirmPassword.message}</div>)}
+                                        {errors.confirm_password && (<div className="ws-input-error">{errors.confirm_password.message}</div>)}
                                     </div>
 
                                     {/* <div className="pb-[15px] md:pb-[15px] text-right"> */}
                                     <div className="text-right pt-[10px]">
-                                        <button type="submit" title="Change Password" className="ws-button-m1">
-                                            Change Password
-                                        </button>
+                                        {
+                                            isLoading ? 
+                                            (<div className="transition-all delay-75 font-noto_sans text-[14px] md:text-[16px] text-zinc-800 dark:text-zinc-200 font-semibold">Sending ...</div>) 
+                                            : 
+                                            (
+                                                <button type="submit" title="Change Password" className="ws-button-m1">
+                                                    Change Password
+                                                </button>
+                                            )
+                                        }
                                     </div>
                                 </form>
                             </div>

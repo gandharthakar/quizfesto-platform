@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { set_dark_mode, unset_dark_mode } from "@/app/redux-service/slices/theme-mode/themeSwitcherSlice";
 import { IoIosEye } from "react-icons/io";
 import { IoIosEyeOff } from "react-icons/io";
@@ -11,9 +11,13 @@ import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import Swal from "sweetalert2";
+import { RootState } from "@/app/redux-service/store";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
 
+    const router = useRouter();
+    const AuthUser = useSelector((state: RootState) => state.auth_user_id.auth_user_id);
     const dispatch = useDispatch();
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [showConfPassword, setShowConfPassword] = useState<boolean>(false);
@@ -78,6 +82,16 @@ export default function Page() {
             dispatch(unset_dark_mode());
         }
     });
+
+    const checkAuthUser = () => {
+        if(AuthUser !== '') {
+            router.push("/");
+        }
+    }
+
+    useEffect(() => {
+        checkAuthUser();
+    }, [checkAuthUser]);
 
     return (
         <>

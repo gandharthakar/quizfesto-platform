@@ -3,18 +3,21 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { set_dark_mode, unset_dark_mode } from "@/app/redux-service/slices/theme-mode/themeSwitcherSlice";
-import { IoIosEye } from "react-icons/io";
-import { IoIosEyeOff } from "react-icons/io";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { RootState } from "@/app/redux-service/store";
+import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
 
 export default function Page() {
 
+    const router = useRouter();
+    const AuthUser = useSelector((state: RootState) => state.auth_user_id.auth_user_id);
     const dispatch = useDispatch();
-    const [showPassword, setShowPassword] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const validationSchema = z.object({
         email: z.string({
@@ -31,9 +34,31 @@ export default function Page() {
 		resolver: zodResolver(validationSchema)
 	});
 
-    const handleFormSubmit: SubmitHandler<validationSchema> = (formdata) => {
-        console.log(formdata);
-        reset();
+    const handleFormSubmit: SubmitHandler<validationSchema> = async (formdata) => {
+        setIsLoading(true);
+        const resp = await fetch('/api/site/auth-user/forgot-password', {
+            method: "POST",
+            body: JSON.stringify({ user_email: formdata.email })
+        });
+        const body = await resp.json();
+        if(body.success) {
+            Swal.fire({
+                title: "Success!",
+                text: body.message,
+                icon: "success",
+                timer: 4000
+            });
+            setIsLoading(false);
+            reset();
+        } else {
+            Swal.fire({
+                title: "Error!",
+                text: body.message,
+                icon: "error",
+                timer: 4000
+            });
+            setIsLoading(false);
+        }
     }
     
     useEffect(() => {
@@ -45,6 +70,16 @@ export default function Page() {
             dispatch(unset_dark_mode());
         }
     });
+
+    const checkAuthUser = () => {
+        if(AuthUser !== '') {
+            router.push("/");
+        }
+    }
+
+    useEffect(() => {
+        checkAuthUser();
+    }, [checkAuthUser]);
 
     return (
         <>
@@ -80,9 +115,16 @@ export default function Page() {
                                     </div>
 
                                     <div className="text-right pt-[10px]">
-                                        <button type="submit" title="Submit" className="ws-button-m1">
-                                            Submit
-                                        </button>
+                                        {
+                                            isLoading ? 
+                                            (<div className="transition-all delay-75 font-noto_sans text-[14px] md:text-[16px] text-zinc-800 dark:text-zinc-200 font-semibold">Sending ...</div>) 
+                                            : 
+                                            (
+                                                <button type="submit" title="Submit" className="ws-button-m1">
+                                                    Submit
+                                                </button>
+                                            )
+                                        }
                                     </div>
                                 </form>
                             </div>

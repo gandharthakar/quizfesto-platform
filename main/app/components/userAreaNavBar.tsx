@@ -9,10 +9,9 @@ import { FaPowerOff } from "react-icons/fa6";
 import { ImCog } from "react-icons/im";
 import { IoChatboxEllipses } from "react-icons/io5";
 import { AiOutlineTrophy } from "react-icons/ai";
-import { usePathname } from "next/navigation";
+import { usePathname, redirect } from "next/navigation";
 import { close_user_area_menu } from "../redux-service/slices/user-area/userAreaMenuToggleSlice";
 import { useEffect, useState } from "react";
-import { signOut } from "next-auth/react";
 
 export default function UserAreaNavBar() {
     
@@ -34,10 +33,6 @@ export default function UserAreaNavBar() {
         setNameLetter(body.user_full_name.charAt(0));
         setProfilePict(body.user_photo);
         setUserName(body.user_full_name);
-    }
-
-    const handleLogout = () => {
-        signOut();
     }
 
     useEffect(() => {
@@ -141,11 +136,11 @@ export default function UserAreaNavBar() {
                         <div className="pb-[10px] w-full">
                             <ul className="flex flex-col w-full">
                                 <li className="w-full">
-                                    <button 
-                                        type="button" 
+                                    <Link 
+                                        href={`/logout`} 
                                         title="Logout" 
-                                        className="transition-all delay-75 py-[10px] md:py-[15px] block w-full px-[15px] border-l-[4px] border-solid border-transparent font-noto_sans font-semibold text-[16px] md:text-[18px] text-red-600 hover:bg-zinc-100 hover:border-red-600 dark:text-red-600 dark:hover:bg-zinc-900" 
-                                        onClick={handleLogout} 
+                                        className={`transition-all delay-75 py-[10px] md:py-[15px] block w-full px-[15px] border-l-[4px] border-solid border-transparent font-noto_sans font-semibold text-[16px] md:text-[18px] text-red-600 hover:bg-zinc-100 hover:border-red-600 dark:text-red-600 dark:hover:bg-zinc-900`} 
+                                        onClick={() => dispatch(close_user_area_menu())}
                                     >
                                         <div className="flex gap-x-[10px] items-center">
                                             <FaPowerOff size={25} />
@@ -153,7 +148,7 @@ export default function UserAreaNavBar() {
                                                 Logout
                                             </div>
                                         </div>
-                                    </button>
+                                    </Link>
                                 </li>
                             </ul>
                         </div>

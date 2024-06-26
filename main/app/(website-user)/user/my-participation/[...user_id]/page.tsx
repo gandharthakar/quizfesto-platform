@@ -12,7 +12,7 @@ export default function Page() {
                 <div>
                     {
                         dump_my_participation.map((itm) => (
-                            <div className="pb-[20px] last:pb-0" key={itm.id}>
+                            <div className="pb-[20px] last:pb-0 hidden" key={itm.id}>
                                 <MyParticipationCard 
                                     quiz_title={itm.quiz_title} 
                                     quiz_cover_photo={itm.quiz_cover_photo} 

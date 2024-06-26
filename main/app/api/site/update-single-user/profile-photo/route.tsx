@@ -17,8 +17,43 @@ export async function POST(req: Request) {
     try {
         
         const body = await req.json();
-        let { user_id } = body;
+        let { user_id, user_photo } = body;
 
+        if(!user_id) {
+            short_resp = {
+                success: false,
+                message: 'User id not provided',
+            }
+            sts = 400;
+        } else {
+            const user = await prisma.user.findFirst({
+                where: {
+                    user_id
+                }
+            });
+            if(user) {
+                await prisma.user.update({
+                    where: {
+                        user_id
+                    },
+                    data: {
+                        user_photo
+                    }
+                });
+                short_resp = {
+                    success: true,
+                    message: 'Profile Photo Updated.',
+                }
+                sts = 200;
+            } else {
+                short_resp = {
+                    success: false,
+                    message: 'User not found with this user id.',
+                }
+                sts = 400;
+            }
+        }
+        return NextResponse.json(short_resp, {status: sts});
     } catch (error: any) {
         sts = 500;
         short_resp = {

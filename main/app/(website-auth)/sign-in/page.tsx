@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { set_dark_mode, unset_dark_mode } from "@/app/redux-service/slices/theme-mode/themeSwitcherSlice";
 import { IoIosEye } from "react-icons/io";
 import { IoIosEyeOff } from "react-icons/io";
@@ -11,9 +11,10 @@ import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { jwtDecode } from "jwt-decode";
-import { getCookie, setCookie } from 'cookies-next';
+// import { jwtDecode } from "jwt-decode";
+import { setCookie } from 'cookies-next';
 import { signIn } from "next-auth/react";
+import { RootState } from "@/app/redux-service/store";
 
 interface JWTDec {
     is_auth_user: string,
@@ -23,6 +24,7 @@ interface JWTDec {
 
 export default function Page() {
 
+    const AuthUser = useSelector((state: RootState) => state.auth_user_id.auth_user_id);
     const router = useRouter();
     const dispatch = useDispatch();
     const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -57,9 +59,9 @@ export default function Page() {
 
         if(dt.success) {
             setIsLoading(false);
-            let uid: JWTDec = jwtDecode(dt.token);
+            // let uid: JWTDec = jwtDecode(dt.token);
             setCookie('is_auth_user', dt.token);
-            router.push(`/user/${uid}`);
+            router.push(`/`);
             reset();
         }
     }
@@ -73,6 +75,16 @@ export default function Page() {
             dispatch(unset_dark_mode());
         }
     });
+
+    const checkAuthUser = () => {
+        if(AuthUser !== '') {
+            router.push("/");
+        }
+    }
+
+    useEffect(() => {
+        checkAuthUser();
+    }, [checkAuthUser]);
 
     return (
         <>

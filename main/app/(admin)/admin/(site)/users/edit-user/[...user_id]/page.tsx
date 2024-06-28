@@ -150,6 +150,10 @@ function Page() {
 		}).email({
 			message: "Please enter valid email address."
 		}).min(1),
+
+        role:z.string({
+            required_error: "Please select a role."
+        }).min(1, {message: "Please select a role."}),
     });
 
     type validationSchema = z.infer<typeof validationSchema>;
@@ -198,6 +202,7 @@ function Page() {
     useEffect(() => {
         setValue("full_name", "Amit Jadhav");
         setValue("email", "amitjn@ay.com");
+        setValue("role", "Normal");
         setImageFile("/images/testimonials/michael-davis.jpg");
         setProfileImage("/images/testimonials/michael-davis.jpg");
         setImageDimensions(true);
@@ -243,6 +248,24 @@ function Page() {
                                         {...register("email")} 
                                     />
                                     {errors.email && (<div className="ws-input-error mt-[2px]">{errors.email.message}</div>)}
+                                </div>
+                                <div className="pb-[20px]">
+                                    <label 
+                                        className="transition-all delay-75 block mb-[5px] font-noto_sans text-[16px] font-semibold text-zinc-900 dark:text-zinc-300" 
+                                        htmlFor="cq-qrole"
+                                    >
+                                        Role <span className="text-red-500">*</span>
+                                    </label>
+                                    <select
+                                        id="cq-qrole" 
+                                        className="ws-input-pwd-m1-v1" 
+                                        {...register("role")} 
+                                    >
+                                        <option value="">- Select -</option>
+                                        <option value="Normal">Normal</option>
+                                        <option value="Admin">Admin</option>
+                                    </select>
+                                    {errors.role && (<div className="ws-input-error mt-[2px]">{errors.role.message}</div>)}
                                 </div>
                                 <div className="pb-[20px]">
                                     <label 
@@ -354,8 +377,8 @@ function Page() {
                                     </div>
                                 </div>
                                 <div className="text-right">
-                                    <button type="submit" title="Create User" className="transition-all delay-75 inline-block concard px-[20px] md:px-[25px] py-[10px] md:py-[12px] text-center text-white font-noto_sans font-semibold text-[16px] md:text-[18px] hover:shadow-lg">
-                                        Create User
+                                    <button type="submit" title="Update User" className="transition-all delay-75 inline-block concard px-[20px] md:px-[25px] py-[10px] md:py-[12px] text-center text-white font-noto_sans font-semibold text-[16px] md:text-[18px] hover:shadow-lg">
+                                        Update User
                                     </button>
                                 </div>
                             </div>

@@ -5,11 +5,33 @@ import Link from "next/link";
 import { VscSettingsGear } from "react-icons/vsc";
 import { FaPowerOff } from "react-icons/fa6";
 import { useEffect, useRef, useState } from "react";
+import { deleteCookie, getCookie } from "cookies-next";
+import { useRouter } from "next/navigation";
+import { jwtDecode } from "jwt-decode";
+
+interface JWTDec {
+    is_admin_user: string,
+    exp: number,
+    iat: number
+}
 
 function AdminHeaderProfileMenu() {
 
+    const router = useRouter();
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
     const menuRef = useRef<HTMLDivElement>(null);
+    const gtco = getCookie("is_admin_user");
+    let AdminAuthUserID: string = '';
+
+    let admin_id: JWTDec = {
+        is_admin_user: '',
+        exp: 0,
+        iat: 0
+    };
+    if(gtco) {
+        admin_id = jwtDecode(gtco);
+        AdminAuthUserID = admin_id.is_admin_user;
+    }
 
     const handleClick = () => {
         setIsMenuOpen(false);
@@ -17,6 +39,8 @@ function AdminHeaderProfileMenu() {
     
     const handleLogOut = () => {
         setIsMenuOpen(false);
+        deleteCookie("is_admin_user");
+        router.push("/admin/login");
     }
 
     useEffect(()=> {
@@ -45,7 +69,7 @@ function AdminHeaderProfileMenu() {
                 <ul className={`absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-zinc-950 dark:ring-zinc-800 ${isMenuOpen ? 'block' : 'hidden'}`}>
                     <li className="w-full">
                         <Link 
-                            href={`/admin/settings/1`} 
+                            href={`/admin/settings/${AdminAuthUserID}`} 
                             title="Settings"
                             className="transition-all delay-75 block w-full py-[10px] px-[15px] font-ubuntu text-[16px] text-zinc-900 hover:bg-zinc-100 dark:text-zinc-200 dark:hover:bg-zinc-800" 
                             onClick={handleClick}

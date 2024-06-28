@@ -26,6 +26,18 @@ model User {
   updatedAt           DateTime             @updatedAt
 }
 
+model Admin_User {
+  admin_user_id       String   @id @default(uuid())
+  admin_user_name     String
+  admin_user_email    String   @unique
+  admin_user_password String
+  admin_user_photo    String
+  admin_user_phone    String
+  role                Role?    @default(Admin)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
 model User_Participation {
   user_participation_id String  @id @default(uuid())
   quiz_estimated_time   String

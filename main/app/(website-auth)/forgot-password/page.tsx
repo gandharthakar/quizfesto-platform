@@ -71,6 +71,7 @@ export default function Page() {
         }
     });
 
+    //eslint-disable-next-line
     const checkAuthUser = () => {
         if(AuthUser !== '') {
             router.push("/");
@@ -79,6 +80,7 @@ export default function Page() {
 
     useEffect(() => {
         checkAuthUser();
+    //eslint-disable-next-line
     }, [checkAuthUser]);
 
     return (

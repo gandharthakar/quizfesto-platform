@@ -142,6 +142,7 @@ function Page() {
 
     useEffect(() => {
         setQuizListData(GFG(dump_list_of_quizes, currentPage, dataPerPage));
+    //eslint-disable-next-line
     }, []);
         
     useEffect(() => {

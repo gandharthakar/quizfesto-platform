@@ -152,6 +152,7 @@ function Page() {
 
     useEffect(() => {
         setUserList(GFG(dump_list_of_users, currentPage, dataPerPage));
+    //eslint-disable-next-line
     }, []);
         
     useEffect(() => {
@@ -173,7 +174,7 @@ function Page() {
         };
 
         document.addEventListener('mousedown', menuHandler);
-
+    //eslint-disable-next-line
     }, []);
 
     return (

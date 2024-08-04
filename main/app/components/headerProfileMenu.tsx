@@ -13,6 +13,7 @@ export default function HeaderProfileMenu() {
     const [nameLetter, setNameLetter] = useState<string>('');
     const [profilePict, setProfilePict] = useState<string>("");
 
+    //eslint-disable-next-line
     const getUser = async () => {
         const resp = await fetch('http://localhost:3000/api/site/get-single-user', {
             method: 'POST',
@@ -27,6 +28,7 @@ export default function HeaderProfileMenu() {
         if(AuthUser !== '') {
             getUser();
         }
+    //eslint-disable-next-line
     }, [getUser]);
 
     return (

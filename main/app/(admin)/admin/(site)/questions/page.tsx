@@ -141,6 +141,7 @@ function Page() {
     
     useEffect(() => {
         setQestionListData(GFG(dump_list_of_questions, currentPage, dataPerPage));
+        //eslint-disable-next-line
     }, []);
 
     useEffect(() => {

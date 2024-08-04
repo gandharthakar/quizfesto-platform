@@ -6,6 +6,7 @@ import { useEffect } from "react";
 
 function Page() {
 
+    //eslint-disable-next-line
     const handleLogout = () => {
         signOut();
         deleteCookie("is_auth_user");
@@ -17,6 +18,7 @@ function Page() {
 
     useEffect(() => {
         handleLogout();
+    //eslint-disable-next-line
     }, [handleLogout]);
 
     return (

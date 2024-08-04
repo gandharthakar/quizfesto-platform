@@ -4,6 +4,7 @@ import AdminSettingsNav from "@/app/components/admin/adminSettingsNav";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useEffect } from "react";
 
 function Page() {
 
@@ -23,7 +24,7 @@ function Page() {
 
     type validationSchema = z.infer<typeof validationSchema>;
 
-    const { register, handleSubmit, reset, formState: { errors }} = useForm<validationSchema>({
+    const { register, handleSubmit, reset, setValue, formState: { errors }} = useForm<validationSchema>({
 		resolver: zodResolver(validationSchema),
         defaultValues: {
             full_name: 'Amit Thakur',
@@ -35,6 +36,11 @@ function Page() {
         console.log(formdata);
         reset();
     }
+
+    useEffect(() => {
+        setValue("full_name", "");
+        setValue("email", "");
+    }, []);
 
     return (
         <div className="pt-[15px] pb-[25px]">

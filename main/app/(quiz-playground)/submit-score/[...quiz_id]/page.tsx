@@ -144,14 +144,15 @@ export default function Page() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isLoading]);
 
-    const AuthUser = useSelector((state: RootState) => state.auth_user_id);
-    useEffect(() => {
-        if(!AuthUser) {
+    // const AuthUser = useSelector((state: RootState) => state.auth_user_id);
+    // useEffect(() => {
+    //     if(!AuthUser) {
 
-        } else {
-            router.push("/sign-in");
-        }
-    }, []);
+    //     } else {
+    //         router.push("/sign-in");
+    //     }
+    // //eslint-disable-next-line
+    // }, []);
 
     return (
         <>

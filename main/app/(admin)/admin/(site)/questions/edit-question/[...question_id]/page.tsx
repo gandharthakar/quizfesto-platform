@@ -39,6 +39,7 @@ function Page() {
         setValue("quiz_id", "12345");
         setValue("question_text", "This is question text ?");
         setValue("question_marks", 2);
+        //eslint-disable-next-line
     }, []);
 
     return (

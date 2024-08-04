@@ -24,6 +24,7 @@ export default function UserAreaNavBar() {
     const [userName, setUserName] = useState<string>("");
     const settingRoutes:string[] = [`/user/settings/${AuthUser}`, `/user/settings/password/${AuthUser}`, `/user/settings/phone/${AuthUser}`, `/user/settings/profle-photo/${AuthUser}`];
 
+    //eslint-disable-next-line
     const getUser = async () => {
         const resp = await fetch('http://localhost:3000/api/site/get-single-user', {
             method: 'POST',
@@ -39,6 +40,7 @@ export default function UserAreaNavBar() {
         if(AuthUser !== '') {
             getUser();
         }
+    //eslint-disable-next-line
     }, [getUser]);
 
     return (

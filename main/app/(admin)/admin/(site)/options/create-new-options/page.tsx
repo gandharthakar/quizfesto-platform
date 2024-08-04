@@ -176,7 +176,7 @@ function Page() {
                                                         </button>
                                                     )}
                                                     {genOptionSet.length > 1 && (
-                                                        <button type="button" title="Remove Term" onClick={() => handleDeleteInputOptSet(0)}>
+                                                        <button type="button" title="Remove Term" onClick={() => handleDeleteInputOptSet(idx)}>
                                                             <RiDeleteBin6Line size={20} className="transition-all w-[15px] h-[15px] md:w-[20px] md:h-[20px] text-red-600 dark:text-red-400" />
                                                         </button>
                                                     )}

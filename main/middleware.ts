@@ -1,18 +1,24 @@
 import { NextResponse, NextRequest } from 'next/server';
 
-export function middleware(request: NextRequest) {
-    let auth = request.cookies.get('is_admin_user')?.value;
+import { config as adminConfig, middleware as adminMiddleware } from '@/app/(admin)/middleware';
+
+export default function middleware(req: NextRequest) {
+
+    let authUser = req.cookies.get('is_auth_user')?.value;
+
+    if (req.nextUrl.pathname.startsWith('/admin') && !req.nextUrl.pathname.startsWith('/admin/login')) {
+        return adminMiddleware(req);
+    } 
     
-    if(auth == 'undefined' || auth == undefined) {
-        // console.log('cookie is not set.');
-        // if(request.nextUrl.pathname !== '/admin/auth/login') {
-            return NextResponse.redirect(new URL("/admin/login", request.url));
-        // }
-    } else {
-        //console.log('cookie is set');
+    if((authUser == 'undefined' || authUser == undefined) && (
+        req.nextUrl.pathname.startsWith('/play-quiz') || 
+        req.nextUrl.pathname.startsWith('/submit-score') || 
+        req.nextUrl.pathname.startsWith('/user')
+    )) {
+        return NextResponse.redirect(new URL("/sign-in", req.url));
     }
 }
 
 export const config = {
-    matcher: ["/admin", "/admin/settings/:path", "/admin/settings/password/:path", "/admin/quizes", "/quizes/create-new-quiz", "/admin/quizes/edit-quiz/:path", "/admin/questions", "/admin/questions/create-new-question", "/admin/questions/edit-question/:path", "/admin/options", "/admin/options/create-new-options", "/admin/options/edit-options/:path", "/admin/categories", "/admin/categories/create-new-category", "/admin/categories/edit-category/:path", "/admin/categories/set_home_categories", "/admin/users", "/admin/users/create-new-user", "/admin/users/edit-user/:path", "/admin/prizes", "/admin/winners"]
+    matcher: [...adminConfig.matcher]
 }

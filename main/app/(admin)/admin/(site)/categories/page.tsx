@@ -142,6 +142,7 @@ function Page() {
 
     useEffect(() => {
         setQuizListCats(GFG(dump_list_of_categories, currentPage, dataPerPage));
+        //eslint-disable-next-line
     }, []);
         
     useEffect(() => {

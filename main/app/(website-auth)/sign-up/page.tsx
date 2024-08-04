@@ -70,6 +70,14 @@ export default function Page() {
                 icon: "success",
                 timer: 4000
             });
+        } else {
+            Swal.fire({
+                title: "Error!",
+                text: dt.message,
+                icon: "error",
+                timer: 4000
+            });
+            setIsLoading(false);
         }
     }
     
@@ -83,6 +91,7 @@ export default function Page() {
         }
     });
 
+    //eslint-disable-next-line
     const checkAuthUser = () => {
         if(AuthUser !== '') {
             router.push("/");
@@ -91,6 +100,7 @@ export default function Page() {
 
     useEffect(() => {
         checkAuthUser();
+    //eslint-disable-next-line
     }, [checkAuthUser]);
 
     return (

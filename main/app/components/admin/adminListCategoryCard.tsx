@@ -51,7 +51,7 @@ function AdminListCategoryCard(props: AdmLstQzCd) {
         };
 
         document.addEventListener('mousedown', menuHandler);
-
+    //eslint-disable-next-line
     }, []);
 
     return (

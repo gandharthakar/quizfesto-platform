@@ -208,6 +208,7 @@ function Page() {
         setImageDimensions(true);
         setImageFileSize(true);
         setFileExt("jpg");
+    //eslint-disable-next-line
     }, []);
 
     return (

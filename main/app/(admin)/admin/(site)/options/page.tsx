@@ -17,7 +17,7 @@ function GFG(array: any, currPage: number, pageSize: number) {
     return array.slice(startIndex, endIndex);
 }
 
-function page() {
+function Page() {
 
     const dataPerPage = 5;
     const [srchInp, setSrchInp] = useState<string>("");
@@ -141,6 +141,7 @@ function page() {
 
     useEffect(() => {
         setOptionsListData(GFG(dump_list_of_options, currentPage, dataPerPage));
+    //eslint-disable-next-line
     }, []);
 
     useEffect(() => {
@@ -149,6 +150,7 @@ function page() {
         } else {
             setSelectAll(false);
         }
+    //eslint-disable-next-line
     }, [selectedItems, optionsListData]);
 
     return (
@@ -305,4 +307,4 @@ function page() {
     )
 }
 
-export default page;
+export default Page;

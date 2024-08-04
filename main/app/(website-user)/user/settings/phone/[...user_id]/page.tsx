@@ -59,6 +59,7 @@ export default function Page() {
         }
     }
 
+    //eslint-disable-next-line
     const getUser = async () => {
         const resp = await fetch('http://localhost:3000/api/site/get-single-user', {
             method: 'POST',
@@ -70,10 +71,12 @@ export default function Page() {
 
     useEffect(() => {
         getUser();
+        //eslint-disable-next-line
     }, [getUser]);
 
     useEffect(() => {
         setValue("phone_number", phone??'');
+    //eslint-disable-next-line
     }, [phone]);
 
     return (

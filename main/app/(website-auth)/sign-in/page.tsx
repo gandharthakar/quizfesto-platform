@@ -15,12 +15,13 @@ import { useRouter } from "next/navigation";
 import { setCookie } from 'cookies-next';
 import { signIn } from "next-auth/react";
 import { RootState } from "@/app/redux-service/store";
+import Swal from "sweetalert2";
 
-interface JWTDec {
-    is_auth_user: string,
-    exp: bigint,
-    iat: bigint
-}
+// interface JWTDec {
+//     is_auth_user: string,
+//     exp: bigint,
+//     iat: bigint
+// }
 
 export default function Page() {
 
@@ -63,6 +64,14 @@ export default function Page() {
             setCookie('is_auth_user', dt.token);
             router.push(`/`);
             reset();
+        } else {
+            Swal.fire({
+                title: "Error!",
+                text: dt.message,
+                icon: "error",
+                timer: 4000
+            });
+            setIsLoading(false);
         }
     }
     
@@ -76,6 +85,7 @@ export default function Page() {
         }
     });
 
+    //eslint-disable-next-line
     const checkAuthUser = () => {
         if(AuthUser !== '') {
             router.push("/");
@@ -84,6 +94,7 @@ export default function Page() {
 
     useEffect(() => {
         checkAuthUser();
+    //eslint-disable-next-line
     }, [checkAuthUser]);
 
     return (

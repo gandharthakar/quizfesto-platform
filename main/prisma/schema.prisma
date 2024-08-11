@@ -47,6 +47,46 @@ model User_Participation {
   user_id               String?
 }
 
+model QF_Quiz {
+  quiz_id             String          @id @default(uuid())
+  quiz_title          String
+  quiz_summary        String
+  quiz_display_time   String
+  quiz_estimated_time String
+  quiz_total_question String
+  quiz_total_marks    String
+  quiz_status         String
+  quiz_about_text     String?
+  quiz_terms          String?
+  quiz_cover_photo    String?
+  quiz_categories     Quiz_Category[]
+  Questions           QF_Question[]
+}
+
+model QF_Question {
+  question_id    String      @id @default(uuid())
+  question_title String
+  question_marks String
+  quizid         String
+  quiz           QF_Quiz     @relation(fields: [quizid], references: [quiz_id], onDelete: Cascade) // Foreign key with cascade delete
+  Options        QF_Option[]
+}
+
+model QF_Option {
+  option_id     String      @id @default(uuid())
+  question_text String
+  option_data   Json
+  questionid    String
+  question      QF_Question @relation(fields: [questionid], references: [question_id], onDelete: Cascade) // Foreign key with cascade delete
+}
+
+model Quiz_Category {
+  quiz_category_id    String    @id @default(uuid())
+  quiz_category_title String
+  quiz_category_slug  String
+  QF_Quiz             QF_Quiz[]
+}
+
 enum Role {
   Normal
   Admin

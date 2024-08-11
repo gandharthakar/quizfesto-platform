@@ -6,11 +6,16 @@ import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { IoIosEye, IoIosEyeOff } from "react-icons/io";
+import Swal from "sweetalert2";
+import { useParams } from "next/navigation";
 
 function Page() {
 
+    const param = useParams();
+    let AuthUser = param?.userid[0];
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [showConfPassword, setShowConfPassword] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const validationSchema = z.object({
         password: z.string({
@@ -31,9 +36,31 @@ function Page() {
 		resolver: zodResolver(validationSchema)
 	});
 
-    const handleFormSubmit: SubmitHandler<validationSchema> = (formdata) => {
-        console.log(formdata);
-        reset();
+    const handleFormSubmit: SubmitHandler<validationSchema> = async (formdata) => {
+        setIsLoading(true);
+        const resp = await fetch('http://localhost:3000/api/admin/auth-user/settings/password', {
+            method: 'POST',
+            body: JSON.stringify({ user_id: AuthUser, password: formdata.password, confirm_password: formdata.confirmPassword })
+        });
+        let body = await resp.json();
+        if(body.success) {
+            Swal.fire({
+                title: "Success!",
+                text: body.message,
+                icon: "success",
+                timer: 4000
+            });
+            setIsLoading(false);
+            reset();
+        } else {
+            Swal.fire({
+                title: "Error!",
+                text: body.message,
+                icon: "error",
+                timer: 4000
+            });
+            setIsLoading(false);
+        }
     }
 
     return (
@@ -81,9 +108,16 @@ function Page() {
                         {errors.confirmPassword && (<div className="ws-input-error">{errors.confirmPassword.message}</div>)}
                     </div>
                     <div className="text-right">
-                        <button type="submit" title="Change Password" className="ws-button-m1">
-                            Change Password
-                        </button>
+                        {
+                            isLoading ? 
+                            (<div className="transition-all delay-75 font-noto_sans text-[14px] md:text-[16px] text-zinc-800 dark:text-zinc-200 font-semibold">Loading...</div>) 
+                            :
+                            (
+                                <button type="submit" title="Change Password" className="ws-button-m1">
+                                    Change Password
+                                </button>
+                            )
+                        }
                     </div>
                 </form>
             </div>

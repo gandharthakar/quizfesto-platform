@@ -391,7 +391,7 @@ function Page() {
                                                         </button>
                                                     )}
                                                     {quizTerms.length > 1 && (
-                                                        <button type="button" title="Remove Term" onClick={() => handleDeleteInputQuizTerms(0)}>
+                                                        <button type="button" title="Remove Term" onClick={() => handleDeleteInputQuizTerms(index)}>
                                                             <RiDeleteBin6Line size={20} className="transition-all w-[15px] h-[15px] md:w-[20px] md:h-[20px] text-red-600 dark:text-red-400" />
                                                         </button>
                                                     )}

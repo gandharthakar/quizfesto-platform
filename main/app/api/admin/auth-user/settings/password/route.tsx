@@ -1,9 +1,10 @@
 import prisma from "@/app/lib/db";
 import { NextResponse } from "next/server";
+import { hash } from "bcrypt";
 
 interface Respo {
-    user_full_name: string,
-    user_email: string,
+    password: string,
+    confirm_password: string,
 }
 
 interface ShtResp {
@@ -25,9 +26,9 @@ export async function POST(req: Request) {
     try {
 
         const body = await req.json();
-        let { user_id, user_full_name, user_email } = body;
+        let { user_id, password, confirm_password } = body;
 
-        if(user_id && user_full_name && user_email) {
+        if(user_id && password && confirm_password) {
             
             const fu__in__usrtblmdl = await prisma.user.findFirst({
                 where: {
@@ -59,35 +60,41 @@ export async function POST(req: Request) {
 
             if(isTrueAdminUser) {
 
-                if(fu__in__usrtblmdl) {
-                    await prisma.user.update({
-                        where: {
-                            user_id
-                        },
-                        data: {
-                            user_full_name,
-                            user_email
-                        }
-                    });
-                } else {
-                    if(fu__in__admntblmdl) {
-                        await prisma.admin_User.update({
+                if(password === confirm_password) {
+                    const hashPassword = await hash(password, 10);
+                    if(fu__in__usrtblmdl) {
+                        await prisma.user.update({
                             where: {
-                                admin_user_id: user_id
+                                user_id
                             },
                             data: {
-                                admin_user_name: user_full_name,
-                                admin_user_email: user_email
+                                user_password: hashPassword,
                             }
                         });
+                    } else {
+                        if(fu__in__admntblmdl) {
+                            await prisma.admin_User.update({
+                                where: {
+                                    admin_user_id: user_id
+                                },
+                                data: {
+                                    admin_user_password: hashPassword
+                                }
+                            });
+                        }
                     }
+                    resp = {
+                        success: true,
+                        message: 'Password Updated.',
+                    }
+                    sts = 200;
+                } else {
+                    resp = {
+                        success: false,
+                        message: "Password & Confirm Password Doesn't Match.",
+                    }
+                    sts = 400;
                 }
-
-                resp = {
-                    success: true,
-                    message: 'General Settings Updated.',
-                }
-                sts = 200;
             } else {
                 resp = {
                     success: false,

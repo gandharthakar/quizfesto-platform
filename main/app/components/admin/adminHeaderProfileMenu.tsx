@@ -20,18 +20,7 @@ function AdminHeaderProfileMenu() {
     const router = useRouter();
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
     const menuRef = useRef<HTMLDivElement>(null);
-    const gtco = getCookie("is_admin_user");
-    let AdminAuthUserID: string = '';
-
-    let admin_id: JWTDec = {
-        is_admin_user: '',
-        exp: 0,
-        iat: 0
-    };
-    if(gtco) {
-        admin_id = jwtDecode(gtco);
-        AdminAuthUserID = admin_id.is_admin_user;
-    }
+    const [auid, setAuid] = useState<string>("");
 
     const handleClick = () => {
         setIsMenuOpen(false);
@@ -54,6 +43,18 @@ function AdminHeaderProfileMenu() {
         };
 
         document.addEventListener('mousedown', menuHandler);
+
+        const gtco = getCookie("is_admin_user");
+        let admin_id: JWTDec = {
+            is_admin_user: '',
+            exp: 0,
+            iat: 0
+        };
+        if(gtco) {
+            admin_id = jwtDecode(gtco);
+            setAuid(admin_id.is_admin_user);
+        }
+
     //eslint-disable-next-line
     }, []);
 
@@ -69,7 +70,7 @@ function AdminHeaderProfileMenu() {
                 <ul className={`absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-zinc-950 dark:ring-zinc-800 ${isMenuOpen ? 'block' : 'hidden'}`}>
                     <li className="w-full">
                         <Link 
-                            href={`/admin/settings/${AdminAuthUserID}`} 
+                            href={`/admin/settings/${auid}`} 
                             title="Settings"
                             className="transition-all delay-75 block w-full py-[10px] px-[15px] font-ubuntu text-[16px] text-zinc-900 hover:bg-zinc-100 dark:text-zinc-200 dark:hover:bg-zinc-800" 
                             onClick={handleClick}

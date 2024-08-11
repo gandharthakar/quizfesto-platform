@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 interface Respo {
     user_full_name: string,
     user_email: string,
+    success?: boolean
 }
 
 interface ShtResp {
@@ -15,6 +16,7 @@ export async function POST(req: Request) {
     let resp_main: Respo = {
         user_full_name: '',
         user_email: '',
+        success: false
     }
 
     let sts:number = 400;
@@ -68,7 +70,32 @@ export async function POST(req: Request) {
                 }
             }
 
-            console.log(user);
+            if(fu__in__usrtblmdl) {
+                resp_main = {
+                    user_full_name: user.user_full_name,
+                    user_email: user.user_email,
+                    success: true
+                }
+                MixResp = resp_main;
+                sts = 200;
+            } else {
+                if(fu__in__admntblmdl) {
+                    resp_main = {
+                        user_full_name: user.admin_user_name,
+                        user_email: user.admin_user_email,
+                        success: true
+                    }
+                    MixResp = resp_main;
+                    sts = 200;
+                } else {
+                    short_resp = {
+                        success: false,
+                        message: 'No User Found.',
+                    }
+                    MixResp = short_resp;
+                    sts = 400;
+                }
+            }
         }
 
         return NextResponse.json(MixResp, {status: sts});

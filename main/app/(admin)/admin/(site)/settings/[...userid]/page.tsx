@@ -42,7 +42,8 @@ function Page() {
 
     const handleFormSubmit: SubmitHandler<validationSchema> = async (formdata) => {
         setIsLoading(true);
-        const resp = await fetch('http://localhost:3000/api/admin/auth-user/settings/general/set', {
+        let baseURI = window.location.origin;
+        const resp = await fetch(`${baseURI}/api/admin/auth-user/settings/general/set`, {
             method: 'POST',
             body: JSON.stringify({ user_id: AuthUser, user_full_name: formdata.full_name, user_email: formdata.email })
         });
@@ -71,7 +72,8 @@ function Page() {
     //eslint-disable-next-line
     const getUser = async () => {
         setIsLoading(true);
-        const resp = await fetch('http://localhost:3000/api/admin/auth-user/settings/general/get', {
+        let baseURI = window.location.origin;
+        const resp = await fetch(`${baseURI}/api/admin/auth-user/settings/general/get`, {
             method: 'POST',
             body: JSON.stringify({ user_id: AuthUser })
         });

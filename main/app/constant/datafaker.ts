@@ -272,148 +272,64 @@ const dump_quizzes_list = [
 
 const dump_quiz_data = {
     quiz_id: "quiz-1",
-    quiz_dev_time: "00:01:00",
     quiz_total_question: 5,
     quiz_total_marks: 10,
     quiz_estimated_time: "00:02:00",
     quiz_display_time: '2 Mins',
+    quiz_cover_photo: '',
+    quiz_title: 'Swacha Nigam Bharat Abhiyan Quiz',
     only_q_a_opts: [
         {
             question_id: "ques-1",
             question_text: "Q1 This is demo question text ?",
             question_marks: 2,
-            question_options: [
-                {
-                    option_id: "ques-1-opt-1",
-                    option_text: "Q1 Option 1",
-                },
-                {
-                    option_id: "ques-1-opt-2",
-                    option_text: "Q1 Option 2",
-                },
-                {
-                    option_id: "ques-1-opt-3",
-                    option_text: "Q1 Option 3",
-                },
-                {
-                    option_id: "ques-1-opt-4",
-                    option_text: "Q1 Option 4",
-                },
-            ],
+            question_options: "Q1 Option 1, Q1 Option 2, Q1 Option 3, Q1 Option 4",
         },
         {
             question_id: "ques-2",
             question_text: "Q2 This is demo question text ?",
             question_marks: 2,
-            question_options: [
-                {
-                    option_id: "ques-2-opt-1",
-                    option_text: "Q2 Option 1",
-                },
-                {
-                    option_id: "ques-2-opt-2",
-                    option_text: "Q2 Option 2",
-                },
-                {
-                    option_id: "ques-2-opt-3",
-                    option_text: "Q2 Option 3",
-                },
-                {
-                    option_id: "ques-2-opt-4",
-                    option_text: "Q2 Option 4",
-                },
-            ],
+            question_options: "Q2 Option 1, Q2 Option 2, Q2 Option 3, Q2 Option 4",
         },
         {
             question_id: "ques-3",
             question_text: "Q3 This is demo question text ?",
             question_marks: 2,
-            question_options: [
-                {
-                    option_id: "ques-3-opt-1",
-                    option_text: "Q3 Option 1",
-                },
-                {
-                    option_id: "ques-3-opt-2",
-                    option_text: "Q3 Option 2",
-                },
-                {
-                    option_id: "ques-3-opt-3",
-                    option_text: "Q3 Option 3",
-                },
-                {
-                    option_id: "ques-3-opt-4",
-                    option_text: "Q3 Option 4",
-                },
-            ],
+            question_options: "Q3 Option 1, Q3 Option 2, Q3 Option 3, Q3 Option 4",
         },
         {
             question_id: "ques-4",
             question_text: "Q4 This is demo question text ?",
             question_marks: 2,
-            question_options: [
-                {
-                    option_id: "ques-4-opt-1",
-                    option_text: "Q4 Option 1",
-                },
-                {
-                    option_id: "ques-4-opt-2",
-                    option_text: "Q4 Option 2",
-                },
-                {
-                    option_id: "ques-4-opt-3",
-                    option_text: "Q4 Option 3",
-                },
-                {
-                    option_id: "ques-4-opt-4",
-                    option_text: "Q4 Option 4",
-                },
-            ],
+            question_options: "Q4 Option 1, Q4 Option 2, Q4 Option 3, Q4 Option 4",
         },
         {
             question_id: "ques-5",
             question_text: "Q5 This is demo question text ?",
             question_marks: 2,
-            question_options: [
-                {
-                    option_id: "ques-5-opt-1",
-                    option_text: "Q5 Option 1",
-                },
-                {
-                    option_id: "ques-5-opt-2",
-                    option_text: "Q5 Option 2",
-                },
-                {
-                    option_id: "ques-5-opt-3",
-                    option_text: "Q5 Option 3",
-                },
-                {
-                    option_id: "ques-5-opt-4",
-                    option_text: "Q5 Option 4",
-                },
-            ],
+            question_options: "Q5 Option 1, Q5 Option 2, Q5 Option 3, Q5 Option 4",
         },
     ],
     only_corr_answ: [
         {
             question_id: "ques-1",
-            correct_option_id: "ques-1-opt-3"
+            correct_option: "Q1 Option 1",
         },
         {
             question_id: "ques-2",
-            correct_option_id: "ques-2-opt-2"
+            correct_option: "Q2 Option 3",
         },
         {
             question_id: "ques-3",
-            correct_option_id: "ques-3-opt-4"
+            correct_option: "Q3 Option 4",
         },
         {
             question_id: "ques-4",
-            correct_option_id: "ques-4-opt-1"
+            correct_option: "Q4 Option 2",
         },
         {
             question_id: "ques-5",
-            correct_option_id: "ques-5-opt-2"
+            correct_option: "Q5 Option 1",
         },
     ],
 }

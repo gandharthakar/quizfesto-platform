@@ -6,107 +6,86 @@ import { set_dark_mode, unset_dark_mode } from "@/app/redux-service/slices/theme
 import Link from "next/link";
 import Image from "next/image";
 import { RootState } from "@/app/redux-service/store";
-import { dump_quiz_data } from "@/app/constant/datafaker";
-import { useRouter } from "next/navigation";
 
 interface QuizGivenAns {
     question_id: string,
-    user_choosen_option_id: string,
+    user_choosen_option: string,
     question_marks: number
-}
-
-interface QuizQues {
-    question_id: string,
-    correct_option_id: string
 }
 
 export default function Page() {
 
-    const router = useRouter();
     const dispatch = useDispatch();
     const trqzdt = useSelector((state: RootState) => state.transfer_quiz_data);
 
-    const [corrQAArr, setCorrQAArr] = useState<QuizQues[]>(dump_quiz_data.only_corr_answ);
     const [usrAnsw, setUserAnsw] = useState<QuizGivenAns[]>([]);
+
+    const [qzId, setQzId] = useState<string>("");
+    const [qzTitla, setQzTitle] = useState<string>("");
+    const [qzCP, setQzCP] = useState<string>("");
 
     const [timeTaken, setTimeTaken] = useState<string>("00:00:00");
     const [estTime, setEstTime] = useState<string>("00:00:00");
     const [totalMarks, setTotalMarks] = useState<number>(0);
+    const [totalQues, setTotalQues] = useState<number>(0);
+
     const [correctAnswers, setCorectAnswers] = useState<number>(0);
     const [totalScore, setTotalScore] = useState<number>(0);
+
     const [isLoading, setIsLoading] = useState<boolean>(true);
-
-    function countCorrectAnswers(questions: QuizQues[], answers: QuizGivenAns[]) {
-        // Initialize a counter for correct answers
-        let correctCount = 0;
-        let totalMarks = 0;
-        let arr = [];
-
-        // Loop through each user answer
-        for (const answer of answers) {
-            const questionId = answer.question_id;
-            const userOptionId = answer.user_choosen_option_id;
-
-            // Find the corresponding question object
-            const matchingQuestion = questions.find(question => question.question_id === questionId);
-
-            // Check if question exists and user option matches correct answer
-            if (matchingQuestion && matchingQuestion.correct_option_id === userOptionId) {
-                correctCount++;
-                arr.push(answer);
-            }
-        }
-
-        for (const mark of arr) {
-            totalMarks += mark.question_marks;
-        }
-
-        return {
-            correct_answers: correctCount,
-            total_mark: totalMarks
-        };
-    }
+    const [isSubmiting, setIsSubmiting] = useState<boolean>(false);
+    const [isSubmited, setIsSubmited] = useState<boolean>(false);
 
     const handleScoreSubmissionClick = () => {
+        setIsSubmiting(true);
+        let prepData = {
+            quiz_id: qzId,
+            quiz_title: qzTitla,
+            quiz_cover_photo: qzCP,
+
+            quiz_total_question: totalQues,
+            quiz_total_marks: totalMarks,
+            quiz_estimated_time: estTime,
+            time_taken: timeTaken,
+
+            quiz_coorect_answers_count: correctAnswers,
+            quiz_total_score: totalScore
+        }
         if(trqzdt.attempted_data.length > 0) {
-            console.log(trqzdt);
+            let st_12 = setTimeout(() => {
+                console.log(prepData);
+                setIsSubmited(true);
+                clearTimeout(st_12);
+            }, 1000);
         } else {
             alert("No Data Found.");
         }
     }
 
-    useEffect(() => {
-
-        function ppc(questions: QuizQues[], answers: QuizGivenAns[]) {
-            // Initialize a counter for correct answers
-            let correctCount = 0;
-            let totalMarks = 0;
-            let arr = [];
-    
-            // Loop through each user answer
-            for (const answer of answers) {
-                const questionId = answer.question_id;
-                const userOptionId = answer.user_choosen_option_id;
-    
-                // Find the corresponding question object
-                const matchingQuestion = questions.find(question => question.question_id === questionId);
-    
-                // Check if question exists and user option matches correct answer
-                if (matchingQuestion && matchingQuestion.correct_option_id === userOptionId) {
-                    correctCount++;
-                    arr.push(answer);
-                }
-            }
-    
-            for (const mark of arr) {
-                totalMarks += mark.question_marks;
-            }
-    
-            return {
-                correct_answers: correctCount,
-                total_mark: totalMarks
-            };
+    const getScore = async (ugadtArr: QuizGivenAns[]) => {
+        let baseURI = window.location.origin;
+        const resp = await fetch(`${baseURI}/api/site/get-score`, {
+            method: "POST",
+            body: JSON.stringify(ugadtArr)
+        });
+        const body = await resp.json();
+        if(body.success) {
+            setCorectAnswers(body.quiz_coorect_answers_count);
+            setTotalScore(body.quiz_total_score);
+            setIsLoading(false);
         }
+    }
+
+    useEffect(() => {
+        if(trqzdt.attempted_data.length > 0) {
+            let st_22 = setTimeout(() => {
+                getScore(trqzdt.attempted_data);
+                clearTimeout(st_22);
+            }, 1000);
+        }
+    }, [qzTitla]);
+
+    useEffect(() => {
 
         let glsi = localStorage.getItem('site-dark-mode');
         const checkDM = glsi ? JSON.parse(glsi) : '';
@@ -119,40 +98,45 @@ export default function Page() {
         // const ls_fiqdata = localStorage.getItem('transfer_quiz_data');
         // const prsfid = ls_fiqdata ? JSON.parse(ls_fiqdata) : '';
         // if(prsfid) {
+
+        //     setQzId(prsfid.quiz_id);
+        //     setQzCP(prsfid.quiz_cover_photo);
+        //     setQzTitle(prsfid.quiz_title);
+
+        //     setTotalQues(prsfid.quiz_total_question);
         //     setTimeTaken(prsfid.time_taken);
         //     setEstTime(prsfid.quiz_estimated_time);
         //     setTotalMarks(prsfid.quiz_total_marks);
+
         //     setUserAnsw(prsfid.attempted_data);
 
-        //     setCorectAnswers(countCorrectAnswers(corrQAArr, usrAnsw).correct_answers);
-        //     setTotalScore(countCorrectAnswers(corrQAArr, usrAnsw).total_mark);
+        //     // setCorectAnswers(countCorrectAnswers(corrQAArr, usrAnsw).correct_answers);
+        //     // setTotalScore(countCorrectAnswers(corrQAArr, usrAnsw).total_mark);
         // }
+
+
         if(trqzdt.attempted_data.length > 0) {
+            setQzId(trqzdt.quiz_id);
+            setQzCP(trqzdt.quiz_cover_photo);
+            setQzTitle(trqzdt.quiz_title);
+
+            setTotalQues(trqzdt.quiz_total_question);
             setTimeTaken(trqzdt.time_taken);
             setEstTime(trqzdt.quiz_estimated_time);
             setTotalMarks(trqzdt.quiz_total_marks);
-            setUserAnsw(trqzdt.attempted_data);
 
-            setCorectAnswers(countCorrectAnswers(corrQAArr, usrAnsw).correct_answers);
-            setTotalScore(countCorrectAnswers(corrQAArr, usrAnsw).total_mark);
+            setUserAnsw(trqzdt.attempted_data);
         }
-        let st = setTimeout(() => {
-            setIsLoading(false);
-            clearTimeout(st);
-        }, 200);
+
+        if(trqzdt.attempted_data.length === 0) {
+            let st = setTimeout(() => {
+                setIsLoading(false);
+                clearTimeout(st);
+            }, 200);
+        }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isLoading]);
-
-    // const AuthUser = useSelector((state: RootState) => state.auth_user_id);
-    // useEffect(() => {
-    //     if(!AuthUser) {
-
-    //     } else {
-    //         router.push("/sign-in");
-    //     }
-    // //eslint-disable-next-line
-    // }, []);
 
     return (
         <>
@@ -215,21 +199,43 @@ export default function Page() {
 
                         <div className="flex flex-wrap gap-[15px] justify-center">
                             {
-                                trqzdt.attempted_data.length > 0 ? 
+                                isSubmiting ? 
                                 (
-                                    <div>
-                                        <button 
-                                            type="button" 
-                                            title="Submit Score" 
-                                            className="inline-block transition-all delay-75 border-[2px] border-solid border-theme-color-1 text-white bg-theme-color-1 py-[8px] md:py-[10px] px-[20px] md:px-[25px] rounded-full font-ubuntu font-semibold text-[16px] md:text-[18px] hover:bg-theme-color-1-hover-dark hover:text-white" 
-                                            onClick={handleScoreSubmissionClick}
-                                        >
-                                            Submit Score
-                                        </button>
-                                    </div>
+                                    <>
+                                        {
+                                            isSubmited ? 
+                                            ("") 
+                                            : 
+                                            (
+                                                <div>
+                                                    <div className="spinner"></div>
+                                                </div>
+                                            )
+                                        }
+                                    </>
                                 ) 
                                 : 
-                                ('')
+                                (
+                                    <>
+                                        {
+                                            trqzdt.attempted_data.length > 0 && isLoading === false ? 
+                                            (
+                                                <div>
+                                                    <button 
+                                                        type="button" 
+                                                        title="Submit Score" 
+                                                        className="inline-block transition-all delay-75 border-[2px] border-solid border-theme-color-1 text-white bg-theme-color-1 py-[8px] md:py-[10px] px-[20px] md:px-[25px] rounded-full font-ubuntu font-semibold text-[16px] md:text-[18px] hover:bg-theme-color-1-hover-dark hover:text-white" 
+                                                        onClick={handleScoreSubmissionClick}
+                                                    >
+                                                        Submit Score
+                                                    </button>
+                                                </div>
+                                            ) 
+                                            : 
+                                            ('')
+                                        }
+                                    </>
+                                )
                             }
                             <div>
                                 <Link href="/all-quizzes" title="Play Another Quiz" className="inline-block transition-all delay-75 border-[2px] border-solid border-theme-color-2 text-theme-color-2 py-[8px] md:py-[10px] px-[20px] md:px-[25px] rounded-full font-ubuntu font-semibold text-[16px] md:text-[18px] hover:bg-theme-color-2 hover:text-white">

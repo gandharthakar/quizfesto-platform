@@ -38,7 +38,8 @@ function Page() {
 
     const handleFormSubmit: SubmitHandler<validationSchema> = async (formdata) => {
         setIsLoading(true);
-        const resp = await fetch('http://localhost:3000/api/admin/auth-user/settings/password', {
+        let baseURI = window.location.origin;
+        const resp = await fetch(`${baseURI}/api/admin/auth-user/settings/password`, {
             method: 'POST',
             body: JSON.stringify({ user_id: AuthUser, password: formdata.password, confirm_password: formdata.confirmPassword })
         });

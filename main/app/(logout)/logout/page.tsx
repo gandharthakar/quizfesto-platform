@@ -2,24 +2,23 @@
 
 import { deleteCookie } from "cookies-next";
 import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 function Page() {
 
+    const router = useRouter();
+
     //eslint-disable-next-line
     const handleLogout = () => {
-        signOut();
+        signOut({callbackUrl: '/'});
         deleteCookie("is_auth_user");
-        let st = setTimeout(() => {
-            window.location.href = "/";
-            clearTimeout(st);
-        }, 1000);
     }
 
     useEffect(() => {
         handleLogout();
     //eslint-disable-next-line
-    }, [handleLogout]);
+    }, []);
 
     return (
         <>

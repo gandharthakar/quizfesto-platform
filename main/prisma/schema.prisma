@@ -20,7 +20,7 @@ model User {
   user_password       String
   user_phone          String?
   user_photo          String?
-  role                Role?                @default(Normal)
+  role                Role?                @default(User)
   user_participations User_Participation[]
   createdAt           DateTime             @default(now())
   updatedAt           DateTime             @updatedAt
@@ -39,55 +39,84 @@ model Admin_User {
 }
 
 model User_Participation {
-  user_participation_id String  @id @default(uuid())
-  quiz_estimated_time   String
-  quiz_total_marks      String
-  time_taken            String
-  User                  User?   @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
-  user_id               String?
+  user_participation_id      String   @id @default(uuid())
+  quiz_total_question        Int
+  quiz_total_marks           Int
+  quiz_estimated_time        String
+  quiz_time_taken            String
+  quiz_id                    String
+  quiz_title                 String
+  quiz_cover_photo           String?
+  quiz_total_score           Int
+  quiz_coorect_answers_count Int
+  User                       User?    @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  user_id                    String?
+  createdAt                  DateTime @default(now())
+  updatedAt                  DateTime @updatedAt
 }
 
 model QF_Quiz {
-  quiz_id             String          @id @default(uuid())
+  quiz_id             String        @id @default(uuid())
   quiz_title          String
   quiz_summary        String
   quiz_display_time   String
   quiz_estimated_time String
-  quiz_total_question String
-  quiz_total_marks    String
+  quiz_total_question Int
+  quiz_total_marks    Int
   quiz_status         String
   quiz_about_text     String?
-  quiz_terms          String?
+  quiz_terms          String[]
   quiz_cover_photo    String?
-  quiz_categories     Quiz_Category[]
   Questions           QF_Question[]
+  quiz_categories     String[]
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
 }
 
 model QF_Question {
   question_id    String      @id @default(uuid())
   question_title String
-  question_marks String
+  question_marks Int
   quizid         String
   quiz           QF_Quiz     @relation(fields: [quizid], references: [quiz_id], onDelete: Cascade) // Foreign key with cascade delete
   Options        QF_Option[]
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
 }
 
 model QF_Option {
-  option_id     String      @id @default(uuid())
-  question_text String
-  option_data   Json
-  questionid    String
-  question      QF_Question @relation(fields: [questionid], references: [question_id], onDelete: Cascade) // Foreign key with cascade delete
+  option_id      String      @id @default(uuid())
+  question_text  String
+  options        String
+  correct_option String
+  questionid     String
+  question       QF_Question @relation(fields: [questionid], references: [question_id], onDelete: Cascade) // Foreign key with cascade delete
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
 }
 
-model Quiz_Category {
-  quiz_category_id    String    @id @default(uuid())
-  quiz_category_title String
-  quiz_category_slug  String
-  QF_Quiz             QF_Quiz[]
+model QF_Quiz_Category {
+  category_id    String @id @default(uuid())
+  category_title String
+  category_slug  String
+}
+
+model QF_Winning_Prizes {
+  prize_id          String @id @default(uuid())
+  priz_type         String
+  prize_description String
+  prize_cover_photo String
+}
+
+model QF_Winners {
+  winner_id          String @id @default(uuid())
+  winner_type        String
+  winner_user_id     String
+  winner_date        String
+  winner_description String
 }
 
 enum Role {
-  Normal
+  User
   Admin
 }

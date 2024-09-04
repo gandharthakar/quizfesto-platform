@@ -39,7 +39,8 @@ export default function Page() {
 
     const handleFormSubmit: SubmitHandler<validationSchema> = async (formdata) => {
         setIsLoading(true);
-        const resp = await fetch('http://localhost:3000/api/site/update-single-user/general', {
+        let baseURI = window.location.origin;
+        const resp = await fetch(`${baseURI}/api/site/update-single-user/general`, {
             method: 'POST',
             body: JSON.stringify({ user_id: AuthUser, user_full_name: formdata.full_name, user_email: formdata.email })
         });
@@ -67,7 +68,8 @@ export default function Page() {
 
     //eslint-disable-next-line
     const getUser = async () => {
-        const resp = await fetch('http://localhost:3000/api/site/get-single-user', {
+        let baseURI = window.location.origin;
+        const resp = await fetch(`${baseURI}/api/site/get-single-user`, {
             method: 'POST',
             body: JSON.stringify({ user_id: AuthUser })
         });

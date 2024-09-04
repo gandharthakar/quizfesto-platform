@@ -15,7 +15,8 @@ import { useSelector } from "react-redux";
 
 interface AnswObj {
     question_id: string,
-    user_choosen_option_id: string
+    user_choosen_option: string,
+    question_marks: number
 }
 
 let currentQuestionIndex:number = 0;
@@ -44,7 +45,7 @@ export default function Page() {
     interface QuizQuestion {
         question_id: string,
         question_text: string,
-        question_marks: number | string
+        question_marks: number
     }
     const [currentQuestion, setCurrentQuestion] = useState<QuizQuestion>(
         {
@@ -55,11 +56,7 @@ export default function Page() {
     );
     const [currentQuestionMarks, setCurrentQuestionMarks] = useState<number>(dump_quiz_data.only_q_a_opts[currentQuestionIndex].question_marks);
 
-    type QuizQuestionOpts = {
-        option_id: string,
-        option_text: string
-    }
-    const [currentQuestionOptions, setCurrentQuestionOptions] = useState<QuizQuestionOpts[]>(dump_quiz_data.only_q_a_opts[currentQuestionIndex].question_options);
+    const [currentQuestionOptions, setCurrentQuestionOptions] = useState<string[]>(dump_quiz_data.only_q_a_opts[currentQuestionIndex].question_options.split(", "));
     const [timing, setTiming] = useState<string>('');
 
     const CreateRadioButton = (opt_id:string, opt_txt:string, sa:string, ch:any) => {
@@ -70,8 +67,8 @@ export default function Page() {
                     name="answer_option" 
                     id={opt_id} 
                     className="radio-btn" 
-                    value={opt_id} 
-                    checked={sa === opt_id}
+                    value={opt_txt} 
+                    checked={sa === opt_txt}
                     onChange={ch}
                 />
                 <label htmlFor={opt_id} role="button" title="Option 1" className="option-btn">
@@ -92,7 +89,7 @@ export default function Page() {
     };
 
     const Radio = useMemo(() => {
-        return currentQuestionOptions.map((itm) => (<li key={itm.option_id}>{CreateRadioButton(itm.option_id, itm.option_text, selectedAnswer, handleChange)}</li>));
+        return currentQuestionOptions.map((itm, idx) => (<li key={idx}>{CreateRadioButton(idx.toString(), itm, selectedAnswer, handleChange)}</li>));
     }, [currentQuestionOptions, selectedAnswer]);
 
     const handleClick = (e: any) => {
@@ -125,12 +122,12 @@ export default function Page() {
                 }
             });
             setCurrentQuestionMarks(dump_quiz_data.only_q_a_opts[currentQuestionIndex].question_marks);
-            setCurrentQuestionOptions(dump_quiz_data.only_q_a_opts[currentQuestionIndex].question_options);
+            setCurrentQuestionOptions(dump_quiz_data.only_q_a_opts[currentQuestionIndex].question_options.split(", "));
             
             let obj = {
                 question_id: currentQuestion.question_id,
-                user_choosen_option_id: selectedAnswer,
-                question_marks: currentQuestion.question_marks,
+                user_choosen_option: selectedAnswer,
+                question_marks: currentQuestion.question_marks
             }
             atm_data.push(obj);
             // console.log(atm_data);
@@ -140,16 +137,24 @@ export default function Page() {
                 router.push(`/submit-score/${quiz_id}/${user_id}`);
                 setIsFinishing(true);
                 const prepData = {
-                    time_taken: timing,
-                    attempted_data: atm_data,
+                    quiz_id: quiz_id,
+                    quiz_title: dump_quiz_data.quiz_title,
+                    quiz_cover_photo: dump_quiz_data.quiz_cover_photo,
+
+                    quiz_total_question: dump_quiz_data.quiz_total_question,
                     quiz_total_marks: totalMarks,
                     quiz_estimated_time: quizEstTime,
+                    time_taken: timing,
+
+                    attempted_data: atm_data,
                 }
                 // console.log(prepData);
 
                 // let temp_ls_dt = localStorage.getItem('transfer_quiz_data');
                 // if(temp_ls_dt) {
                 //     localStorage.removeItem('transfer_quiz_data');
+                //     localStorage.setItem('transfer_quiz_data', JSON.stringify(prepData));
+                // } else {
                 //     localStorage.setItem('transfer_quiz_data', JSON.stringify(prepData));
                 // }
                 dispatch(clear_tqd());

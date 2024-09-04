@@ -4,11 +4,15 @@ import { createSlice } from "@reduxjs/toolkit";
 
 type QuizAns = {
     question_id: string,
-    user_choosen_option_id: string,
+    user_choosen_option: string,
     question_marks: number
 }
 
 interface AnswObj {
+    quiz_id: string,
+    quiz_title: string,
+    quiz_cover_photo: string,
+    quiz_total_question: number,
     time_taken: string,
     attempted_data: QuizAns[],
     quiz_total_marks: number,
@@ -16,6 +20,10 @@ interface AnswObj {
 }
 
 let initialState:AnswObj = {
+    quiz_id: '',
+    quiz_title: '',
+    quiz_cover_photo: '',
+    quiz_total_question: 0,
     time_taken: '',
     attempted_data: [],
     quiz_total_marks: 0,
@@ -33,6 +41,10 @@ const transferQuizDataReducer = createSlice({
         clear_tqd: (state) => {
             let arr:QuizAns[] = [];
             state = {
+                quiz_id: '',
+                quiz_title: '',
+                quiz_cover_photo: '',
+                quiz_total_question: 0,
                 time_taken: '',
                 attempted_data: arr,
                 quiz_total_marks: 0,

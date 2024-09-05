@@ -1,7 +1,8 @@
 'use client';
 
 import Image from "next/image";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { RiCloseLargeFill } from "react-icons/ri";
 import Swal from "sweetalert2";
@@ -15,8 +16,9 @@ function WinnerPrizeForm(props: WinPriFrm) {
 
     let { prize_type_text, prize_possition_text } = props;
 
-    const defaultImage = "https://placehold.co/1000x700/png";
+    const defaultImage = "https://placehold.co/700x500/png";
 
+    const router= useRouter();
     const [profileImage, setProfileImage] = useState<string>("");
     const [imageFile, setImageFile] = useState<string>('');
     const [fileExt, setFileExt] = useState<string>('');
@@ -24,6 +26,8 @@ function WinnerPrizeForm(props: WinPriFrm) {
     const [imageDimensions, setImageDimensions] = useState<boolean>(false);
     const [descr, setDescr] = useState<string>("");
     const [descError, setDescError] = useState<string>("");
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [btnTxt, setBtnTxt] = useState<string>("Save");
 
     const handleImageFileInput = async (e: any) => {
         let file = e.target.files[0];
@@ -68,6 +72,32 @@ function WinnerPrizeForm(props: WinPriFrm) {
         setImageDimensions(false);
     }
 
+    const removePrize = async () => {
+        let conf = confirm("Are you sure you want to remove prize ?");
+        if(conf) {
+            setIsLoading(true);
+            let baseURI = window.location.origin;
+            const resp = await fetch(`${baseURI}/api/admin/prizes/delete`, {
+                method: "POST",
+                body: JSON.stringify({prize_type: prize_type_text})
+            });
+            const body = await resp.json();
+            if(body.success) {
+                setIsLoading(false);
+                Swal.fire({
+                    title: "Success!",
+                    text: body.message,
+                    icon: "success",
+                    timer: 1500
+                });
+                let s1 = setTimeout(() => {
+                    window.location.reload();
+                    clearTimeout(s1);
+                }, 1500);
+            }
+        }
+    }
+
     const convertBase64 = (file:any) => {
         return new Promise<string>((resolve, reject) => {
             const fileReader = new FileReader();
@@ -93,7 +123,7 @@ function WinnerPrizeForm(props: WinPriFrm) {
         }
     }
 
-    const handleSubmit = (e: any) => {
+    const handleSubmit = async (e: any) => {
         e.preventDefault();
 
         let validPrizeCoverPhoto:boolean = false;
@@ -152,13 +182,76 @@ function WinnerPrizeForm(props: WinPriFrm) {
                 prize_photo: imageFile,
                 prize_description: descr,
             }
-            console.log(data);
+            setIsLoading(true);
+            let baseURI = window.location.origin;
+            const resp = await fetch(`${baseURI}/api/admin/prizes/create-update`, {
+                method: "POST",
+                body: JSON.stringify(data)
+            });
+            const body = await resp.json();
+            if(body.success) {
+                setIsLoading(false);
+                Swal.fire({
+                    title: "Success!",
+                    text: body.message,
+                    icon: "success",
+                    timer: 1500
+                });
+                let s1 = setTimeout(() => {
+                    window.location.reload();
+                    clearTimeout(s1);
+                }, 1500);
+            }
         }
     }
 
+    const getPrize = async () => {
+        setIsLoading(true);
+        let baseURI = window.location.origin;
+        const resp = await fetch(`${baseURI}/api/admin/prizes/read`, {
+            method: "POST",
+            body: JSON.stringify({ prize_type: prize_type_text })
+        });
+        const body = await resp.json();
+        if(body.success) {
+            setIsLoading(false);
+            // Swal.fire({
+            //     title: "Success!",
+            //     text: body.message,
+            //     icon: "success",
+            //     timer: 4000
+            // });
+            if(body.message == "No Prize Found!") {
+                setBtnTxt("Save");
+            } else {
+                setBtnTxt("Update");
+                setDescr(body.prize_description);
+                setProfileImage(body.prize_cover_photo);
+                setImageFile(body.prize_cover_photo);
+                setFileExt("png");
+                setImageFileSize(true);
+                setImageDimensions(true);
+            }
+        }
+    }
+
+    useEffect(() => {
+        getPrize();
+    }, []);
+
     return (
         <>
-            <div className="transition-all delay-75 border-[2px] border-solid p-[15px] border-zinc-300 bg-white hover:border-zinc-600 dark:bg-zinc-800 dark:border-zinc-600 dark:hover:border-zinc-400">
+            <div className="transition-all delay-75 relative border-[2px] border-solid p-[15px] border-zinc-300 bg-white hover:border-zinc-600 dark:bg-zinc-800 dark:border-zinc-600 dark:hover:border-zinc-400">
+                {
+                    isLoading ? 
+                    (
+                        <div className={`transition-all delay-75 absolute left-0 top-0 z-[5] bg-[rgba(255,255,255,0.90)] w-full h-full dark:bg-[rgba(9,9,11,0.95)] justify-center items-center flex`}>
+                            <div className="spinner"></div>
+                        </div>
+                    ) 
+                    : 
+                    ("")
+                }
                 <form onSubmit={handleSubmit}>
                     <div className="flex gap-x-[20px] gap-y-[10px] items-start md:items-start flex-col md:flex-row">
                         <div className="w-full md:max-w-[200px]">
@@ -200,8 +293,16 @@ function WinnerPrizeForm(props: WinPriFrm) {
                                 {descError && (<div className="ws-input-error mt-[2px]">{descError}</div>)}
                             </div>
                             <div className="text-right">
-                                <button type="submit" title="Save" className="transition-all delay-75 inline-block concard px-[20px] md:px-[25px] py-[10px] md:py-[12px] text-center text-white font-noto_sans font-semibold text-[16px] md:text-[18px] hover:shadow-lg">
-                                    Save
+                                <button 
+                                    type="button" 
+                                    title="Remove" 
+                                    className="transition-all delay-75 inline-block px-[20px] md:px-[25px] py-[10px] md:py-[12px] text-center font-noto_sans font-semibold text-[16px] md:text-[18px] text-red-600" 
+                                    onClick={removePrize} 
+                                >
+                                    Remove
+                                </button>
+                                <button type="submit" title={btnTxt} className="transition-all delay-75 inline-block concard px-[20px] md:px-[25px] py-[10px] md:py-[12px] text-center text-white font-noto_sans font-semibold text-[16px] md:text-[18px] hover:shadow-lg">
+                                    {btnTxt}
                                 </button>
                             </div>
                         </div>

@@ -3,7 +3,6 @@ import { dump_cats_homepage } from "../constant/datafaker";
 import { CiUser } from "react-icons/ci";
 import { BsCompass } from "react-icons/bs";
 import { MdOutlineSportsScore } from "react-icons/md";
-import Image from "next/image";
 import HomeTestimonialsSection from "../components/homeTestimonialsSection";
 import QuizPrizes from "../components/quizPrizes";
 

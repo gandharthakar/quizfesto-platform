@@ -107,9 +107,9 @@ CREATE TABLE "QF_Quiz_Category" (
 -- CreateTable
 CREATE TABLE "QF_Winning_Prizes" (
     "prize_id" TEXT NOT NULL,
-    "priz_type" TEXT NOT NULL,
+    "prize_type" INTEGER NOT NULL,
     "prize_description" TEXT NOT NULL,
-    "prize_cover_photo" TEXT NOT NULL,
+    "prize_cover_photo" TEXT,
 
     CONSTRAINT "QF_Winning_Prizes_pkey" PRIMARY KEY ("prize_id")
 );
@@ -117,7 +117,7 @@ CREATE TABLE "QF_Winning_Prizes" (
 -- CreateTable
 CREATE TABLE "QF_Winners" (
     "winner_id" TEXT NOT NULL,
-    "winner_type" TEXT NOT NULL,
+    "winner_type" INTEGER NOT NULL,
     "winner_user_id" TEXT NOT NULL,
     "winner_date" TEXT NOT NULL,
     "winner_description" TEXT NOT NULL,
@@ -125,11 +125,28 @@ CREATE TABLE "QF_Winners" (
     CONSTRAINT "QF_Winners_pkey" PRIMARY KEY ("winner_id")
 );
 
+-- CreateTable
+CREATE TABLE "Homepage_Categories" (
+    "home_cat_id" TEXT NOT NULL,
+    "home_cats" TEXT[],
+
+    CONSTRAINT "Homepage_Categories_pkey" PRIMARY KEY ("home_cat_id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "User_user_email_key" ON "User"("user_email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Admin_User_admin_user_email_key" ON "Admin_User"("admin_user_email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "QF_Quiz_Category_category_title_key" ON "QF_Quiz_Category"("category_title");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "QF_Winning_Prizes_prize_type_key" ON "QF_Winning_Prizes"("prize_type");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "QF_Winners_winner_type_key" ON "QF_Winners"("winner_type");
 
 -- AddForeignKey
 ALTER TABLE "User_Participation" ADD CONSTRAINT "User_Participation_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("user_id") ON DELETE CASCADE ON UPDATE CASCADE;

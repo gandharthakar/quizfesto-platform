@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { MdOutlineModeEdit } from "react-icons/md";
 import Swal from "sweetalert2";
+import { useRouter } from "next/navigation";
 
 interface AdmLstQzCd {
     cat_id: string,
@@ -29,6 +30,7 @@ function AdminListCategoryCard(props: AdmLstQzCd) {
         onCheckboxChange, 
     } = props;
 
+    const router = useRouter();
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
     const menuRef = useRef<HTMLDivElement>(null);
 
@@ -36,8 +38,36 @@ function AdminListCategoryCard(props: AdmLstQzCd) {
         setIsMenuOpen(false);
     }
     
-    const handleDeleteQuiz = () => {
+    const handleDeleteQuiz = async () => {
         setIsMenuOpen(false);
+        const conf = confirm("Are you sure want to delete category ?");
+        if(conf) {
+            let baseURI = window.location.origin;
+            const resp = await fetch(`${baseURI}/api/admin/categories/crud/delete`, {
+                method: "POST",
+                body: JSON.stringify({category_id: cat_id})
+            });
+            const body = await resp.json();
+            if(body.success) {
+                Swal.fire({
+                    title: "Success!",
+                    text: body.message,
+                    icon: "success",
+                    timer: 2000
+                });
+                let set = setTimeout(() => {
+                    window.location.reload();
+                    clearTimeout(set);
+                }, 2000);
+            } else {
+                Swal.fire({
+                    title: "Error!",
+                    text: body.message,
+                    icon: "error",
+                    timer: 2000
+                });
+            }
+        }
     }
 
     useEffect(()=> {

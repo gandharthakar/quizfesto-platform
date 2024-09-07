@@ -2,14 +2,22 @@
 
 import Link from "next/link";
 import { RiDeleteBin6Line } from "react-icons/ri";
+// import { GrAdd, GrPowerReset } from "react-icons/gr";
 import { GrAdd } from "react-icons/gr";
 import { IoMdCheckmark } from "react-icons/io";
 import AdminSearchPanel from "@/app/components/admin/adminSearchPanel";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Swal from "sweetalert2";
 import SitePagination from "@/app/components/sitePagination";
-import { dump_list_of_categories } from "@/app/constant/datafaker";
+// import { dump_list_of_categories } from "@/app/constant/datafaker";
 import AdminListCategoryCard from "@/app/components/admin/adminListCategoryCard";
+import { FaEllipsisVertical } from "react-icons/fa6";
+
+interface Cats {
+    category_id: string,
+    category_title: string,
+    category_slug: string
+}
 
 function GFG(array: any, currPage: number, pageSize: number) {
     const startIndex = (currPage - 1) * pageSize;
@@ -23,19 +31,24 @@ function Page() {
     const [srchInp, setSrchInp] = useState<string>("");
     
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const [totalPages, setTotalPages] = useState<number>(Math.ceil(dump_list_of_categories.length / dataPerPage));
+    const [catData, setCatData] = useState<Cats[]>([]);
+    const [totalPages, setTotalPages] = useState<number>(Math.ceil(catData.length / dataPerPage));
     const [quizListCats, setQuizListCats] = useState([]);
     // const totalPages = Math.ceil(totalItems / dataPerPage);
 
     const [selectAll, setSelectAll] = useState(false);
     const [selectedItems, setSelectedItems] = useState<string[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+
+    const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+    const menuRef = useRef<HTMLDivElement>(null);
 
     const handleSearchInputChange = (e:any) => {
         setSrchInp(e.target.value);
         if(srchInp.length === 1) {
             setCurrentPage(1);
-            setQuizListCats(GFG(dump_list_of_categories, currentPage, dataPerPage));
-            setTotalPages(Math.ceil(dump_list_of_categories.length / dataPerPage));
+            setQuizListCats(GFG(catData, currentPage, dataPerPage));
+            setTotalPages(Math.ceil(catData.length / dataPerPage));
         }
     }
 
@@ -43,8 +56,8 @@ function Page() {
         setSrchInp(e.target.value);
         if(e.key === "Backspace") {
             setCurrentPage(1);
-            setQuizListCats(GFG(dump_list_of_categories, currentPage, dataPerPage));
-            setTotalPages(Math.ceil(dump_list_of_categories.length / dataPerPage));
+            setQuizListCats(GFG(catData, currentPage, dataPerPage));
+            setTotalPages(Math.ceil(catData.length / dataPerPage));
         }
     }
 
@@ -61,7 +74,7 @@ function Page() {
 
         if(quizListCats.length > 0) {
 
-            const res = dump_list_of_categories.filter((item) => {
+            const res = catData.filter((item) => {
                 const srch_res = item.category_title.toLowerCase().includes(srchInp.toLowerCase()) || item.category_slug.toLowerCase().includes(srchInp.toLowerCase());
                 return srch_res;
             });
@@ -72,13 +85,13 @@ function Page() {
                 setQuizListCats(GFG(res, currentPage, dataPerPage));
                 if(srchInp == "") {
                     setCurrentPage(1);
-                    setTotalPages(Math.ceil(dump_list_of_categories.length / dataPerPage));
+                    setTotalPages(Math.ceil(catData.length / dataPerPage));
                     setQuizListCats([]);
                 }
             } else {
                 if(srchInp == "") {
                     setCurrentPage(1);
-                    setTotalPages(Math.ceil(dump_list_of_categories.length / dataPerPage));
+                    setTotalPages(Math.ceil(catData.length / dataPerPage));
                     setQuizListCats([]);
                 }
                 setCurrentPage(1);
@@ -97,7 +110,7 @@ function Page() {
 
     const handlePageChange = (newPage: number) => {
         setCurrentPage(newPage);
-        setQuizListCats(GFG(dump_list_of_categories, newPage, dataPerPage));
+        setQuizListCats(GFG(catData, newPage, dataPerPage));
         setSelectAll(false);
         setSelectedItems([]);
     };
@@ -121,15 +134,64 @@ function Page() {
         toggleItem(itemId);
     };
 
-    const handleDeleteBulkLogic = () => {
-        console.log(selectedItems);
-        if(selectedItems.length > 0) {
-            Swal.fire({
-                title: "Success!",
-                text: "Selected Quizes Deleted Successfully!",
-                icon: "success",
-                timer: 4000
+    // const handleResetDataChange = () => {
+    //     setIsMenuOpen(false);
+    // }
+
+    const handleDeleteAllBulkLogic = async () => {
+        const conf = confirm("Are you sure want to delete all Categories ?");
+        if(conf) {
+            let baseURI = window.location.origin;
+            let resp = await fetch(`${baseURI}/api/admin/categories/bulk-options/delete-all`, {
+                method: "DELETE",
             });
+            const body = await resp.json();
+            if(body.success) {
+                Swal.fire({
+                    title: "Success!",
+                    text: body.message,
+                    icon: "success",
+                    timer: 2000
+                });
+                let set = setTimeout(() => {
+                    window.location.reload();
+                    clearTimeout(set);
+                }, 2000);
+            } else {
+                Swal.fire({
+                    title: "Error!",
+                    text: body.message,
+                    icon: "error",
+                    timer: 2000
+                });
+            }
+        }
+        setIsMenuOpen(false);
+    }
+
+    const handleDeleteSelectedBulkLogic = async () => {
+        if(selectedItems.length > 0) {
+            const conf = confirm("Are you sure want to delete selected Categories ?");
+            if(conf) {
+                let baseURI = window.location.origin;
+                let resp = await fetch(`${baseURI}/api/admin/categories/bulk-options/delete-selected`, {
+                    method: "POST",
+                    body: JSON.stringify({category_id_list: selectedItems})
+                });
+                const body = await resp.json();
+                if(body.success) {
+                    Swal.fire({
+                        title: "Success!",
+                        text: body.message,
+                        icon: "success",
+                        timer: 2000
+                    });
+                    let set = setTimeout(() => {
+                        window.location.reload();
+                        clearTimeout(set);
+                    }, 2000);
+                }
+            }
         } else {
             Swal.fire({
                 title: "Error!",
@@ -138,11 +200,26 @@ function Page() {
                 timer: 4000
             });
         }
+        setIsMenuOpen(false);
     }
 
-    useEffect(() => {
-        setQuizListCats(GFG(dump_list_of_categories, currentPage, dataPerPage));
+    // useEffect(() => {
+        // setQuizListCats(GFG(dump_list_of_categories, currentPage, dataPerPage));
         //eslint-disable-next-line
+    // }, []);
+
+    useEffect(()=> {
+
+        let menuHandler = (e:any) => {
+            if(menuRef.current !== null) {
+                if(!menuRef.current.contains(e.target)) {
+                    setIsMenuOpen(false);
+                }
+            }
+        };
+
+        document.addEventListener('mousedown', menuHandler);
+    //eslint-disable-next-line
     }, []);
         
     useEffect(() => {
@@ -151,7 +228,29 @@ function Page() {
         } else {
             setSelectAll(false);
         }
+        //eslint-disable-next-line
     }, [selectedItems, quizListCats]);
+
+    const getCatData = async () => {
+        let baseURI = window.location.origin;
+        let resp = await fetch(`${baseURI}/api/admin/categories/bulk-options/read-all`, {
+            method: "GET"
+        });
+        const body = await resp.json();
+        if(body.success) {
+            setIsLoading(false);
+            setQuizListCats(GFG(body.cat_data, currentPage, dataPerPage));
+            setCatData(body.cat_data);
+            setTotalPages(Math.ceil(body.cat_data.length / dataPerPage));
+        } else {
+            setIsLoading(false);
+        }
+    }
+
+    useEffect(() => {
+        getCatData();
+        //eslint-disable-next-line
+    }, []);
 
     return (
         <>
@@ -198,7 +297,7 @@ function Page() {
                                 </div>
                             </label>
                         </div>
-                        <button 
+                        {/* <button 
                             type="button" 
                             title="Delete All" 
                             className="transition-all delay-75 inline-block font-noto_sans font-semibold text-[14px] md:text-[16px] py-[8px] md:py-[10px] px-[10px] md:px-[15px] bg-red-600 text-zinc-100 hover:bg-red-700" 
@@ -208,7 +307,49 @@ function Page() {
                                 <RiDeleteBin6Line size={20} className="w-[18px] h-[18px] md:w-[20px] md:h-[20px]" />
                                 <div className="hidden md:block">Delete All</div>
                             </div>
-                        </button>
+                        </button> */}
+                        <div ref={menuRef} className="relative h-[18px]">
+                            <button 
+                                type="button"
+                                title="Actions"  
+                                className="transition-all delay-75 text-zinc-800 dark:text-zinc-200" 
+                                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                            >
+                                <FaEllipsisVertical size={18} />
+                            </button>
+                            <ul className={`absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-zinc-950 dark:ring-zinc-800 ${isMenuOpen ? 'block' : 'hidden'}`}>
+                                <li className="w-full">
+                                    <button 
+                                        type="button" 
+                                        title="Delete Selected" 
+                                        className="transition-all delay-75 block w-full py-[10px] px-[15px] font-ubuntu text-[16px] text-red-500 hover:bg-zinc-100 dark:text-red-500 dark:hover:bg-zinc-800" 
+                                        onClick={handleDeleteSelectedBulkLogic} 
+                                    >
+                                        <div className="flex gap-x-[5px] items-center">
+                                            <RiDeleteBin6Line size={20} />
+                                            <div>
+                                                Delete Selected
+                                            </div>
+                                        </div>
+                                    </button>
+                                </li>
+                                <li className="w-full">
+                                    <button 
+                                        type="button" 
+                                        title="Delete All" 
+                                        className="transition-all delay-75 block w-full py-[10px] px-[15px] font-ubuntu text-[16px] text-red-500 hover:bg-zinc-100 dark:text-red-500 dark:hover:bg-zinc-800" 
+                                        onClick={handleDeleteAllBulkLogic} 
+                                    >
+                                        <div className="flex gap-x-[5px] items-center">
+                                            <RiDeleteBin6Line size={20} />
+                                            <div>
+                                                Delete All
+                                            </div>
+                                        </div>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
 
@@ -235,7 +376,20 @@ function Page() {
                             </>
                         ) 
                         : 
-                        ('')
+                        (
+                            <>
+                                {
+                                    isLoading ? 
+                                    (<div className="spinner size-1"></div>) 
+                                    : 
+                                    (
+                                        <h1 className="transition-all delay-75 text-[16px] md:text-[18px] font-semibold text-zinc-800 dark:text-zinc-300">
+                                            No Categories Found.
+                                        </h1>
+                                    )
+                                }
+                            </>
+                        )
                     }
                 </div>
 

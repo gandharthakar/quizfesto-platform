@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Select from "react-tailwindcss-select";
+import Swal from "sweetalert2";
 
 interface TwSelInt {
     value: string,
@@ -12,25 +13,148 @@ function Page() {
 
     const [homeCats, setHomeCats] = useState<TwSelInt[]>([]);
     const [homeCatOpts, setHomeCatOpts] = useState<TwSelInt[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [homeCatsId, setHomeCatsId] = useState<string>("");
 
     const handleChangeSelect = (value: any) => {
         setHomeCats(value);
     }
 
-    useEffect(() => {
-        const options: TwSelInt[] = [
-            { value: "fox", label: "🦊 Fox" },
-            { value: "Butterfly", label: "🦋 Butterfly" },
-            { value: "Honeybee", label: "🐝 Honeybee" }
-        ];
+    const getSavedCats = async (cb_new?:any, cb_update?: any) => {
+        setIsLoading(true);
+        let isCatsExist = false;
+        let baseURI = window.location.origin;
+        let resp = await fetch(`${baseURI}/api/admin/categories/home-categories/read`, {
+            method: "GET"
+        });
+        const body = await resp.json();
+        if(body.success) {
+            isCatsExist = true;
+            setHomeCats(body.home_cats);
+            setHomeCatsId(body.home_cats_id);
+            if(cb_update) {
+                cb_update();
+            }
+        } else {
+            isCatsExist = false;
+            if(cb_new) {
+                cb_new();
+            }
+        }
+        return isCatsExist;
+    }
 
-        setHomeCatOpts(options);
+    const setHomeCatsDB = async () => {
+        let cats:string[] = [];
+        for(let i = 0; i < homeCats.length; i++) {
+            cats.push(homeCats[i].value);
+        }
+        let baseURI = window.location.origin;
+        let resp = await fetch(`${baseURI}/api/admin/categories/home-categories/create-update`, {
+            method: "POST",
+            body: JSON.stringify({home_cats: cats})
+        });
+        const body = await resp.json();
+        if(body.success) {
+            Swal.fire({
+                title: "Success!",
+                text: body.message,
+                icon: "success",
+                timer: 2000
+            });
+            let set = setTimeout(() => {
+                window.location.reload();
+                clearTimeout(set);
+            }, 2000);
+            setIsLoading(false);
+        }
+    }
+
+    const updateHomeCatsDB = async () => {
+        let cats:string[] = [];
+        for(let i = 0; i < homeCats.length; i++) {
+            cats.push(homeCats[i].value);
+        }
+        let baseURI = window.location.origin;
+        let resp = await fetch(`${baseURI}/api/admin/categories/home-categories/create-update`, {
+            method: "POST",
+            body: JSON.stringify({home_cats: cats, home_cats_id: homeCatsId})
+        });
+        const body = await resp.json();
+        if(body.success) {
+            Swal.fire({
+                title: "Success!",
+                text: body.message,
+                icon: "success",
+                timer: 2000
+            });
+            let set = setTimeout(() => {
+                window.location.reload();
+                clearTimeout(set);
+            }, 2000);
+            setIsLoading(false);
+        }
+    }
+
+    const handleSubmit = async (e: any) => {
+        e.preventDefault();
+        if(homeCats.length > 0) {
+            getSavedCats(setHomeCatsDB, updateHomeCatsDB);
+        } else {
+            Swal.fire({
+                title: "Error!",
+                text: "Please Select Categories First!",
+                icon: "error",
+                timer: 2000
+            });
+        }
+    }
+
+    const getCats = async () => {
+        let baseURI = window.location.origin;
+        let resp = await fetch(`${baseURI}/api/admin/categories/bulk-options/read-all`, {
+            method: "GET"
+        });
+        const body = await resp.json();
+        if(body.success) {
+            const cts = body.cat_data;
+            let opts: TwSelInt[] = [];
+            for(let i = 0; i < cts.length; i++) {
+                let obj = {
+                    value: cts[i].category_id,
+                    label: cts[i].category_title
+                }
+                opts.push(obj);
+            }
+            setHomeCatOpts(opts);
+            setIsLoading(false);
+        } else {
+            Swal.fire({
+                title: "Error!",
+                text: body.message,
+                icon: "error",
+                timer: 4000
+            });
+            setIsLoading(false);
+        }
+    }
+
+    useEffect(() => {
+        // const options: TwSelInt[] = [
+        //     { value: "fox", label: "🦊 Fox" },
+        //     { value: "Butterfly", label: "🦋 Butterfly" },
+        //     { value: "Honeybee", label: "🐝 Honeybee" }
+        // ];
+
+        // setHomeCatOpts(options);
+        getCats();
+        getSavedCats('', '');
     }, []);
 
     return (
         <>
             <div className="py-[25px]">
-                <form>
+                <form onSubmit={handleSubmit}>
                     <div className="transition-all delay-75 border-[2px] border-solid p-[15px] md:p-[25px] border-zinc-300 bg-white dark:bg-zinc-800 dark:border-zinc-600">
                         <div className="pb-[20px]">
                             <Select
@@ -52,9 +176,16 @@ function Page() {
                             />
                         </div>
                         <div className="text-right">
-                            <button type="submit" title="Save Categories" className="transition-all delay-75 inline-block concard px-[20px] md:px-[25px] py-[10px] md:py-[12px] text-center text-white font-noto_sans font-semibold text-[16px] md:text-[18px] hover:shadow-lg">
-                                Save Categories
-                            </button>
+                            {
+                                isLoading ? 
+                                (<div className="spinner size-1"></div>)  
+                                : 
+                                (
+                                    <button type="submit" title="Save Categories" className="transition-all delay-75 inline-block concard px-[20px] md:px-[25px] py-[10px] md:py-[12px] text-center text-white font-noto_sans font-semibold text-[16px] md:text-[18px] hover:shadow-lg">
+                                        Save Categories
+                                    </button>
+                                )
+                            }
                         </div>
                     </div>
                 </form>

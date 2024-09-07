@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from "react";
+import Swal from "sweetalert2";
 
 /* Encode string to slug */
 function convertToSlug( str:string ) {
@@ -23,6 +24,7 @@ function Page() {
     const [catTitle, setCatTitle] = useState<string>("");
     const [catSlug, setCatSlug] = useState<string>("");
     const [catError, setCatError] = useState<string>("");
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const handleInputChange = (e:any) => {
         const value = e.target.value;
@@ -40,17 +42,47 @@ function Page() {
         setCatSlug(convertToSlug(value));
     }
 
-    const handleFormSubmit = (e: any) => {
+    const handleFormSubmit = async (e: any) => {
         e.preventDefault();
         if(catTitle == "") {
             setCatError("Please enter category title.");
             if(catTitle.length < 2) {
                 setCatError("Category title must be contains at least 2 characters.");
             } else {
-                setCatError("");  
+                setCatError("");
             }
         } else {
-            setCatError("");   
+            setCatError("");
+            setIsLoading(true);
+            let prepData = {
+                category_title: catTitle,
+                category_slug: catSlug
+            }
+            let baseURI = window.location.origin;
+            const resp = await fetch(`${baseURI}/api/admin/categories/crud/create`, {
+                method: "POST",
+                body: JSON.stringify(prepData)
+            });
+            const body = await resp.json();
+            if(body.success) {
+                setIsLoading(false);
+                Swal.fire({
+                    title: "Success!",
+                    text: body.message,
+                    icon: "success",
+                    timer: 3000
+                });
+                setCatTitle("");
+                setCatSlug("");
+            } else {
+                setIsLoading(false);
+                Swal.fire({
+                    title: "Error!",
+                    text: body.message,
+                    icon: "error",
+                    timer: 3000
+                });
+            }
         }
     }
 
@@ -98,9 +130,16 @@ function Page() {
                                 </div>
                                 
                                 <div className="text-right">
-                                    <button type="submit" title="Add Category" className="transition-all delay-75 inline-block concard px-[20px] md:px-[25px] py-[10px] md:py-[12px] text-center text-white font-noto_sans font-semibold text-[16px] md:text-[18px] hover:shadow-lg">
-                                        Add Category
-                                    </button>
+                                    {
+                                        isLoading ? 
+                                        (<div className="spinner size-1"></div>) 
+                                        : 
+                                        (
+                                            <button type="submit" title="Add Category" className="transition-all delay-75 inline-block concard px-[20px] md:px-[25px] py-[10px] md:py-[12px] text-center text-white font-noto_sans font-semibold text-[16px] md:text-[18px] hover:shadow-lg">
+                                                Add Category
+                                            </button>
+                                        )
+                                    }
                                 </div>
                             </div>
                         </div>

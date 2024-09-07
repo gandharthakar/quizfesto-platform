@@ -1,10 +1,11 @@
 import Link from "next/link";
-import { dump_cats_homepage } from "../constant/datafaker";
+// import { dump_cats_homepage } from "../constant/datafaker";
 import { CiUser } from "react-icons/ci";
 import { BsCompass } from "react-icons/bs";
 import { MdOutlineSportsScore } from "react-icons/md";
 import HomeTestimonialsSection from "../components/homeTestimonialsSection";
 import QuizPrizes from "../components/quizPrizes";
+import HomeTopCategories from "../components/homeTopCategories";
 
 export default function Home() {
 	return (
@@ -40,7 +41,7 @@ export default function Home() {
 						</h2>
 					</div>
 
-					<div className="relative block">
+					{/* <div className="relative block">
 						<ul className="flex flex-wrap gap-x-[10px] gap-y-[10px] md:gap-x-[20px] md:gap-y-[15px]">
 							{
 								dump_cats_homepage.map((item) => (
@@ -56,6 +57,9 @@ export default function Home() {
 								))
 							}
 						</ul>
+					</div> */}
+					<div className="relative block">
+						<HomeTopCategories />
 					</div>
 				</div>
 			</section>

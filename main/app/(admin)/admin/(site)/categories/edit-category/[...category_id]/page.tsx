@@ -1,6 +1,8 @@
 'use client';
 
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 
 /* Encode string to slug */
 function convertToSlug( str:string ) {
@@ -20,9 +22,12 @@ function convertToSlug( str:string ) {
 
 function Page() {
 
+    const parms = useParams();
+    const cat_id = parms.category_id[0];
     const [catTitle, setCatTitle] = useState<string>("");
     const [catSlug, setCatSlug] = useState<string>("");
     const [catError, setCatError] = useState<string>("");
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     const handleInputChange = (e:any) => {
         const value = e.target.value;
@@ -40,7 +45,7 @@ function Page() {
         setCatSlug(convertToSlug(value));
     }
 
-    const handleFormSubmit = (e: any) => {
+    const handleFormSubmit = async (e: any) => {
         e.preventDefault();
         if(catTitle == "") {
             setCatError("Please enter category title.");
@@ -51,12 +56,64 @@ function Page() {
             }
         } else {
             setCatError("");
+            setIsLoading(true);
+            let prepData = {
+                category_id: cat_id,
+                category_title: catTitle,
+                category_slug: catSlug
+            }
+            let baseURI = window.location.origin;
+            const resp = await fetch(`${baseURI}/api/admin/categories/crud/update`, {
+                method: "POST",
+                body: JSON.stringify(prepData)
+            });
+            const body = await resp.json();
+            if(body.success) {
+                setIsLoading(false);
+                Swal.fire({
+                    title: "Success!",
+                    text: body.message,
+                    icon: "success",
+                    timer: 3000
+                });
+            } else {
+                setIsLoading(false);
+                Swal.fire({
+                    title: "Error!",
+                    text: body.message,
+                    icon: "error",
+                    timer: 3000
+                });
+            }
+        }
+    }
+
+    const getCategoryDetails = async () => {
+        let baseURI = window.location.origin;
+        const resp = await fetch(`${baseURI}/api/admin/categories/crud/read`, {
+            method: "POST",
+            body: JSON.stringify({category_id: cat_id})
+        });
+        const body = await resp.json();
+        if(body.success) {
+            setCatTitle(body.cat_data.category_title);
+            setCatSlug(body.cat_data.category_slug);
+            setIsLoading(false);
+        } else {
+            setIsLoading(false);
+            Swal.fire({
+                title: "Error!",
+                text: body.message,
+                icon: "error",
+                timer: 2000
+            });
         }
     }
 
     useEffect(() => {
-        setCatTitle("Category 1");
-        setCatSlug(convertToSlug("Category 1"));
+        // setCatTitle("Category 1");
+        // setCatSlug(convertToSlug("Category 1"));
+        getCategoryDetails();
     }, []);
 
     return (
@@ -103,9 +160,16 @@ function Page() {
                                 </div>
                                 
                                 <div className="text-right">
-                                    <button type="submit" title="Edit Category" className="transition-all delay-75 inline-block concard px-[20px] md:px-[25px] py-[10px] md:py-[12px] text-center text-white font-noto_sans font-semibold text-[16px] md:text-[18px] hover:shadow-lg">
-                                        Edit Category
-                                    </button>
+                                    {
+                                        isLoading ? 
+                                        (<div className="spinner size-1"></div>) 
+                                        : 
+                                        (
+                                            <button type="submit" title="Update Category" className="transition-all delay-75 inline-block concard px-[20px] md:px-[25px] py-[10px] md:py-[12px] text-center text-white font-noto_sans font-semibold text-[16px] md:text-[18px] hover:shadow-lg">
+                                                Update Category
+                                            </button>
+                                        )
+                                    }
                                 </div>
                             </div>
                         </div>

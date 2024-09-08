@@ -23,6 +23,15 @@ export async function DELETE(req: Request) {
                 success: true,
                 message: "Categories Deleted Successfully!"
             }
+
+            let hcats = await prisma.homepage_Categories.findFirst();
+            if(hcats !== null) {
+                await prisma.homepage_Categories.delete({
+                    where: {
+                        home_cat_id: hcats.home_cat_id
+                    }
+                });
+            }
         } else {
             sts = 201;
             resp = {

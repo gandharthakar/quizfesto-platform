@@ -12,6 +12,7 @@ interface Cats {
 function HomeTopCategories() {
     
     const [cats, setCats] = useState<Cats[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     const getTopCats = async () => {
         let baseURI = window.location.origin;
@@ -21,6 +22,7 @@ function HomeTopCategories() {
         const body = await resp.json();
         if(body.success) {
             setCats(body.home_cats);
+            setIsLoading(false);
         }
     }
 
@@ -52,9 +54,18 @@ function HomeTopCategories() {
                     ) 
                     : 
                     (
-                        <h1 className="transition-all delay-75 text-[16px] md:text-[18px] font-semibold text-zinc-800 dark:text-zinc-300">
-                            No Categories Found.
-                        </h1>
+                        <>
+                            {
+                                isLoading ? 
+                                (<div className="spinner size-1"></div>) 
+                                : 
+                                (
+                                    <h1 className="transition-all delay-75 text-[16px] md:text-[18px] font-semibold text-zinc-800 dark:text-zinc-300">
+                                        No Categories Found.
+                                    </h1>
+                                )
+                            }
+                        </>
                     )
                 }
             </ul>

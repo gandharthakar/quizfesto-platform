@@ -6,6 +6,14 @@ interface Respo {
     message: string
 }
 
+const findCommonItems = (arr1:string[], arr2: string[]) => {
+    return arr1.filter(item => arr2.includes(item));
+}
+
+const removeItemsFromArray = (fruitsArray: string[], itemsToRemove: string[]) => {
+    return fruitsArray.filter(fruit => !itemsToRemove.includes(fruit));
+}
+
 export async function POST(req: Request) {
     let resp: Respo = {
         success: false,
@@ -34,6 +42,21 @@ export async function POST(req: Request) {
                 resp = {
                     success: true,
                     message: "Category Deleted Successfully!"
+                }
+                let hcats = await prisma.homepage_Categories.findFirst();
+                if(hcats !== null) {
+                    let commonIDs = findCommonItems([category_id], hcats.home_cats);
+                    if(commonIDs.length > 0) {
+                        let updated = removeItemsFromArray(hcats.home_cats, [category_id]);
+                        await prisma.homepage_Categories.update({
+                            where: {
+                                home_cat_id: hcats.home_cat_id
+                            },
+                            data: {
+                                home_cats: updated
+                            }
+                        });
+                    }
                 }
             } else {
                 sts = 200;

@@ -14,7 +14,7 @@ const removeItemsFromArray = (fruitsArray: string[], itemsToRemove: string[]) =>
     return fruitsArray.filter(fruit => !itemsToRemove.includes(fruit));
 }
 
-export async function POST(req: Request) {
+export async function DELETE(req: Request) {
     let resp: Respo = {
         success: false,
         message: ''

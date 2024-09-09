@@ -13,6 +13,12 @@ import AdminListUsersCard from "@/app/components/admin/adminListUsersCard";
 import { FaEllipsisVertical } from "react-icons/fa6";
 import { GrPowerReset } from "react-icons/gr";
 
+interface QF_User {
+    user_id: string,
+    user_name: string,
+    user_role: string
+}
+
 function GFG(array: any, currPage: number, pageSize: number) {
     const startIndex = (currPage - 1) * pageSize;
     const endIndex = startIndex + pageSize;
@@ -25,8 +31,9 @@ function Page() {
     const [srchInp, setSrchInp] = useState<string>("");
     
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const [totalPages, setTotalPages] = useState<number>(Math.ceil(dump_list_of_users.length / dataPerPage));
-    const [userList, setUserList] = useState([]);
+    const [userData, setUserData] = useState<QF_User[]>([]);
+    const [totalPages, setTotalPages] = useState<number>(Math.ceil(userData.length / dataPerPage));
+    const [userList, setUserList] = useState<QF_User[]>([]);
     // const totalPages = Math.ceil(totalItems / dataPerPage);
 
     const [selectAll, setSelectAll] = useState(false);
@@ -34,13 +41,15 @@ function Page() {
 
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
     const menuRef = useRef<HTMLDivElement>(null);
+    
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     const handleSearchInputChange = (e:any) => {
         setSrchInp(e.target.value);
         if(srchInp.length === 1) {
             setCurrentPage(1);
-            setUserList(GFG(dump_list_of_users, currentPage, dataPerPage));
-            setTotalPages(Math.ceil(dump_list_of_users.length / dataPerPage));
+            setUserList(GFG(userData, currentPage, dataPerPage));
+            setTotalPages(Math.ceil(userData.length / dataPerPage));
         }
     }
 
@@ -48,8 +57,8 @@ function Page() {
         setSrchInp(e.target.value);
         if(e.key === "Backspace") {
             setCurrentPage(1);
-            setUserList(GFG(dump_list_of_users, currentPage, dataPerPage));
-            setTotalPages(Math.ceil(dump_list_of_users.length / dataPerPage));
+            setUserList(GFG(userData, currentPage, dataPerPage));
+            setTotalPages(Math.ceil(userData.length / dataPerPage));
         }
     }
 
@@ -66,7 +75,7 @@ function Page() {
 
         if(userList.length > 0) {
 
-            const res = dump_list_of_users.filter((item) => {
+            const res = userData.filter((item) => {
                 const srch_res = item.user_name.toLowerCase().includes(srchInp.toLowerCase());
                 return srch_res;
             });
@@ -77,13 +86,13 @@ function Page() {
                 setUserList(GFG(res, currentPage, dataPerPage));
                 if(srchInp == "") {
                     setCurrentPage(1);
-                    setTotalPages(Math.ceil(dump_list_of_users.length / dataPerPage));
+                    setTotalPages(Math.ceil(userData.length / dataPerPage));
                     setUserList([]);
                 }
             } else {
                 if(srchInp == "") {
                     setCurrentPage(1);
-                    setTotalPages(Math.ceil(dump_list_of_users.length / dataPerPage));
+                    setTotalPages(Math.ceil(userData.length / dataPerPage));
                     setUserList([]);
                 }
                 setCurrentPage(1);
@@ -102,7 +111,7 @@ function Page() {
 
     const handlePageChange = (newPage: number) => {
         setCurrentPage(newPage);
-        setUserList(GFG(dump_list_of_users, newPage, dataPerPage));
+        setUserList(GFG(userData, newPage, dataPerPage));
         setSelectAll(false);
         setSelectedItems([]);
     };
@@ -126,34 +135,95 @@ function Page() {
         toggleItem(itemId);
     };
 
-    const handleResetDataChange = () => {
+    // const handleResetDataChange = () => {
+    //     setIsMenuOpen(false);
+    // }
+
+    const handleRDSelectedBulkLogic = () => {
+        const conf = confirm("Are you sure want to reset participation data for selected users ?");
+        if(conf) {
+
+        }
         setIsMenuOpen(false);
     }
 
-    const handleDeleteBulkLogic = () => {
-        console.log(selectedItems);
+    const handleRDAllBulkLogic = async () => {
+        const conf = confirm("Are you sure want to reset participation data for all users ?");
+        if(conf) {
+            
+        }
+        setIsMenuOpen(false);
+    }
+
+    const handleDeleteSelectedBulkLogic = async () => {
         if(selectedItems.length > 0) {
-            Swal.fire({
-                title: "Success!",
-                text: "Selected Quizes Deleted Successfully!",
-                icon: "success",
-                timer: 4000
-            });
+            const conf = confirm("Are you sure want to delete selected users ?");
+            if(conf) {
+                let baseURI = window.location.origin;
+                let resp = await fetch(`${baseURI}/api/admin/users/bulk-options/delete-selected`, {
+                    method: "DELETE",
+                    body: JSON.stringify({user_id_list: selectedItems})
+                });
+                const body = await resp.json();
+                if(body.success) {
+                    Swal.fire({
+                        title: "Success!",
+                        text: body.message,
+                        icon: "success",
+                        timer: 2000
+                    });
+                    let set = setTimeout(() => {
+                        window.location.reload();
+                        clearTimeout(set);
+                    }, 2000);
+                }
+            }
         } else {
             Swal.fire({
                 title: "Error!",
-                text: "Please Select Quiz Items First!",
+                text: "Please Select Users First!",
                 icon: "error",
-                timer: 4000
+                timer: 3000
             });
         }
         setIsMenuOpen(false);
     }
 
-    useEffect(() => {
-        setUserList(GFG(dump_list_of_users, currentPage, dataPerPage));
-    //eslint-disable-next-line
-    }, []);
+    const handleDeleteAllBulkLogic = async () => {
+        const conf = confirm("Are you sure want to delete all users ?");
+        if(conf) {
+            let baseURI = window.location.origin;
+            let resp = await fetch(`${baseURI}/api/admin/users/bulk-options/delete-all`, {
+                method: "DELETE",
+            });
+            const body = await resp.json();
+            if(body.success) {
+                Swal.fire({
+                    title: "Success!",
+                    text: body.message,
+                    icon: "success",
+                    timer: 2000
+                });
+                let set = setTimeout(() => {
+                    window.location.reload();
+                    clearTimeout(set);
+                }, 2000);
+            } else {
+                Swal.fire({
+                    title: "Error!",
+                    text: body.message,
+                    icon: "error",
+                    timer: 2000
+                });
+            }
+        }
+        setIsMenuOpen(false);
+    }
+
+    // useEffect(() => {
+    //     setUserList(GFG(dump_list_of_users, currentPage, dataPerPage));
+    // //eslint-disable-next-line
+    // }, []);
         
     useEffect(() => {
         if (selectedItems.length === userList.length) {
@@ -175,6 +245,27 @@ function Page() {
 
         document.addEventListener('mousedown', menuHandler);
     //eslint-disable-next-line
+    }, []);
+
+    const getUserData = async () => {
+        let baseURI = window.location.origin;
+        let resp = await fetch(`${baseURI}/api/admin/users/bulk-options/read-all`, {
+            method: "GET"
+        });
+        const body = await resp.json();
+        if(body.success) {
+            setIsLoading(false);
+            setUserList(GFG(body.users, currentPage, dataPerPage));
+            setUserData(body.users);
+            setTotalPages(Math.ceil(body.users.length / dataPerPage));
+        } else {
+            setIsLoading(false);
+        }
+    }
+
+    useEffect(() => {
+        getUserData();
+        //eslint-disable-next-line
     }, []);
 
     return (
@@ -242,18 +333,33 @@ function Page() {
                             >
                                 <FaEllipsisVertical size={18} />
                             </button>
-                            <ul className={`absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-zinc-950 dark:ring-zinc-800 ${isMenuOpen ? 'block' : 'hidden'}`}>
+                            <ul className={`absolute right-0 z-10 mt-2 w-52 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-zinc-950 dark:ring-zinc-800 ${isMenuOpen ? 'block' : 'hidden'}`}>
                                 <li className="w-full">
                                     <button 
                                         type="button" 
-                                        title="Reset Data" 
+                                        title="Reset Selected Data" 
                                         className="transition-all delay-75 block w-full py-[10px] px-[15px] font-ubuntu text-[16px] text-zinc-900 hover:bg-zinc-100 dark:text-zinc-200 dark:hover:bg-zinc-800" 
-                                        onClick={handleResetDataChange} 
+                                        onClick={handleRDSelectedBulkLogic} 
                                     >
                                         <div className="flex gap-x-[5px] items-center">
                                             <GrPowerReset size={20} />
                                             <div>
-                                                Reset Data
+                                                Reset Selected Data
+                                            </div>
+                                        </div>
+                                    </button>
+                                </li>
+                                <li className="w-full">
+                                    <button 
+                                        type="button" 
+                                        title="Reset All Data" 
+                                        className="transition-all delay-75 block w-full py-[10px] px-[15px] font-ubuntu text-[16px] text-zinc-900 hover:bg-zinc-100 dark:text-zinc-200 dark:hover:bg-zinc-800" 
+                                        onClick={handleRDAllBulkLogic} 
+                                    >
+                                        <div className="flex gap-x-[5px] items-center">
+                                            <GrPowerReset size={20} />
+                                            <div>
+                                                Reset All Data
                                             </div>
                                         </div>
                                     </button>
@@ -263,7 +369,22 @@ function Page() {
                                         type="button" 
                                         title="Delete All" 
                                         className="transition-all delay-75 block w-full py-[10px] px-[15px] font-ubuntu text-[16px] text-red-500 hover:bg-zinc-100 dark:text-red-500 dark:hover:bg-zinc-800" 
-                                        onClick={handleDeleteBulkLogic} 
+                                        onClick={handleDeleteSelectedBulkLogic} 
+                                    >
+                                        <div className="flex gap-x-[5px] items-center">
+                                            <RiDeleteBin6Line size={20} />
+                                            <div>
+                                                Delete Selected
+                                            </div>
+                                        </div>
+                                    </button>
+                                </li>
+                                <li className="w-full">
+                                    <button 
+                                        type="button" 
+                                        title="Delete All" 
+                                        className="transition-all delay-75 block w-full py-[10px] px-[15px] font-ubuntu text-[16px] text-red-500 hover:bg-zinc-100 dark:text-red-500 dark:hover:bg-zinc-800" 
+                                        onClick={handleDeleteAllBulkLogic} 
                                     >
                                         <div className="flex gap-x-[5px] items-center">
                                             <RiDeleteBin6Line size={20} />
@@ -301,7 +422,20 @@ function Page() {
                             </>
                         ) 
                         : 
-                        ('')
+                        (
+                            <>
+                                {
+                                    isLoading ? 
+                                    (<div className="spinner size-1"></div>) 
+                                    : 
+                                    (
+                                        <h1 className="transition-all delay-75 text-[16px] md:text-[18px] font-semibold text-zinc-800 dark:text-zinc-300">
+                                            No Categories Found.
+                                        </h1>
+                                    )
+                                }
+                            </>
+                        )
                     }
                 </div>
 

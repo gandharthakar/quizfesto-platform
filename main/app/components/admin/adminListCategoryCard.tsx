@@ -7,7 +7,6 @@ import { useEffect, useRef, useState } from "react";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { MdOutlineModeEdit } from "react-icons/md";
 import Swal from "sweetalert2";
-import { useRouter } from "next/navigation";
 
 interface AdmLstQzCd {
     cat_id: string,
@@ -30,7 +29,6 @@ function AdminListCategoryCard(props: AdmLstQzCd) {
         onCheckboxChange, 
     } = props;
 
-    const router = useRouter();
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
     const menuRef = useRef<HTMLDivElement>(null);
 
@@ -44,7 +42,7 @@ function AdminListCategoryCard(props: AdmLstQzCd) {
         if(conf) {
             let baseURI = window.location.origin;
             const resp = await fetch(`${baseURI}/api/admin/categories/crud/delete`, {
-                method: "POST",
+                method: "DELETE",
                 body: JSON.stringify({category_id: cat_id})
             });
             const body = await resp.json();

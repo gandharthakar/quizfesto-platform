@@ -24,6 +24,7 @@ function Page() {
     const [imageFileSize, setImageFileSize] = useState<boolean>(false);
     const [imageDimensions, setImageDimensions] = useState<boolean>(false);
     const [errorFileInput, setErrorFileInput] = useState<string>('');
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const handleChangePhone = (e: any) => {
         let value = e.target.value;
@@ -135,9 +136,7 @@ function Page() {
 		resolver: zodResolver(validationSchema),
 	});
 
-    const handleFormSubmit: SubmitHandler<validationSchema> = (formdata) => {
-        console.log(formdata);
-        // reset();
+    const handleFormSubmit: SubmitHandler<validationSchema> = async (formdata) => {
 
         // Validate Phone Number.
         const validPhone = validatePhone(phone);
@@ -169,6 +168,42 @@ function Page() {
                     }
                 }
             }
+        }
+
+        let prepData = {
+            user_full_name: formdata.full_name,
+            user_email: formdata.email,
+            user_password: formdata.password,
+            user_conf_password: formdata.confirmPassword,
+            role: formdata.role,
+            user_phone: phone,
+            user_photo: imageFile
+        }
+        setIsLoading(true);
+        let baseURI = window.location.origin;
+        let resp = await fetch(`${baseURI}/api/admin/users/crud/create`, {
+            method: "POST",
+            body: JSON.stringify(prepData),
+        });
+        const body = await resp.json();
+        if(body.success) {
+            Swal.fire({
+                title: "Success!",
+                text: body.message,
+                icon: "success",
+                timer: 3000
+            });
+            setIsLoading(false);
+            removeButtonClick();
+            reset();
+        } else {
+            Swal.fire({
+                title: "Error!",
+                text: body.message,
+                icon: "error",
+                timer: 3000
+            });
+            setIsLoading(false);
         }
     }
 
@@ -230,24 +265,6 @@ function Page() {
                                 <div className="pb-[20px]">
                                     <label 
                                         className="transition-all delay-75 block mb-[5px] font-noto_sans text-[16px] font-semibold text-zinc-900 dark:text-zinc-300" 
-                                        htmlFor="cq-qrole"
-                                    >
-                                        Role <span className="text-red-500">*</span>
-                                    </label>
-                                    <select
-                                        id="cq-qrole" 
-                                        className="ws-input-pwd-m1-v1" 
-                                        {...register("role")} 
-                                    >
-                                        <option value="">- Select -</option>
-                                        <option value="Normal">Normal</option>
-                                        <option value="Admin">Admin</option>
-                                    </select>
-                                    {errors.role && (<div className="ws-input-error mt-[2px]">{errors.role.message}</div>)}
-                                </div>
-                                <div className="pb-[20px]">
-                                    <label 
-                                        className="transition-all delay-75 block mb-[5px] font-noto_sans text-[16px] font-semibold text-zinc-900 dark:text-zinc-300" 
                                         htmlFor="cq-qcnfpwd"
                                     >
                                         Confirm Password <span className="text-red-500">*</span>
@@ -260,6 +277,24 @@ function Page() {
                                         {...register("confirmPassword")} 
                                     />
                                     {errors.confirmPassword && (<div className="ws-input-error mt-[2px]">{errors.confirmPassword.message}</div>)}
+                                </div>
+                                <div className="pb-[20px]">
+                                    <label 
+                                        className="transition-all delay-75 block mb-[5px] font-noto_sans text-[16px] font-semibold text-zinc-900 dark:text-zinc-300" 
+                                        htmlFor="cq-qrole"
+                                    >
+                                        Role <span className="text-red-500">*</span>
+                                    </label>
+                                    <select
+                                        id="cq-qrole" 
+                                        className="ws-input-pwd-m1-v1" 
+                                        {...register("role")} 
+                                    >
+                                        <option value="">- Select -</option>
+                                        <option value="User">User</option>
+                                        <option value="Admin">Admin</option>
+                                    </select>
+                                    {errors.role && (<div className="ws-input-error mt-[2px]">{errors.role.message}</div>)}
                                 </div>
                                 <div className="pb-[20px]">
                                     <label 
@@ -316,9 +351,16 @@ function Page() {
                                     {errorFileInput && (<div className="ws-input-error mt-[5px]">{errorFileInput}</div>)}
                                 </div>
                                 <div className="text-right">
-                                    <button type="submit" title="Create User" className="transition-all delay-75 inline-block concard px-[20px] md:px-[25px] py-[10px] md:py-[12px] text-center text-white font-noto_sans font-semibold text-[16px] md:text-[18px] hover:shadow-lg">
-                                        Create User
-                                    </button>
+                                    {
+                                        isLoading ? 
+                                        (<div className="spinner size-1"></div>) 
+                                        : 
+                                        (
+                                            <button type="submit" title="Create User" className="transition-all delay-75 inline-block concard px-[20px] md:px-[25px] py-[10px] md:py-[12px] text-center text-white font-noto_sans font-semibold text-[16px] md:text-[18px] hover:shadow-lg">
+                                                Create User
+                                            </button>
+                                        )
+                                    }
                                 </div>
                             </div>
                         </div>

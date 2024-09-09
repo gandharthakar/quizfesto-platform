@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import Image from "next/image";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { FaRegTrashCan } from "react-icons/fa6";
+import { useParams } from "next/navigation";
 
 function validatePhone(phoneNumber: string){
     let phoneNumberPattern = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
@@ -35,6 +36,10 @@ function Page() {
     const [imageFileSize, setImageFileSize] = useState<boolean>(false);
     const [imageDimensions, setImageDimensions] = useState<boolean>(false);
     const [errorFileInput, setErrorFileInput] = useState<string>('');
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+
+    const params = useParams();
+    const user_id = params.user_id[0];
 
     const handleChangePhone = (e: any) => {
         let value = e.target.value;
@@ -162,9 +167,7 @@ function Page() {
 		resolver: zodResolver(validationSchema),
 	});
 
-    const handleFormSubmit: SubmitHandler<validationSchema> = (formdata) => {
-        console.log(formdata);
-        // reset();
+    const handleFormSubmit: SubmitHandler<validationSchema> = async (formdata) => {
 
         // Validate Phone Number.
         const validPhone = validatePhone(phone);
@@ -197,17 +200,88 @@ function Page() {
                 }
             }
         }
+
+        let prepData = {
+            user_id,
+            user_full_name: formdata.full_name,
+            user_email: formdata.email,
+            user_password: password,
+            user_conf_password: confirmPassword,
+            role: formdata.role,
+            user_phone: phone,
+            user_photo: imageFile
+        }
+        setIsLoading(true);
+        let baseURI = window.location.origin;
+        let resp = await fetch(`${baseURI}/api/admin/users/crud/update`, {
+            method: "POST",
+            body: JSON.stringify(prepData),
+        });
+        const body = await resp.json();
+        if(body.success) {
+            Swal.fire({
+                title: "Success!",
+                text: body.message,
+                icon: "success",
+                timer: 3000
+            });
+            setIsLoading(false);
+        } else {
+            Swal.fire({
+                title: "Error!",
+                text: body.message,
+                icon: "error",
+                timer: 3000
+            });
+            setIsLoading(false);
+        }
+    }
+
+    const getUser = async () => {
+        let baseURI = window.location.origin;
+        let resp = await fetch(`${baseURI}/api/admin/users/crud/read`, {
+            method: "POST",
+            body: JSON.stringify({ user_id }),
+        });
+        const body = await resp.json();
+        if(body.success) {
+            Swal.fire({
+                title: "Success!",
+                text: body.message,
+                icon: "success",
+                timer: 3000
+            });
+            setValue("full_name", body.user.user_full_name);
+            setValue("email", body.user.user_email);
+            setValue("role", body.user.role);
+            setImageFile(body.user.user_photo);
+            setProfileImage(body.user.user_photo);
+            setPhone(body.user.user_phone);
+            setImageDimensions(true);
+            setImageFileSize(true);
+            setIsLoading(false);
+            setFileExt("jpg");
+        } else {
+            Swal.fire({
+                title: "Error!",
+                text: body.message,
+                icon: "error",
+                timer: 3000
+            });
+            setIsLoading(false);
+        }
     }
 
     useEffect(() => {
-        setValue("full_name", "Amit Jadhav");
-        setValue("email", "amitjn@ay.com");
-        setValue("role", "Normal");
-        setImageFile("/images/testimonials/michael-davis.jpg");
-        setProfileImage("/images/testimonials/michael-davis.jpg");
-        setImageDimensions(true);
-        setImageFileSize(true);
-        setFileExt("jpg");
+        // setValue("full_name", "Amit Jadhav");
+        // setValue("email", "amitjn@ay.com");
+        // setValue("role", "Normal");
+        // setImageFile("/images/testimonials/michael-davis.jpg");
+        // setProfileImage("/images/testimonials/michael-davis.jpg");
+        // setImageDimensions(true);
+        // setImageFileSize(true);
+        // setFileExt("jpg");
+        getUser();
     //eslint-disable-next-line
     }, []);
 
@@ -253,24 +327,6 @@ function Page() {
                                 <div className="pb-[20px]">
                                     <label 
                                         className="transition-all delay-75 block mb-[5px] font-noto_sans text-[16px] font-semibold text-zinc-900 dark:text-zinc-300" 
-                                        htmlFor="cq-qrole"
-                                    >
-                                        Role <span className="text-red-500">*</span>
-                                    </label>
-                                    <select
-                                        id="cq-qrole" 
-                                        className="ws-input-pwd-m1-v1" 
-                                        {...register("role")} 
-                                    >
-                                        <option value="">- Select -</option>
-                                        <option value="Normal">Normal</option>
-                                        <option value="Admin">Admin</option>
-                                    </select>
-                                    {errors.role && (<div className="ws-input-error mt-[2px]">{errors.role.message}</div>)}
-                                </div>
-                                <div className="pb-[20px]">
-                                    <label 
-                                        className="transition-all delay-75 block mb-[5px] font-noto_sans text-[16px] font-semibold text-zinc-900 dark:text-zinc-300" 
                                         htmlFor="cq-qpwd"
                                     >
                                         Password
@@ -301,6 +357,24 @@ function Page() {
                                         onChange={handleConfPwdChange} 
                                     />
                                     {confPwdError && (<div className="ws-input-error mt-[2px]">{confPwdError}</div>)}
+                                </div>
+                                <div className="pb-[20px]">
+                                    <label 
+                                        className="transition-all delay-75 block mb-[5px] font-noto_sans text-[16px] font-semibold text-zinc-900 dark:text-zinc-300" 
+                                        htmlFor="cq-qrole"
+                                    >
+                                        Role <span className="text-red-500">*</span>
+                                    </label>
+                                    <select
+                                        id="cq-qrole" 
+                                        className="ws-input-pwd-m1-v1" 
+                                        {...register("role")} 
+                                    >
+                                        <option value="">- Select -</option>
+                                        <option value="User">User</option>
+                                        <option value="Admin">Admin</option>
+                                    </select>
+                                    {errors.role && (<div className="ws-input-error mt-[2px]">{errors.role.message}</div>)}
                                 </div>
                                 <div className="pb-[20px]">
                                     <label 
@@ -360,7 +434,7 @@ function Page() {
                                     <label 
                                         className="transition-all delay-75 block mb-[5px] font-noto_sans text-[16px] font-semibold text-zinc-900 dark:text-zinc-300"
                                     >
-                                        Reset Data
+                                        Reset Participation Data
                                     </label>
                                     <div>
                                         <div className="pb-[5px]">
@@ -378,9 +452,16 @@ function Page() {
                                     </div>
                                 </div>
                                 <div className="text-right">
-                                    <button type="submit" title="Update User" className="transition-all delay-75 inline-block concard px-[20px] md:px-[25px] py-[10px] md:py-[12px] text-center text-white font-noto_sans font-semibold text-[16px] md:text-[18px] hover:shadow-lg">
-                                        Update User
-                                    </button>
+                                    {
+                                        isLoading ? 
+                                        (<div className="spinner size-1"></div>) 
+                                        : 
+                                        (
+                                            <button type="submit" title="Update User" className="transition-all delay-75 inline-block concard px-[20px] md:px-[25px] py-[10px] md:py-[12px] text-center text-white font-noto_sans font-semibold text-[16px] md:text-[18px] hover:shadow-lg">
+                                                Update User
+                                            </button>
+                                        )
+                                    }
                                 </div>
                             </div>
                         </div>

@@ -175,7 +175,7 @@ function Page() {
             if(conf) {
                 let baseURI = window.location.origin;
                 let resp = await fetch(`${baseURI}/api/admin/categories/bulk-options/delete-selected`, {
-                    method: "POST",
+                    method: "DELETE",
                     body: JSON.stringify({category_id_list: selectedItems})
                 });
                 const body = await resp.json();
@@ -195,9 +195,9 @@ function Page() {
         } else {
             Swal.fire({
                 title: "Error!",
-                text: "Please Select Quiz Items First!",
+                text: "Please Select Categories First!",
                 icon: "error",
-                timer: 4000
+                timer: 3000
             });
         }
         setIsMenuOpen(false);

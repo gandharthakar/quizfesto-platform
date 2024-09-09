@@ -44,6 +44,36 @@ function Page() {
         return isCatsExist;
     }
 
+    const clearCats = async () => {
+        let conf = confirm("Are you sure want to clear home page top categories ?");
+        if(conf) {
+            let baseURI = window.location.origin;
+            let resp = await fetch(`${baseURI}/api/admin/categories/home-categories/clear`, {
+                method: "DELETE",
+            });
+            const body = await resp.json();
+            if(body.success) {
+                Swal.fire({
+                    title: "Success!",
+                    text: body.message,
+                    icon: "success",
+                    timer: 2000
+                });
+                let set = setTimeout(() => {
+                    window.location.reload();
+                    clearTimeout(set);
+                }, 2000);
+            } else {
+                Swal.fire({
+                    title: "Error!",
+                    text: body.message,
+                    icon: "error",
+                    timer: 2000
+                });
+            }
+        }
+    }
+
     const setHomeCatsDB = async () => {
         let cats:string[] = [];
         for(let i = 0; i < homeCats.length; i++) {
@@ -181,9 +211,19 @@ function Page() {
                                 (<div className="spinner size-1"></div>)  
                                 : 
                                 (
-                                    <button type="submit" title="Save Categories" className="transition-all delay-75 inline-block concard px-[20px] md:px-[25px] py-[10px] md:py-[12px] text-center text-white font-noto_sans font-semibold text-[16px] md:text-[18px] hover:shadow-lg">
-                                        Save Categories
-                                    </button>
+                                    <>
+                                        <button 
+                                            type="button" 
+                                            title="Clear" 
+                                            className="transition-all delay-75 inline-block px-[20px] md:px-[25px] py-[10px] md:py-[12px] text-center font-noto_sans font-semibold text-[16px] md:text-[18px] text-red-600" 
+                                            onClick={clearCats} 
+                                        >
+                                            Clear
+                                        </button>
+                                        <button type="submit" title="Save Categories" className="transition-all delay-75 inline-block concard px-[20px] md:px-[25px] py-[10px] md:py-[12px] text-center text-white font-noto_sans font-semibold text-[16px] md:text-[18px] hover:shadow-lg">
+                                            Save Categories
+                                        </button>
+                                    </>
                                 )
                             }
                         </div>

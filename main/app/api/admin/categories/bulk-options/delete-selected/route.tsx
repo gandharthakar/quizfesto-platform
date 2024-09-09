@@ -14,7 +14,7 @@ const removeItemsFromArray = (fruitsArray: string[], itemsToRemove: string[]) =>
     return fruitsArray.filter(fruit => !itemsToRemove.includes(fruit));
 }
 
-export async function POST(req: Request) {
+export async function DELETE(req: Request) {
     let resp: Respo = {
         success: false,
         message: ''
@@ -65,7 +65,7 @@ export async function POST(req: Request) {
                     }
                 }
             } else {
-                sts = 201;
+                sts = 200;
                 resp = {
                     success: false,
                     message: "No Categories Found!"

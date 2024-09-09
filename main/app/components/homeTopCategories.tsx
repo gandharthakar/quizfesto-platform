@@ -23,6 +23,8 @@ function HomeTopCategories() {
         if(body.success) {
             setCats(body.home_cats);
             setIsLoading(false);
+        } else {
+            setIsLoading(false);
         }
     }
 

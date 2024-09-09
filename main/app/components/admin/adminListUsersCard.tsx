@@ -36,8 +36,36 @@ function AdminListUsersCard(props: AdmLstQzCd) {
         setIsMenuOpen(false);
     }
     
-    const handleDeleteQuiz = () => {
+    const handleDeleteUser = async () => {
         setIsMenuOpen(false);
+        let conf = confirm("Are you sure want to delete this user ?");
+        if(conf) {
+            let baseURI = window.location.origin;
+            const resp = await fetch(`${baseURI}/api/admin/users/crud/delete`, {
+                method: "DELETE",
+                body: JSON.stringify({user_id})
+            });
+            const body = await resp.json();
+            if(body.success) {
+                Swal.fire({
+                    title: "Success!",
+                    text: body.message,
+                    icon: "success",
+                    timer: 2000
+                });
+                let set = setTimeout(() => {
+                    window.location.reload();
+                    clearTimeout(set);
+                }, 2000);
+            } else {
+                Swal.fire({
+                    title: "Error!",
+                    text: body.message,
+                    icon: "error",
+                    timer: 2000
+                });
+            }
+        }
     }
 
     useEffect(()=> {
@@ -119,7 +147,7 @@ function AdminListUsersCard(props: AdmLstQzCd) {
                                     type="button" 
                                     title="Delete" 
                                     className="transition-all delay-75 block w-full py-[10px] px-[15px] font-ubuntu text-[16px] text-red-500 hover:bg-zinc-100 dark:text-red-500 dark:hover:bg-zinc-800" 
-                                    onClick={handleDeleteQuiz}
+                                    onClick={handleDeleteUser}
                                 >
                                     <div className="flex gap-x-[5px] items-center">
                                         <RiDeleteBin6Line size={20} />

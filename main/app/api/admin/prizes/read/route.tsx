@@ -47,7 +47,7 @@ export async function POST(req: Request) {
                     }
                 }
             } else {
-                sts = 201;
+                sts = 200;
                 resp = {
                     success: true,
                     message: "No Prize Found!",

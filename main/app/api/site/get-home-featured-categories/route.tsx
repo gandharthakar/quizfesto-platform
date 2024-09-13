@@ -36,7 +36,7 @@ export async function GET(req: Request) {
 
         const data = await prisma.homepage_Categories.findFirst();
         if(data === null) {
-            sts = 400;
+            sts = 200;
             resp = {
                 success: false,
                 message: "No Categories Found!",

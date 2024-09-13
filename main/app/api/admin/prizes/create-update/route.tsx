@@ -47,7 +47,7 @@ export async function POST(req: Request) {
                         prize_cover_photo: prize_photo
                     }
                 });
-                sts = 200;
+                sts = 201;
                 resp = {
                     success: true,
                     message: "Prize Created Successfully!"

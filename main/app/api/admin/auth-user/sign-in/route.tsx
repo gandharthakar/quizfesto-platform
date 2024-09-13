@@ -94,7 +94,7 @@ export async function POST(req: Request) {
                     success: false,
                     message: 'Admin Access Denied : Invalid User.',
                 }
-                sts = 400;
+                sts = 401;
             }
         } else {
             resp = {

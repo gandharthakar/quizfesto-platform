@@ -25,7 +25,7 @@ export async function GET(req: Request) {
             let db_data = [...data, resp];
             return NextResponse.json(db_data, {status: sts});
         } else {
-            sts = 201;
+            sts = 200;
             resp = {
                 success: true,
                 message: "No Prizes Found!",

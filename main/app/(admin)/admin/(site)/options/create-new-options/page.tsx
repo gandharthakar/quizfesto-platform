@@ -3,6 +3,7 @@
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
+import Swal from "sweetalert2";
 
 function Page() {
 
@@ -25,7 +26,7 @@ function Page() {
         correct_option: z.string({
 			required_error: "Please enter correct option.",
 			invalid_type_error: "Correct option text must be in string format."
-		}).min(1, {message: "Correct option text must be contains at least 5 characters."})
+		}).min(1, {message: "Correct option text must be contains at least 1 characters."})
     });
 
     type validationSchema = z.infer<typeof validationSchema>;
@@ -34,9 +35,28 @@ function Page() {
 		resolver: zodResolver(validationSchema),
 	});
 
-    const handleFormSubmit: SubmitHandler<validationSchema> = (formdata) => {
-        console.log(formdata);
+    const handleFormSubmit: SubmitHandler<validationSchema> = async (formdata) => {
+        // console.log(formdata);
         // reset();
+        let baseURI = window.location.origin;
+        const resp = await fetch(`${baseURI}/api/admin/options/crud/create`, {
+            method: "POST",
+            body: JSON.stringify({
+                question_text: formdata.question_text,
+                options: formdata.options,
+                correct_option: formdata.correct_option,
+                questionid: formdata.question_id
+            })
+        });
+        const body = await resp.json();
+        if(body.success) {
+            Swal.fire({
+                title: "Success!",
+                text: body.message,
+                icon: "success",
+                timer: 3000
+            });
+        }
     }
 
     return (

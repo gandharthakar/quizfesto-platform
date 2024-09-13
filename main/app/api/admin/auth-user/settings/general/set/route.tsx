@@ -1,11 +1,6 @@
 import prisma from "@/app/lib/db";
 import { NextResponse } from "next/server";
 
-interface Respo {
-    user_full_name: string,
-    user_email: string,
-}
-
 interface ShtResp {
     success: boolean,
     message: string
@@ -93,7 +88,7 @@ export async function POST(req: Request) {
                     success: false,
                     message: 'User Not Found.',
                 }
-                sts = 400;
+                sts = 200;
             }
         } else {
             resp = {

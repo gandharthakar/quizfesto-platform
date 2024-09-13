@@ -30,21 +30,21 @@ export async function POST(req: Request) {
                 const isMatch = await compare(password, fuser.user_password);
                 if(isMatch) {
                     const token = jwt.sign({is_auth_user: fuser.user_id}, process.env.JWT_SECRET ?? "", { expiresIn: '30d' });
-                    sts = 400;
+                    sts = 200;
                     resp = {
                         success: true,
                         message: "User Login Success !",
                         token
                     }
                 } else {
-                    sts = 400;
+                    sts = 422;
                     resp = {
                         success: false,
                         message: "Password Is Incorrect!"
                     }
                 }
             } else {
-                sts = 400;
+                sts = 200;
                 resp = {
                     success: false,
                     message: "User Not Found With This Email Address. Please Sign Up First Or Try To Sign In With Google."

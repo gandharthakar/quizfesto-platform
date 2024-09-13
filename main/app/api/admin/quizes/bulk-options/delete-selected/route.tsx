@@ -6,7 +6,7 @@ interface Respo {
     message: string
 }
 
-export async function DELETE() {
+export async function DELETE(req: Request) {
     let resp: Respo = {
         success: false,
         message: ''
@@ -15,28 +15,27 @@ export async function DELETE() {
 
     try {
 
-        let data = await prisma.qF_Quiz_Category.findMany();
-        if(data.length > 0) {
-            await prisma.qF_Quiz_Category.deleteMany();
+        const body = await req.json();
+        let { quiz_id_list } = body;
+
+        if(quiz_id_list) {
+            await prisma.qF_Quiz.deleteMany({
+                where: {
+                    quiz_id: {
+                        in: quiz_id_list
+                    }
+                }
+            });
             sts = 200;
             resp = {
                 success: true,
-                message: "Categories Deleted Successfully!"
-            }
-
-            let hcats = await prisma.homepage_Categories.findFirst();
-            if(hcats !== null) {
-                await prisma.homepage_Categories.delete({
-                    where: {
-                        home_cat_id: hcats.home_cat_id
-                    }
-                });
+                message: "Selected Quizes Deleted Successfully!"
             }
         } else {
-            sts = 200;
+            sts = 400;
             resp = {
                 success: false,
-                message: "No Categories Found!"
+                message: "Missing Required Fields!"
             }
         }
         

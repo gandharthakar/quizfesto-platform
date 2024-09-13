@@ -20,10 +20,12 @@ function AdminAreaNav() {
     const dispatch = useDispatch();
     const pathName = usePathname();
     const params = useParams();
-    const ques_id = params?.question_id;
-    const opt_id = params?.option_id;
-    const cat_id = params?.category_id;
-    const usr_id = params?.user_id;
+    const ques_id = params?.question_id ? params?.question_id[0] : '';
+    const opt_id = params?.option_id ? params?.option_id[0] : '';
+    const cat_id = params?.category_id ? params?.category_id[0] : '';
+    const usr_id = params?.user_id ? params?.user_id[0] : '';
+    const quiz_id = params?.quiz_id ? params?.quiz_id[0] : '';
+
     const isMenuOpen = useSelector((state: RootState) => state.admin_area_menu_toggle.is_admin_area_menu_open);
     const isDarkTheme = useSelector((state: RootState) => state.admin_theme_mode.admin_dark_theme_mode);
 
@@ -38,7 +40,7 @@ function AdminAreaNav() {
             subMenuItemId: '1',
             subMenuItemURI: '/admin/quizes',
             subMenuItemTitle: 'Quizes',
-            subMenuItemActArr: ["/admin/quizes", "/admin/quizes/create-new-quiz"],
+            subMenuItemActArr: ["/admin/quizes", "/admin/quizes/create-new-quiz", `/admin/quizes/edit-quiz/${quiz_id}`],
             subMenuItemPathName: pathName, 
             subMenuItemOnClickCallBack: () => dispatch(close_admin_area_menu()), 
         },

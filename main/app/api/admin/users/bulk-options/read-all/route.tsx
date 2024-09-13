@@ -13,7 +13,7 @@ interface Respo {
     users: QF_User[]
 }
 
-export async function GET(req: Request) {
+export async function GET() {
     let resp: Respo = {
         success: false,
         message: '',
@@ -40,7 +40,7 @@ export async function GET(req: Request) {
                 users: user
             }
         } else {
-            sts = 400;
+            sts = 200;
             resp = {
                 success: false,
                 message: "Users Not found!",

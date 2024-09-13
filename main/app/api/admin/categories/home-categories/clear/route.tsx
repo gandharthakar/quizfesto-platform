@@ -6,7 +6,7 @@ interface Respo {
     message: string
 }
 
-export async function DELETE(req: Request) {
+export async function DELETE() {
     let resp: Respo = {
         success: false,
         message: ''

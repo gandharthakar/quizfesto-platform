@@ -16,46 +16,54 @@ export async function DELETE(req: Request) {
     try {
 
         const body = await req.json();
-        let { user_id } = body;
+        let { quiz_id } = body;
 
-        if(user_id) {
-            const DB_User = await prisma.user.findFirst({
+        if(quiz_id) {
+            const alreadQuizExited = await prisma.qF_Quiz.findFirst({
                 where: {
-                    user_id
+                    quiz_id
                 }
             });
-            if(DB_User) {
-                await prisma.user.delete({
+            if(alreadQuizExited) {
+                await prisma.qF_Quiz.delete({
                     where: {
-                        user_id
+                        quiz_id
                     }
                 });
                 sts = 200;
                 resp = {
                     success: true,
-                    message: "User Deleted Successfully."
+                    message: "Quiz Deleted Successfully!"
                 }
             } else {
                 sts = 200;
                 resp = {
                     success: false,
-                    message: "User Not Exist."
+                    message: "Quiz Not Exist!"
                 }
             }
         } else {
             sts = 400;
             resp = {
                 success: false,
-                message: "Missing Required Fields!",
+                message: "Missing Required Fields!"
             }
         }
         
         return NextResponse.json(resp, {status: sts});
     } catch (error: any) {
-        sts = 500;
-        resp = {
-            success: false,
-            message: error.message
+        if(error.message.endsWith("Invalid value provided. Expected StringFilter or String, provided Int.")) {
+            sts = 500;
+            resp = {
+                success: false,
+                message: "Quiz Not Exist!"
+            }
+        } else {
+            sts = 500;
+            resp = {
+                success: false,
+                message: error.message
+            }
         }
         return NextResponse.json(resp, {status: sts});
     }

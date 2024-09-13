@@ -46,21 +46,21 @@ export async function POST(req: Request) {
                             message: "Password Changed Successfully!",
                         }
                     } else {
-                        sts = 400;
+                        sts = 200;
                         resp = {
                             success: false,
                             message: "Token is invalid or expired.",
                         }
                     }
                 } else {
-                    sts = 400;
+                    sts = 200;
                     resp = {
                         success: false,
                         message: "Unable to find user.",
                     }
                 }
             } else {
-                sts = 400;
+                sts = 422;
                 resp = {
                     success: false,
                     message: "Password & confirm password doesn't match.",

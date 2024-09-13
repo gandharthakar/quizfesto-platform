@@ -25,7 +25,7 @@ export async function POST(req: Request) {
             });
 
             if(existingCat) {
-                sts = 201;
+                sts = 200;
                 resp = {
                     success: false,
                     message: "Category Already Exist!"
@@ -37,10 +37,10 @@ export async function POST(req: Request) {
                         category_slug
                     }
                 });
-                sts = 200;
+                sts = 201;
                 resp = {
                     success: true,
-                    message: "Category Added Successfully!"
+                    message: "Category Created Successfully!"
                 }
             }
         } else {

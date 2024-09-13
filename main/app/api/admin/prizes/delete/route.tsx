@@ -6,7 +6,7 @@ interface Respo {
     message: string
 }
 
-export async function POST(req: Request) {
+export async function DELETE(req: Request) {
     let resp: Respo = {
         success: false,
         message: ''
@@ -36,7 +36,7 @@ export async function POST(req: Request) {
                     message: "Prize Deleted Successfully!"
                 }
             } else {
-                sts = 400;
+                sts = 200;
                 resp = {
                     success: false,
                     message: "No Prize Found!"

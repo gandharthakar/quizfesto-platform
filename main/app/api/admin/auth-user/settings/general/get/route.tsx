@@ -93,7 +93,7 @@ export async function POST(req: Request) {
                         message: 'No User Found.',
                     }
                     MixResp = short_resp;
-                    sts = 400;
+                    sts = 200;
                 }
             }
         }

@@ -76,7 +76,7 @@ export async function POST(req: Request) {
                     message: 'User not found with this user id.',
                 }
                 MixResp = short_resp;
-                sts = 400;
+                sts = 200;
             }
         }
 

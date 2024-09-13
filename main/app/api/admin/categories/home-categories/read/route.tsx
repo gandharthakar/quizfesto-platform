@@ -32,7 +32,7 @@ const getCatsLabel = async (id_list: string[]) => {
     return cts;
 }
 
-export async function GET(req: Request) {
+export async function GET() {
     let resp: Respo = {
         success: false,
         message: '',

@@ -15,28 +15,19 @@ export async function DELETE() {
 
     try {
 
-        let data = await prisma.qF_Quiz_Category.findMany();
+        let data = await prisma.qF_Quiz.findMany();
         if(data.length > 0) {
-            await prisma.qF_Quiz_Category.deleteMany();
+            await prisma.qF_Quiz.deleteMany();
             sts = 200;
             resp = {
                 success: true,
-                message: "Categories Deleted Successfully!"
-            }
-
-            let hcats = await prisma.homepage_Categories.findFirst();
-            if(hcats !== null) {
-                await prisma.homepage_Categories.delete({
-                    where: {
-                        home_cat_id: hcats.home_cat_id
-                    }
-                });
+                message: "Quizes Deleted Successfully!"
             }
         } else {
             sts = 200;
             resp = {
                 success: false,
-                message: "No Categories Found!"
+                message: "No Quizes Found!"
             }
         }
         

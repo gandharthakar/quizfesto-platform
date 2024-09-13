@@ -114,6 +114,7 @@ function Page() {
         // setCatTitle("Category 1");
         // setCatSlug(convertToSlug("Category 1"));
         getCategoryDetails();
+        //eslint-disable-next-line
     }, []);
 
     return (

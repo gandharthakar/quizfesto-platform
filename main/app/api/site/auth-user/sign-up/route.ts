@@ -28,7 +28,7 @@ export async function POST(req: Request) {
                 });
 
                 if(existinUserByEmail) {
-                    sts = 401;
+                    sts = 200;
                     resp = {
                         success: false,
                         message: "User Already Exist."
@@ -50,7 +50,7 @@ export async function POST(req: Request) {
                     }
                 }
             } else {
-                sts = 403;
+                sts = 422;
                 resp = {
                     success: false,
                     message: "Password & Confirm Password Doesn't Match."

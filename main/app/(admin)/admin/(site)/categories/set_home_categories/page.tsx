@@ -179,6 +179,7 @@ function Page() {
         // setHomeCatOpts(options);
         getCats();
         getSavedCats('', '');
+        //eslint-disable-next-line
     }, []);
 
     return (

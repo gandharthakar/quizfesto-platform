@@ -10,6 +10,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { HiOutlinePlus } from "react-icons/hi";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import Swal from 'sweetalert2';
+import { useParams } from "next/navigation";
 
 interface TwSelInt {
     value: string,
@@ -19,6 +20,9 @@ interface TwSelInt {
 function Page() {
 
     const defaultImage = "https://placehold.co/1000x700/png";
+    const params = useParams();
+    const quiz_id = params.quiz_id[0];
+
     const [quizCats, setQuizCats] = useState<TwSelInt[]>([]);
     const [alreadyHaveFeImg, setAlreadyHaveFeImg] = useState<boolean>(false);
     interface quizTrms {
@@ -34,7 +38,7 @@ function Page() {
     const [filSize, setFileSize] = useState<boolean>(false);
     const [fileDimensions, setFileDimensions] = useState<boolean>(false);
     const [options, setOptions] = useState<TwSelInt[]>();
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     const handleChangeSelect = (value:any) => {
         setQuizCats(value);
@@ -136,7 +140,7 @@ function Page() {
 
     type validationSchema = z.infer<typeof validationSchema>;
 
-    const { register, handleSubmit, reset, formState: { errors }} = useForm<validationSchema>({
+    const { register, handleSubmit, reset, setValue, formState: { errors }} = useForm<validationSchema>({
 		resolver: zodResolver(validationSchema),
 	});
 
@@ -156,6 +160,8 @@ function Page() {
     }
 
     const clearFileInput = () => {
+        setAlreadyHaveFeImg(false);
+        setImgPrevOld('');
         setFileInput('');
         setImgPrevFresh(defaultImage);
         setFileExt('');
@@ -208,8 +214,9 @@ function Page() {
                 return [];
             }
         });
-        
+
         const prepData = {
+            quiz_id,
             quiz_title: formdata.quiz_main_title,
             quiz_summary: formdata.quiz_summ,
             quiz_categories: quizCats && quizCats.length > 0 ? quizCats.map(item => item.value) : [],
@@ -224,7 +231,7 @@ function Page() {
         }
         setIsLoading(true);
         let baseURI = window.location.origin;
-        let resp = await fetch(`${baseURI}/api/admin/quizes/crud/create`, {
+        let resp = await fetch(`${baseURI}/api/admin/quizes/crud/update`, {
             method: "POST",
             body: JSON.stringify(prepData),
         });
@@ -236,12 +243,7 @@ function Page() {
                 icon: "success",
                 timer: 3000
             });
-            clearFileInput();
             setIsLoading(false);
-            setQuizTerms([]);
-            setQuizAboutContent("");
-            setQuizCats([]);
-            reset();
         } else {
             Swal.fire({
                 title: "Error!",
@@ -280,8 +282,65 @@ function Page() {
         }
     }
 
+    const getQuiz = async () => {
+        let baseURI = window.location.origin;
+        let resp = await fetch(`${baseURI}/api/admin/quizes/crud/read`, {
+            method: "POST",
+            body: JSON.stringify({quiz_id})
+        });
+        const body = await resp.json();
+        if(body.success) {
+
+            setValue("quiz_main_title", body.quiz.quiz_title);
+            setValue("quiz_summ", body.quiz.quiz_summary);
+            setValue("quiz_disp_time", body.quiz.quiz_display_time);
+            setValue("quiz_est_time", body.quiz.quiz_estimated_time);
+            setValue("quiz_total_ques", body.quiz.quiz_total_question);
+            setValue("quiz_total_marks", body.quiz.quiz_total_marks);
+            setValue("quiz_sts", body.quiz.quiz_status);
+
+            if(body.quiz.quiz_about_text) {
+                setQuizAboutContent(body.quiz.quiz_about_text);
+            }
+
+            if(body.quiz.quiz_categories.length > 0) {
+                setQuizCats(body.quiz.quiz_categories);
+            }
+
+            if(body.quiz.quiz_terms.length > 0) {
+                let terms = body.quiz.quiz_terms.map((itm: quizTrms) => {
+                    return {
+                        quiz_terms: itm
+                    }
+                });
+                setQuizTerms(terms);
+            }
+
+            if(body.quiz.quiz_cover_photo) {
+                setAlreadyHaveFeImg(true);
+                setImgPrevOld(body.quiz.quiz_cover_photo);
+                setFileInput(body.quiz.quiz_cover_photo);
+                setImgPrevFresh(body.quiz.quiz_cover_photo);
+                setFileExt('jpg');
+                setFileSize(true);
+                setFileDimensions(true);
+            }
+
+            setIsLoading(false);
+        } else {
+            Swal.fire({
+                title: "Error!",
+                text: body.message,
+                icon: "error",
+                timer: 3000
+            });
+            setIsLoading(false);
+        }
+    }
+
     useEffect(() => {
         getCats();
+        getQuiz();
         //eslint-disable-next-line
     }, []);
 
@@ -505,7 +564,7 @@ function Page() {
                                                         <Image src={imgPrevOld} width={1000} height={700} className="w-full h-auto" alt="photo" priority={true} />
                                                     </div>
                                                     <div className="flex gap-x-[15px] justify-end items-center">
-                                                        <button type="button" title="Remove" className="transition-all delay-75 font-ubuntu text-[14px] text-red-600 underline dark:text-red-400">
+                                                        <button type="button" title="Remove" className="transition-all delay-75 font-ubuntu text-[14px] text-red-600 underline dark:text-red-400" onClick={clearFileInput}>
                                                             <div className="flex gap-x-[5px] items-center">
                                                                 <FaRegTrashAlt size={16} />
                                                                 <div>Remove</div>
@@ -559,8 +618,8 @@ function Page() {
                                         (<div className="spinner size-1"></div>) 
                                         : 
                                         (
-                                            <button type="submit" title="Create Quiz" className="transition-all delay-75 inline-block concard px-[20px] md:px-[25px] py-[10px] md:py-[12px] text-center text-white font-noto_sans font-semibold text-[16px] md:text-[18px] hover:shadow-lg">
-                                                Create Quiz
+                                            <button type="submit" title="Update Quiz" className="transition-all delay-75 inline-block concard px-[20px] md:px-[25px] py-[10px] md:py-[12px] text-center text-white font-noto_sans font-semibold text-[16px] md:text-[18px] hover:shadow-lg">
+                                                Update Quiz
                                             </button>
                                         )
                                     }

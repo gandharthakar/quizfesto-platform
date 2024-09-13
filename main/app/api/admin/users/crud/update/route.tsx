@@ -50,7 +50,7 @@ export async function POST(req: Request) {
                             message: "User Updated Successfully."
                         }
                     } else {
-                        sts = 400;
+                        sts = 422;
                         resp = {
                             success: false,
                             message: "Password & Confirm Password Doesn't Match."
@@ -76,7 +76,7 @@ export async function POST(req: Request) {
                     }
                 }
             } else {
-                sts = 400;
+                sts = 200;
                 resp = {
                     success: false,
                     message: "User Not Exist."

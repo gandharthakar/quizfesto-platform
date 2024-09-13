@@ -37,7 +37,28 @@ function AdminListQuizCard(props: AdmLstQzCd) {
         setIsMenuOpen(false);
     }
     
-    const handleDeleteQuiz = () => {
+    const handleDeleteQuiz = async () => {
+        let baseURI = window.location.origin;
+        let resp = await fetch(`${baseURI}/api/admin/quizes/crud/delete`, {
+            method: "DELETE",
+            body: JSON.stringify({quiz_id: quizid}),
+        });
+        const body = await resp.json();
+        if(body.success) {
+            Swal.fire({
+                title: "Success!",
+                text: body.message,
+                icon: "success",
+                timer: 3000
+            });
+        } else {
+            Swal.fire({
+                title: "Error!",
+                text: body.message,
+                icon: "error",
+                timer: 3000
+            });
+        }
         setIsMenuOpen(false);
     }
 
@@ -46,9 +67,9 @@ function AdminListQuizCard(props: AdmLstQzCd) {
         copy(quizid);
         Swal.fire({
             title: "Success!",
-            text: "Link Copied Successfully!",
+            text: "Quiz ID Copied Successfully!",
             icon: "success",
-            timer: 4000
+            timer: 3000
         });
     }
 
@@ -63,7 +84,7 @@ function AdminListQuizCard(props: AdmLstQzCd) {
         };
 
         document.addEventListener('mousedown', menuHandler);
-
+    //eslint-disable-next-line
     }, []);
 
     return (

@@ -13,7 +13,7 @@ interface Respo {
     cat_data: Cats[]
 }
 
-export async function GET(req: Request) {
+export async function GET() {
     let resp: Respo = {
         success: false,
         message: '',
@@ -32,7 +32,7 @@ export async function GET(req: Request) {
                 cat_data: data
             }
         } else {
-            sts = 201;
+            sts = 200;
             resp = {
                 success: false,
                 message: "No Categories Found!",

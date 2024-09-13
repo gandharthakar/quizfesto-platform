@@ -50,7 +50,7 @@ export async function POST(req: Request) {
                     success: false,
                     message: 'User not found with this user id.',
                 }
-                sts = 400;
+                sts = 200;
             }
         }
 

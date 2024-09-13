@@ -2,11 +2,6 @@ import prisma from "@/app/lib/db";
 import { NextResponse } from "next/server";
 import { hash } from "bcrypt";
 
-interface Respo {
-    password: string,
-    confirm_password: string,
-}
-
 interface ShtResp {
     success: boolean,
     message: string
@@ -93,14 +88,14 @@ export async function POST(req: Request) {
                         success: false,
                         message: "Password & Confirm Password Doesn't Match.",
                     }
-                    sts = 400;
+                    sts = 422;
                 }
             } else {
                 resp = {
                     success: false,
                     message: 'User Not Found.',
                 }
-                sts = 400;
+                sts = 200;
             }
         } else {
             resp = {

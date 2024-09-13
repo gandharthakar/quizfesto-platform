@@ -87,7 +87,7 @@ model QF_Question {
 model QF_Option {
   option_id      String      @id @default(uuid())
   question_text  String
-  options        String
+  options        String[]
   correct_option String
   questionid     String
   question       QF_Question @relation(fields: [questionid], references: [question_id], onDelete: Cascade) // Foreign key with cascade delete

@@ -43,7 +43,7 @@ export async function POST(req: Request) {
                     message: 'Email has been sent to your registered email address.',
                 }
             } else {
-                sts = 400;
+                sts = 200;
                 resp = {
                     success: false,
                     message: 'No user found with this email address.',
@@ -53,7 +53,7 @@ export async function POST(req: Request) {
             sts = 400;
             resp = {
                 success: false,
-                message: 'User email id is not found.',
+                message: 'User email id is missing.',
             }
         }
         

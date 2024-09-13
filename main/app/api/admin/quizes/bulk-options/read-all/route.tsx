@@ -1,42 +1,48 @@
 import prisma from "@/app/lib/db";
 import { NextResponse } from "next/server";
 
-interface Respo {
-    success: boolean,
-    message: string
+interface qF_Quiz {
+    quiz_id: string,
+    quiz_title: string,
+    quiz_status: string,
 }
 
-export async function DELETE() {
+interface Respo {
+    success: boolean,
+    message: string,
+    quizes: qF_Quiz[]
+}
+
+export async function GET() {
     let resp: Respo = {
         success: false,
-        message: ''
+        message: '',
+        quizes: []
     }
     let sts:number = 400;
 
     try {
 
-        let data = await prisma.qF_Quiz_Category.findMany();
+        let data = await prisma.qF_Quiz.findMany();
         if(data.length > 0) {
-            await prisma.qF_Quiz_Category.deleteMany();
             sts = 200;
             resp = {
                 success: true,
-                message: "Categories Deleted Successfully!"
-            }
-
-            let hcats = await prisma.homepage_Categories.findFirst();
-            if(hcats !== null) {
-                await prisma.homepage_Categories.delete({
-                    where: {
-                        home_cat_id: hcats.home_cat_id
+                message: "Quizes Deleted Successfully!",
+                quizes: data.map((item) => {
+                    return {
+                        quiz_id: item.quiz_id,
+                        quiz_title: item.quiz_title,
+                        quiz_status: item.quiz_status
                     }
-                });
+                })
             }
         } else {
             sts = 200;
             resp = {
                 success: false,
-                message: "No Categories Found!"
+                message: "No Quizes Found!",
+                quizes: []
             }
         }
         
@@ -45,7 +51,8 @@ export async function DELETE() {
         sts = 500;
         resp = {
             success: false,
-            message: error.message
+            message: error.message,
+            quizes: []
         }
         return NextResponse.json(resp, {status: sts});
     }

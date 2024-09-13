@@ -24,7 +24,7 @@ export async function DELETE(req: Request) {
                 message: "All Users Deleted Successfully!"
             }
         } else {
-            sts = 400;
+            sts = 200;
             resp = {
                 success: false,
                 message: "No Users Found!"

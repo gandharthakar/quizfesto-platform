@@ -47,7 +47,7 @@ function AdminListQuestionCard(props: AdmLstQuesCd) {
         copy(qestion_id);
         Swal.fire({
             title: "Success!",
-            text: "Link Copied Successfully!",
+            text: "Question ID Copied Successfully!",
             icon: "success",
             timer: 4000
         });

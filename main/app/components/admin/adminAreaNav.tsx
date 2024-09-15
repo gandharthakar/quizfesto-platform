@@ -29,7 +29,7 @@ function AdminAreaNav() {
     const isMenuOpen = useSelector((state: RootState) => state.admin_area_menu_toggle.is_admin_area_menu_open);
     const isDarkTheme = useSelector((state: RootState) => state.admin_theme_mode.admin_dark_theme_mode);
 
-    const all_quizes_mi: string[] = ["/admin/quizes", "/admin/quizes/create-new-quiz", "/admin/questions", "/admin/options", "/admin/questions/create-new-question", `/admin/questions/edit-question/${ques_id}`, "/admin/options/create-new-options", `/admin/options/edit-options/${opt_id}`];
+    const all_quizes_mi: string[] = ["/admin/quizes", "/admin/quizes/create-new-quiz", `/admin/quizes/edit-quiz/${quiz_id}`, "/admin/questions", "/admin/options", "/admin/questions/create-new-question", `/admin/questions/edit-question/${ques_id}`, "/admin/options/create-new-options", `/admin/options/edit-options/${opt_id}`];
     const all_users_mi: string[] = ["/admin/users", "/admin/users/create-new-user", `/admin/users/edit-user/${usr_id}`];
     const all_prizes_mi: string[] = ["/admin/prizes"];
     const all_winners_mi: string[] = ["/admin/winners"];

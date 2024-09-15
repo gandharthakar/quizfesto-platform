@@ -14,6 +14,31 @@ const removeItemsFromArray = (fruitsArray: string[], itemsToRemove: string[]) =>
     return fruitsArray.filter(fruit => !itemsToRemove.includes(fruit));
 }
 
+const getFilteredQuizes = async (filter: string) => {
+    const view_post = await prisma.qF_Quiz.findMany({
+        where: {
+            quiz_categories: {
+                has: filter
+            }
+        }
+    });
+    return view_post;
+}
+
+const removeCategoryFromQuizes = async (categoryId: string) => {
+    const posts = await getFilteredQuizes(categoryId);
+
+    const updatedPosts = posts.map(post => {
+        const updatedCategories = post.quiz_categories.filter(category => category !== categoryId);
+        return {
+            quiz_id: post.quiz_id,
+            quiz_categories: updatedCategories
+        };
+    });
+
+    await Promise.all(updatedPosts.map(post => prisma.qF_Quiz.update({ where: { quiz_id: post.quiz_id }, data: { quiz_categories: post.quiz_categories } })));
+}
+
 export async function DELETE(req: Request) {
     let resp: Respo = {
         success: false,
@@ -43,6 +68,8 @@ export async function DELETE(req: Request) {
                     success: true,
                     message: "Category Deleted Successfully!"
                 }
+
+                // Remove 'Same' Category From Home Top Categories List. 
                 let hcats = await prisma.homepage_Categories.findFirst();
                 if(hcats !== null) {
                     let commonIDs = findCommonItems([category_id], hcats.home_cats);
@@ -58,6 +85,9 @@ export async function DELETE(req: Request) {
                         });
                     }
                 }
+
+                // Remove 'Same' Category From List Of Associative Quizes. 
+                await removeCategoryFromQuizes(category_id);
             } else {
                 sts = 200;
                 resp = {

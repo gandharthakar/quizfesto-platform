@@ -45,6 +45,7 @@ function Page() {
         setValue("question_text", "This is question text ?");
         setValue("options", "Option 1, Option 2, Option 3, Option 4");
         setValue("correct_option", "Option 2");
+        //eslint-disable-next-line
     }, []);
 
     return (

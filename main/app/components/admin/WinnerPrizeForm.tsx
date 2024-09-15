@@ -237,6 +237,7 @@ function WinnerPrizeForm(props: WinPriFrm) {
 
     useEffect(() => {
         getPrize();
+        //eslint-disable-next-line
     }, []);
 
     return (

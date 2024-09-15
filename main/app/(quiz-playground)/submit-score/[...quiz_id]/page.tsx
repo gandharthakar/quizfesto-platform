@@ -83,6 +83,7 @@ export default function Page() {
                 clearTimeout(st_22);
             }, 1000);
         }
+    //eslint-disable-next-line
     }, [qzTitla]);
 
     useEffect(() => {
@@ -135,7 +136,7 @@ export default function Page() {
             }, 200);
         }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    //eslint-disable-next-line
     }, [isLoading]);
 
     return (

@@ -142,7 +142,7 @@ function Page() {
         const conf = confirm("Are you sure want to delete all Categories ?");
         if(conf) {
             let baseURI = window.location.origin;
-            let resp = await fetch(`${baseURI}/api/admin/categories/bulk-options/delete-all`, {
+            let resp = await fetch(`${baseURI}/api/admin/categories/bulk-actions/delete-all`, {
                 method: "DELETE",
             });
             const body = await resp.json();
@@ -174,7 +174,7 @@ function Page() {
             const conf = confirm("Are you sure want to delete selected Categories ?");
             if(conf) {
                 let baseURI = window.location.origin;
-                let resp = await fetch(`${baseURI}/api/admin/categories/bulk-options/delete-selected`, {
+                let resp = await fetch(`${baseURI}/api/admin/categories/bulk-actions/delete-selected`, {
                     method: "DELETE",
                     body: JSON.stringify({category_id_list: selectedItems})
                 });
@@ -233,7 +233,7 @@ function Page() {
 
     const getCatData = async () => {
         let baseURI = window.location.origin;
-        let resp = await fetch(`${baseURI}/api/admin/categories/bulk-options/read-all`, {
+        let resp = await fetch(`${baseURI}/api/admin/categories/bulk-actions/read-all`, {
             method: "GET"
         });
         const body = await resp.json();

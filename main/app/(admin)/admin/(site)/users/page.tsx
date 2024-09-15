@@ -8,7 +8,7 @@ import AdminSearchPanel from "@/app/components/admin/adminSearchPanel";
 import { useEffect, useRef, useState } from "react";
 import Swal from "sweetalert2";
 import SitePagination from "@/app/components/sitePagination";
-import { dump_list_of_users } from "@/app/constant/datafaker";
+// import { dump_list_of_users } from "@/app/constant/datafaker";
 import AdminListUsersCard from "@/app/components/admin/adminListUsersCard";
 import { FaEllipsisVertical } from "react-icons/fa6";
 import { GrPowerReset } from "react-icons/gr";
@@ -160,7 +160,7 @@ function Page() {
             const conf = confirm("Are you sure want to delete selected users ?");
             if(conf) {
                 let baseURI = window.location.origin;
-                let resp = await fetch(`${baseURI}/api/admin/users/bulk-options/delete-selected`, {
+                let resp = await fetch(`${baseURI}/api/admin/users/bulk-actions/delete-selected`, {
                     method: "DELETE",
                     body: JSON.stringify({user_id_list: selectedItems})
                 });
@@ -193,7 +193,7 @@ function Page() {
         const conf = confirm("Are you sure want to delete all users ?");
         if(conf) {
             let baseURI = window.location.origin;
-            let resp = await fetch(`${baseURI}/api/admin/users/bulk-options/delete-all`, {
+            let resp = await fetch(`${baseURI}/api/admin/users/bulk-actions/delete-all`, {
                 method: "DELETE",
             });
             const body = await resp.json();
@@ -249,7 +249,7 @@ function Page() {
 
     const getUserData = async () => {
         let baseURI = window.location.origin;
-        let resp = await fetch(`${baseURI}/api/admin/users/bulk-options/read-all`, {
+        let resp = await fetch(`${baseURI}/api/admin/users/bulk-actions/read-all`, {
             method: "GET"
         });
         const body = await resp.json();

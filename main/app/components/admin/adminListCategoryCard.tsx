@@ -38,7 +38,7 @@ function AdminListCategoryCard(props: AdmLstQzCd) {
     
     const handleDeleteQuiz = async () => {
         setIsMenuOpen(false);
-        const conf = confirm("Are you sure want to delete category ?");
+        const conf = confirm("Are you sure want to delete this category ?");
         if(conf) {
             let baseURI = window.location.origin;
             const resp = await fetch(`${baseURI}/api/admin/categories/crud/delete`, {

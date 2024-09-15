@@ -3,8 +3,12 @@
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
+import Swal from "sweetalert2";
+import { useState } from "react";
 
 function Page() {
+
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const validationSchema = z.object({
         quiz_id: z.string({
@@ -29,9 +33,37 @@ function Page() {
 		resolver: zodResolver(validationSchema),
 	});
 
-    const handleFormSubmit: SubmitHandler<validationSchema> = (formdata) => {
-        console.log(formdata);
-        // reset();
+    const handleFormSubmit: SubmitHandler<validationSchema> = async (formdata) => {
+        setIsLoading(true);
+        let prepData = {
+            quiz_id: formdata.quiz_id,
+            question_title: formdata.question_text,
+            question_marks: formdata.question_marks
+        }
+        let baseURI = window.location.origin;
+        const resp = await fetch(`${baseURI}/api/admin/questions/crud/create`, {
+            method: "POST",
+            body: JSON.stringify(prepData)
+        });
+        const body = await resp.json();
+        if(body.success) {
+            Swal.fire({
+                title: "Success!",
+                text: body.message,
+                icon: "success",
+                timer: 3000
+            });
+            setIsLoading(false);
+            reset();
+        } else {
+            Swal.fire({
+                title: "Error!",
+                text: body.message,
+                icon: "error",
+                timer: 3000
+            });
+            setIsLoading(false);
+        }
     }
 
     return (
@@ -90,9 +122,16 @@ function Page() {
                                     {errors.question_marks && (<div className="ws-input-error mt-[2px]">{errors.question_marks.message}</div>)}
                                 </div>
                                 <div className="text-right">
-                                    <button type="submit" title="Add Question" className="transition-all delay-75 inline-block concard px-[20px] md:px-[25px] py-[10px] md:py-[12px] text-center text-white font-noto_sans font-semibold text-[16px] md:text-[18px] hover:shadow-lg">
-                                        Add Question
-                                    </button>
+                                    {
+                                        isLoading ? 
+                                        (<div className="spinner size-1"></div>) 
+                                        : 
+                                        (
+                                            <button type="submit" title="Create Question" className="transition-all delay-75 inline-block concard px-[20px] md:px-[25px] py-[10px] md:py-[12px] text-center text-white font-noto_sans font-semibold text-[16px] md:text-[18px] hover:shadow-lg">
+                                                Create Question
+                                            </button>
+                                        )
+                                    }
                                 </div>
                             </div>
                         </div>

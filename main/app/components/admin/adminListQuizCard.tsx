@@ -38,26 +38,33 @@ function AdminListQuizCard(props: AdmLstQzCd) {
     }
     
     const handleDeleteQuiz = async () => {
-        let baseURI = window.location.origin;
-        let resp = await fetch(`${baseURI}/api/admin/quizes/crud/delete`, {
-            method: "DELETE",
-            body: JSON.stringify({quiz_id: quizid}),
-        });
-        const body = await resp.json();
-        if(body.success) {
-            Swal.fire({
-                title: "Success!",
-                text: body.message,
-                icon: "success",
-                timer: 3000
+        let conf = confirm("Are you sure want to delete this quiz ?");
+        if(conf) {
+            let baseURI = window.location.origin;
+            let resp = await fetch(`${baseURI}/api/admin/quizes/crud/delete`, {
+                method: "DELETE",
+                body: JSON.stringify({quiz_id: quizid}),
             });
-        } else {
-            Swal.fire({
-                title: "Error!",
-                text: body.message,
-                icon: "error",
-                timer: 3000
-            });
+            const body = await resp.json();
+            if(body.success) {
+                Swal.fire({
+                    title: "Success!",
+                    text: body.message,
+                    icon: "success",
+                    timer: 3000
+                });
+                let set = setTimeout(() => {
+                    window.location.reload();
+                    clearTimeout(set);
+                }, 3000);
+            } else {
+                Swal.fire({
+                    title: "Error!",
+                    text: body.message,
+                    icon: "error",
+                    timer: 3000
+                });
+            }
         }
         setIsMenuOpen(false);
     }

@@ -38,8 +38,36 @@ function AdminListQuestionCard(props: AdmLstQuesCd) {
         setIsMenuOpen(false);
     }
     
-    const handleDeleteQuiz = () => {
+    const handleDeleteQuiz = async () => {
         setIsMenuOpen(false);
+        const conf = confirm("Are you sure want to delete this question ?");
+        if(conf) {
+            let baseURI = window.location.origin;
+            const resp = await fetch(`${baseURI}/api/admin/questions/crud/delete`, {
+                method: "DELETE",
+                body: JSON.stringify({question_id: qestion_id})
+            });
+            const body = await resp.json();
+            if(body.success) {
+                Swal.fire({
+                    title: "Success!",
+                    text: body.message,
+                    icon: "success",
+                    timer: 2000
+                });
+                let set = setTimeout(() => {
+                    window.location.reload();
+                    clearTimeout(set);
+                }, 2000);
+            } else {
+                Swal.fire({
+                    title: "Error!",
+                    text: body.message,
+                    icon: "error",
+                    timer: 2000
+                });
+            }
+        }
     }
 
     const handleCopyQuizId = () => {

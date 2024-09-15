@@ -257,7 +257,7 @@ function Page() {
 
     const getCats = async () => {
         let baseURI = window.location.origin;
-        let resp = await fetch(`${baseURI}/api/admin/categories/bulk-options/read-all`, {
+        let resp = await fetch(`${baseURI}/api/admin/categories/bulk-actions/read-all`, {
             method: "GET"
         });
         const body = await resp.json();

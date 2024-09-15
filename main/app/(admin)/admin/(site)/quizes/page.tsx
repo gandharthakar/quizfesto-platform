@@ -138,7 +138,7 @@ function Page() {
             const conf = confirm("Are you sure want to delete selected Quizes ?");
             if(conf) {
                 let baseURI = window.location.origin;
-                let resp = await fetch(`${baseURI}/api/admin/quizes/bulk-options/delete-selected`, {
+                let resp = await fetch(`${baseURI}/api/admin/quizes/bulk-actions/delete-selected`, {
                     method: "DELETE",
                     body: JSON.stringify({quiz_id_list: selectedItems})
                 });
@@ -170,7 +170,7 @@ function Page() {
         const conf = confirm("Are you sure want to delete all quizes ?");
         if(conf) {
             let baseURI = window.location.origin;
-            let resp = await fetch(`${baseURI}/api/admin/quizes/bulk-options/delete-all`, {
+            let resp = await fetch(`${baseURI}/api/admin/quizes/bulk-actions/delete-all`, {
                 method: "DELETE",
             });
             const body = await resp.json();
@@ -199,7 +199,7 @@ function Page() {
 
     const getQuizes = async () => {
         let baseURI = window.location.origin;
-        let resp = await fetch(`${baseURI}/api/admin/quizes/bulk-options/read-all`, {
+        let resp = await fetch(`${baseURI}/api/admin/quizes/bulk-actions/read-all`, {
             method: "GET",
         });
         const body = await resp.json();

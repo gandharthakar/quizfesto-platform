@@ -4,19 +4,17 @@ import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import Swal from "sweetalert2";
+import { useState } from "react";
 
 function Page() {
+
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const validationSchema = z.object({
         question_id: z.string({
 			required_error: "Please enter question ID",
 			invalid_type_error: "Question ID must be in string format."
 		}).min(5, {message: "Question ID must be contains at least 5 characters."}),
-
-        question_text: z.string({
-			required_error: "Please enter question text",
-			invalid_type_error: "Question text must be in string format."
-		}).min(5, {message: "Question text must be contains at least 5 characters."}),
 
         options: z.string({
 			required_error: "Please enter options.",
@@ -36,16 +34,14 @@ function Page() {
 	});
 
     const handleFormSubmit: SubmitHandler<validationSchema> = async (formdata) => {
-        // console.log(formdata);
-        // reset();
+        setIsLoading(true);
         let baseURI = window.location.origin;
         const resp = await fetch(`${baseURI}/api/admin/options/crud/create`, {
             method: "POST",
             body: JSON.stringify({
-                question_text: formdata.question_text,
-                options: formdata.options,
+                options: formdata.options.split(", "),
                 correct_option: formdata.correct_option,
-                questionid: formdata.question_id
+                question_id: formdata.question_id
             })
         });
         const body = await resp.json();
@@ -56,6 +52,16 @@ function Page() {
                 icon: "success",
                 timer: 3000
             });
+            reset();
+            setIsLoading(false);
+        } else {
+            Swal.fire({
+                title: "Error!",
+                text: body.message,
+                icon: "error",
+                timer: 3000
+            });
+            setIsLoading(false);
         }
     }
 
@@ -82,26 +88,6 @@ function Page() {
                                     />
                                     {errors.question_id && (<div className="ws-input-error mt-[2px]">{errors.question_id.message}</div>)}
                                 </div>
-                                <div className="pb-[20px]">
-                                    <label 
-                                        htmlFor="cq-qzqtxt" 
-                                        className="transition-all delay-75 block mb-[5px] font-noto_sans text-[16px] font-semibold text-zinc-900 dark:text-zinc-300"
-                                    >
-                                        Question Text <span className="text-red-500">*</span>
-                                    </label>
-                                    <input 
-                                        type="text" 
-                                        id="cq-qzqtxt" 
-                                        className="ws-input-pwd-m1-v1" 
-                                        autoComplete="off" 
-                                        {...register("question_text")} 
-                                    />
-                                    {errors.question_text && (<div className="ws-input-error mt-[2px]">{errors.question_text.message}</div>)}
-                                </div>
-                            </div>
-                        </div>
-                        <div className="w-full xl-s2:flex-1 xl-s2:w-auto">
-                            <div className="transition-all delay-75 border-[2px] border-solid p-[15px] md:p-[25px] border-zinc-300 bg-white dark:bg-zinc-800 dark:border-zinc-600">
                                 <div className="pb-[20px]">
                                     <label 
                                         htmlFor="cq-qzqtxt" 
@@ -135,12 +121,20 @@ function Page() {
                                     {errors.correct_option && (<div className="ws-input-error mt-[2px]">{errors.correct_option.message}</div>)}
                                 </div>
                                 <div className="text-right">
-                                    <button type="submit" title="Create Set" className="transition-all delay-75 inline-block concard px-[20px] md:px-[25px] py-[10px] md:py-[12px] text-center text-white font-noto_sans font-semibold text-[16px] md:text-[18px] hover:shadow-lg">
-                                        Create Set
-                                    </button>
+                                    {
+                                        isLoading ? 
+                                        (<div className="spinner size-1"></div>) 
+                                        : 
+                                        (
+                                            <button type="submit" title="Create Options" className="transition-all delay-75 inline-block concard px-[20px] md:px-[25px] py-[10px] md:py-[12px] text-center text-white font-noto_sans font-semibold text-[16px] md:text-[18px] hover:shadow-lg">
+                                                Create Options
+                                            </button>
+                                        )
+                                    }
                                 </div>
                             </div>
                         </div>
+                        
                     </div>
                 </form>
             </div>

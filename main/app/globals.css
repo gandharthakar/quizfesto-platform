@@ -194,10 +194,11 @@
 .spinner {
     display: inline-block;
     --spinner-width: 6px;
+    --spinner-color: #00af4f;
     width: 56px;
     height: 56px;
     border-radius: 50%;
-    background: radial-gradient(farthest-side,#00af4f 94%,#0000) top/var(--spinner-width) var(--spinner-width) no-repeat,conic-gradient(#0000 30%,#00af4f);
+    background: radial-gradient(farthest-side,var(--spinner-color) 94%,#0000) top/var(--spinner-width) var(--spinner-width) no-repeat,conic-gradient(#0000 30%,var(--spinner-color));
     mask: radial-gradient(farthest-side,#0000 calc(100% - var(--spinner-width)),#000 0);
     animation: spinner-c7wet2 1s infinite linear;
  }
@@ -205,6 +206,19 @@
  .spinner.size-1 {
     width: 45px;
     height: 45px;
+ }
+
+ .spinner.size-2 {
+    --spinner-width: 2px;
+    width: 25px;
+    height: 25px;
+ }
+
+ .spinner.size-3 {
+    --spinner-width: 4px;
+    --spinner-color: #ffffff;
+    width: 35px;
+    height: 35px;
  }
  
  @keyframes spinner-c7wet2 {

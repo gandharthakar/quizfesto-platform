@@ -7,18 +7,10 @@ import { useEffect, useRef, useState } from "react";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { MdOutlineModeEdit } from "react-icons/md";
 import Swal from "sweetalert2";
-// import copy from "copy-to-clipboard";
-
-type optionsType = {
-    option_id: string | number,
-    option_text: string,
-    correct_answer: boolean,
-}
 
 interface AdmLstQuesOptsCd {
-    options_id: string,
-    options_data?: optionsType[],
-    question_id: string | number,
+    option_id: string,
+    options: string[],
     question_text?: string,
     checkboxName?: string,
     checkboxChecked?: boolean, 
@@ -29,9 +21,8 @@ interface AdmLstQuesOptsCd {
 function AdminListQuestionOption(props: AdmLstQuesOptsCd) {
 
     const { 
-        options_id, 
-        options_data, 
-        question_id, 
+        option_id, 
+        options, 
         question_text, 
         checkboxName, 
         checkboxChecked, 
@@ -46,20 +37,37 @@ function AdminListQuestionOption(props: AdmLstQuesOptsCd) {
         setIsMenuOpen(false);
     }
     
-    const handleDeleteQuiz = () => {
+    const handleDeleteOption = async () => {
         setIsMenuOpen(false);
+        const conf = confirm("Are you sure want to delete this option ?");
+        if(conf) {
+            let baseURI = window.location.origin;
+            const resp = await fetch(`${baseURI}/api/admin/options/crud/delete`, {
+                method: "DELETE",
+                body: JSON.stringify({option_id})
+            });
+            const body = await resp.json();
+            if(body.success) {
+                Swal.fire({
+                    title: "Success!",
+                    text: body.message,
+                    icon: "success",
+                    timer: 2000
+                });
+                let set = setTimeout(() => {
+                    window.location.reload();
+                    clearTimeout(set);
+                }, 2000);
+            } else {
+                Swal.fire({
+                    title: "Error!",
+                    text: body.message,
+                    icon: "error",
+                    timer: 2000
+                });
+            }
+        }
     }
-
-    // const handleCopyQuizId = () => {
-    //     setIsMenuOpen(false);
-    //     copy(option_id);
-    //     Swal.fire({
-    //         title: "Success!",
-    //         text: "Link Copied Successfully!",
-    //         icon: "success",
-    //         timer: 4000
-    //     });
-    // }
 
     useEffect(()=> {
 
@@ -82,14 +90,14 @@ function AdminListQuestionOption(props: AdmLstQuesOptsCd) {
                     <div className="alqc-chrb">
                         <input 
                             type="checkbox" 
-                            id={options_id} 
+                            id={option_id} 
                             name={checkboxName} 
                             className="input-chrb" 
-                            value={options_id} 
+                            value={option_id} 
                             checked={checkboxChecked} 
-                            onChange={() => onCheckboxChange(options_id)} 
+                            onChange={() => onCheckboxChange(option_id)} 
                         />
-                        <label htmlFor={options_id} className="label">
+                        <label htmlFor={option_id} className="label">
                             <div>
                                 <div className="squere-box">
                                     <IoMdCheckmark size={18} className="svg-icon" />
@@ -110,16 +118,16 @@ function AdminListQuestionOption(props: AdmLstQuesOptsCd) {
                         </div>
                         <div>
                             {
-                                options_data?.length ? 
+                                options?.length ? 
                                 (
                                     <ul className="flex flex-col gap-y-[5px]">
                                         {
-                                            options_data.map((itm) => (
+                                            options.map((itm, idx) => (
                                                 <li 
-                                                    key={itm.option_id} 
+                                                    key={`${option_id}_${idx}`} 
                                                     className="transition-all delay-75 w-full font-noto_sans text-[14px] md:text-[16px] text-zinc-800 dark:text-zinc-200" 
                                                 >
-                                                    {itm.option_text}
+                                                    {itm}
                                                 </li>
                                             ))
                                         }
@@ -166,7 +174,7 @@ function AdminListQuestionOption(props: AdmLstQuesOptsCd) {
                             </li> */}
                             <li className="w-full">
                                 <Link 
-                                    href={`/admin/options/edit-options/${options_id}`} 
+                                    href={`/admin/options/edit-options/${option_id}`} 
                                     title="Edit" 
                                     className="transition-all delay-75 block w-full py-[10px] px-[15px] font-ubuntu text-[16px] text-zinc-900 hover:bg-zinc-100 dark:text-zinc-200 dark:hover:bg-zinc-800" 
                                     onClick={handleClick} 
@@ -184,7 +192,7 @@ function AdminListQuestionOption(props: AdmLstQuesOptsCd) {
                                     type="button" 
                                     title="Delete" 
                                     className="transition-all delay-75 block w-full py-[10px] px-[15px] font-ubuntu text-[16px] text-red-500 hover:bg-zinc-100 dark:text-red-500 dark:hover:bg-zinc-800" 
-                                    onClick={handleDeleteQuiz}
+                                    onClick={handleDeleteOption}
                                 >
                                     <div className="flex gap-x-[5px] items-center">
                                         <RiDeleteBin6Line size={20} />

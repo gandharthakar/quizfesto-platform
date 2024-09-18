@@ -38,7 +38,7 @@ function AdminListQuestionCard(props: AdmLstQuesCd) {
         setIsMenuOpen(false);
     }
     
-    const handleDeleteQuiz = async () => {
+    const handleDeleteQuestion = async () => {
         setIsMenuOpen(false);
         const conf = confirm("Are you sure want to delete this question ?");
         if(conf) {
@@ -183,7 +183,7 @@ function AdminListQuestionCard(props: AdmLstQuesCd) {
                                     type="button" 
                                     title="Delete" 
                                     className="transition-all delay-75 block w-full py-[10px] px-[15px] font-ubuntu text-[16px] text-red-500 hover:bg-zinc-100 dark:text-red-500 dark:hover:bg-zinc-800" 
-                                    onClick={handleDeleteQuiz}
+                                    onClick={handleDeleteQuestion}
                                 >
                                     <div className="flex gap-x-[5px] items-center">
                                         <RiDeleteBin6Line size={20} />

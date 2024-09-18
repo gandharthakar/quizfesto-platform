@@ -3,13 +3,21 @@
 import AdminListQuestionOption from "@/app/components/admin/adminListQuestionOption";
 import AdminSearchPanel from "@/app/components/admin/adminSearchPanel";
 import SitePagination from "@/app/components/sitePagination";
-import { dump_list_of_options } from "@/app/constant/datafaker";
+// import { dump_list_of_options } from "@/app/constant/datafaker";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { FaEllipsisVertical } from "react-icons/fa6";
 import { GrAdd } from "react-icons/gr";
 import { IoMdCheckmark } from "react-icons/io";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import Swal from "sweetalert2";
+
+interface QF_Opts {
+    option_id: string,
+    options: string[],
+    question_text: string,
+    search_tems: string[]
+}
 
 function GFG(array: any, currPage: number, pageSize: number) {
     const startIndex = (currPage - 1) * pageSize;
@@ -23,18 +31,23 @@ function Page() {
     const [srchInp, setSrchInp] = useState<string>("");
     
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const [totalPages, setTotalPages] = useState<number>(Math.ceil(dump_list_of_options.length / dataPerPage));
-    const [optionsListData, setOptionsListData] = useState([]);
+    const [optionData, setOptionData] = useState<QF_Opts[]>([]);
+    const [totalPages, setTotalPages] = useState<number>(Math.ceil(optionData.length / dataPerPage));
+    const [optionsListData, setOptionsListData] = useState<QF_Opts[]>([]);
 
     const [selectAll, setSelectAll] = useState(false);
     const [selectedItems, setSelectedItems] = useState<string[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+
+    const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+    const menuRef = useRef<HTMLDivElement>(null);
 
     const handleSearchInputChange = (e:any) => {
         setSrchInp(e.target.value);
         if(srchInp.length === 1) {
             setCurrentPage(1);
-            setOptionsListData(GFG(dump_list_of_options, currentPage, dataPerPage));
-            setTotalPages(Math.ceil(dump_list_of_options.length / dataPerPage));
+            setOptionsListData(GFG(optionData, currentPage, dataPerPage));
+            setTotalPages(Math.ceil(optionData.length / dataPerPage));
         }
     }
 
@@ -42,8 +55,8 @@ function Page() {
         setSrchInp(e.target.value);
         if(e.key === "Backspace") {
             setCurrentPage(1);
-            setOptionsListData(GFG(dump_list_of_options, currentPage, dataPerPage));
-            setTotalPages(Math.ceil(dump_list_of_options.length / dataPerPage));
+            setOptionsListData(GFG(optionData, currentPage, dataPerPage));
+            setTotalPages(Math.ceil(optionData.length / dataPerPage));
         }
     }
 
@@ -60,7 +73,7 @@ function Page() {
 
         if(optionsListData.length > 0) {
 
-            const res = dump_list_of_options.filter((item) => {
+            const res = optionData.filter((item) => {
                 const srch_res = item.question_text.toLowerCase().includes(srchInp.toLowerCase()) || item.search_tems.toString().toLowerCase().includes(srchInp.toLowerCase());
                 return srch_res;
             });
@@ -71,13 +84,13 @@ function Page() {
                 setOptionsListData(GFG(res, currentPage, dataPerPage));
                 if(srchInp == "") {
                     setCurrentPage(1);
-                    setTotalPages(Math.ceil(dump_list_of_options.length / dataPerPage));
+                    setTotalPages(Math.ceil(optionData.length / dataPerPage));
                     setOptionsListData([]);
                 }
             } else {
                 if(srchInp == "") {
                     setCurrentPage(1);
-                    setTotalPages(Math.ceil(dump_list_of_options.length / dataPerPage));
+                    setTotalPages(Math.ceil(optionData.length / dataPerPage));
                     setOptionsListData([]);
                 }
                 setCurrentPage(1);
@@ -96,14 +109,14 @@ function Page() {
 
     const handlePageChange = (newPage: number) => {
         setCurrentPage(newPage);
-        setOptionsListData(GFG(dump_list_of_options, newPage, dataPerPage));
+        setOptionsListData(GFG(optionData, newPage, dataPerPage));
         setSelectAll(false);
         setSelectedItems([]);
     };
 
     const toggleSelectAll = () => {
         setSelectAll(!selectAll);
-        const allIds = optionsListData.map(item => item['options_id']);
+        const allIds = optionsListData.map(item => item['option_id']);
         setSelectedItems(selectAll ? [] : allIds);
     };
 
@@ -120,27 +133,90 @@ function Page() {
         toggleItem(itemId);
     };
 
-    const handleDeleteBulkLogic = () => {
-        console.log(selectedItems);
-        if(selectedItems.length > 0) {
-            Swal.fire({
-                title: "Success!",
-                text: "Selected Quizes Deleted Successfully!",
-                icon: "success",
-                timer: 4000
+    const handleDeleteAllBulkLogic = async () => {
+        const conf = confirm("Are you sure want to delete all options ?");
+        if(conf) {
+            let baseURI = window.location.origin;
+            let resp = await fetch(`${baseURI}/api/admin/options/bulk-actions/delete-all`, {
+                method: "DELETE",
             });
+            const body = await resp.json();
+            if(body.success) {
+                Swal.fire({
+                    title: "Success!",
+                    text: body.message,
+                    icon: "success",
+                    timer: 2000
+                });
+                let set = setTimeout(() => {
+                    window.location.reload();
+                    clearTimeout(set);
+                }, 2000);
+            } else {
+                Swal.fire({
+                    title: "Error!",
+                    text: body.message,
+                    icon: "error",
+                    timer: 2000
+                });
+            }
+        }
+        setIsMenuOpen(false);
+    }
+
+    const handleDeleteSelectedBulkLogic = async () => {
+        if(selectedItems.length > 0) {
+            const conf = confirm("Are you sure want to delete selected options ?");
+            if(conf) {
+                let baseURI = window.location.origin;
+                let resp = await fetch(`${baseURI}/api/admin/options/bulk-actions/delete-selected`, {
+                    method: "DELETE",
+                    body: JSON.stringify({options_id_list: selectedItems})
+                });
+                const body = await resp.json();
+                if(body.success) {
+                    Swal.fire({
+                        title: "Success!",
+                        text: body.message,
+                        icon: "success",
+                        timer: 2000
+                    });
+                    let set = setTimeout(() => {
+                        window.location.reload();
+                        clearTimeout(set);
+                    }, 2000);
+                }
+            }
         } else {
             Swal.fire({
                 title: "Error!",
-                text: "Please Select Quiz Items First!",
+                text: "Please Select Options First!",
                 icon: "error",
-                timer: 4000
+                timer: 3000
             });
+        }
+        setIsMenuOpen(false);
+    }
+
+    const getOptions = async () => {
+        let baseURI = window.location.origin;
+        let resp = await fetch(`${baseURI}/api/admin/options/bulk-actions/read-all`, {
+            method: "GET"
+        });
+        const body = await resp.json();
+        if(body.success) {
+            setIsLoading(false);
+            setOptionsListData(GFG(body.options_list, currentPage, dataPerPage));
+            setOptionData(body.options_list);
+            setTotalPages(Math.ceil(body.options_list.length / dataPerPage));
+        } else {
+            setIsLoading(false);
         }
     }
 
     useEffect(() => {
-        setOptionsListData(GFG(dump_list_of_options, currentPage, dataPerPage));
+        getOptions();
+        // setOptionsListData(GFG(dump_list_of_options, currentPage, dataPerPage));
     //eslint-disable-next-line
     }, []);
 
@@ -152,6 +228,20 @@ function Page() {
         }
     //eslint-disable-next-line
     }, [selectedItems, optionsListData]);
+
+    useEffect(()=> {
+
+        let menuHandler = (e:any) => {
+            if(menuRef.current !== null) {
+                if(!menuRef.current.contains(e.target)) {
+                    setIsMenuOpen(false);
+                }
+            }
+        };
+
+        document.addEventListener('mousedown', menuHandler);
+
+    }, []);
 
     return (
         <>
@@ -198,7 +288,7 @@ function Page() {
                                 </div>
                             </label>
                         </div>
-                        <button 
+                        {/* <button 
                             type="button" 
                             title="Delete All" 
                             className="transition-all delay-75 inline-block font-noto_sans font-semibold text-[14px] md:text-[16px] py-[8px] md:py-[10px] px-[10px] md:px-[15px] bg-red-600 text-zinc-100 hover:bg-red-700" 
@@ -208,7 +298,49 @@ function Page() {
                                 <RiDeleteBin6Line size={20} className="w-[18px] h-[18px] md:w-[20px] md:h-[20px]" />
                                 <div className="hidden md:block">Delete All</div>
                             </div>
-                        </button>
+                        </button> */}
+                        <div ref={menuRef} className="relative h-[18px]">
+                            <button 
+                                type="button"
+                                title="Actions"  
+                                className="transition-all delay-75 text-zinc-800 dark:text-zinc-200" 
+                                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                            >
+                                <FaEllipsisVertical size={18} />
+                            </button>
+                            <ul className={`absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-zinc-950 dark:ring-zinc-800 ${isMenuOpen ? 'block' : 'hidden'}`}>
+                                <li className="w-full">
+                                    <button 
+                                        type="button" 
+                                        title="Delete Selected" 
+                                        className="transition-all delay-75 block w-full py-[10px] px-[15px] font-ubuntu text-[16px] text-red-500 hover:bg-zinc-100 dark:text-red-500 dark:hover:bg-zinc-800" 
+                                        onClick={handleDeleteSelectedBulkLogic} 
+                                    >
+                                        <div className="flex gap-x-[5px] items-center">
+                                            <RiDeleteBin6Line size={20} />
+                                            <div>
+                                                Delete Selected
+                                            </div>
+                                        </div>
+                                    </button>
+                                </li>
+                                <li className="w-full">
+                                    <button 
+                                        type="button" 
+                                        title="Delete All" 
+                                        className="transition-all delay-75 block w-full py-[10px] px-[15px] font-ubuntu text-[16px] text-red-500 hover:bg-zinc-100 dark:text-red-500 dark:hover:bg-zinc-800" 
+                                        onClick={handleDeleteAllBulkLogic} 
+                                    >
+                                        <div className="flex gap-x-[5px] items-center">
+                                            <RiDeleteBin6Line size={20} />
+                                            <div>
+                                                Delete All
+                                            </div>
+                                        </div>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
 
@@ -219,15 +351,14 @@ function Page() {
                             <>
                                 {
                                     optionsListData.map((itm: any) => (
-                                        <div key={itm.options_id} className="pb-[20px] last:pb-0">
+                                        <div key={itm.option_id} className="pb-[20px] last:pb-0">
                                             <AdminListQuestionOption 
-                                                options_id={itm.options_id} 
-                                                question_id={itm.question_id} 
-                                                options_data={itm.options_data} 
+                                                option_id={itm.option_id} 
+                                                options={itm.options}
                                                 question_text={itm.question_text} 
                                                 checkboxName={"options_list"} 
-                                                checkboxValue={itm.options_id} 
-                                                checkboxChecked={selectedItems.includes(itm.options_id)} 
+                                                checkboxValue={itm.option_id} 
+                                                checkboxChecked={selectedItems.includes(itm.option_id)} 
                                                 onCheckboxChange={handleCheckboxChange} 
                                             />
                                         </div>
@@ -236,64 +367,22 @@ function Page() {
                             </>
                         ) 
                         : 
-                        ("")
+                        (
+                            <>
+                                {
+                                    isLoading ? 
+                                    (<div className="spinner size-1"></div>) 
+                                    : 
+                                    (
+                                        <h1 className="transition-all delay-75 text-[16px] md:text-[18px] font-semibold text-zinc-800 dark:text-zinc-300">
+                                            No Options Found.
+                                        </h1>
+                                    )
+                                }
+                            </>
+                        )
                     }
-                    {/* <div className="pb-[20px] last:pb-0">
-                        <AdminListQuestionOption 
-                            options_id="123" 
-                            options_data={[
-                                {
-                                    option_id: "1",
-                                    option_text: "Option 1", 
-                                    correct_answer: true
-                                },
-                                {
-                                    option_id: "2",
-                                    option_text: "Option 2", 
-                                    correct_answer: false
-                                },
-                                {
-                                    option_id: "3",
-                                    option_text: "Option 3", 
-                                    correct_answer: false
-                                },
-                                {
-                                    option_id: "4",
-                                    option_text: "Option 4", 
-                                    correct_answer: false
-                                },
-                            ]} 
-                            question_id="52" 
-                        />
-                    </div>
-                    <div className="pb-[20px] last:pb-0">
-                        <AdminListQuestionOption 
-                            options_id="321" 
-                            options_data={[
-                                {
-                                    option_id: "11",
-                                    option_text: "Option 11", 
-                                    correct_answer: false
-                                },
-                                {
-                                    option_id: "12",
-                                    option_text: "Option 12", 
-                                    correct_answer: false
-                                },
-                                {
-                                    option_id: "13",
-                                    option_text: "Option 13", 
-                                    correct_answer: false
-                                },
-                                {
-                                    option_id: "14",
-                                    option_text: "Option 14", 
-                                    correct_answer: true
-                                },
-                            ]} 
-                            question_id="62" 
-                        />
-                    </div> */}
+                    
                 </div>
                 <SitePagination 
                     totalPages={totalPages} 

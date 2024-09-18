@@ -605,200 +605,40 @@ const dump_list_of_questions = [
 
 const dump_list_of_options = [
     {
-        options_id: "hey_123",
-        options_data: [
-            {
-                option_id: "11", 
-                option_text: "Option 11", 
-                correct_answer: false, 
-            },
-            {
-                option_id: "12", 
-                option_text: "Option 12", 
-                correct_answer: true, 
-            },
-            {
-                option_id: "13", 
-                option_text: "Option 13", 
-                correct_answer: false, 
-            },
-            {
-                option_id: "14", 
-                option_text: "Option 14", 
-                correct_answer: false, 
-            },
-        ],
-        question_id: "69",
+        option_id: "hey_123",
+        options: ["Option 11", "Option 12", "Option 13", "Option 14"],
         question_text: "This is main question text - 1 ?",
         search_tems: ["Option 11", "Option 12", "Option 13", "Option 14"],
     },
     {
-        options_id: "hey_224",
-        options_data: [
-            {
-                option_id: "21", 
-                option_text: "Option 21", 
-                correct_answer: true, 
-            },
-            {
-                option_id: "22", 
-                option_text: "Option 22", 
-                correct_answer: false, 
-            },
-            {
-                option_id: "23", 
-                option_text: "Option 23", 
-                correct_answer: false, 
-            },
-            {
-                option_id: "24", 
-                option_text: "Option 24", 
-                correct_answer: false, 
-            },
-        ],
-        question_id: "65",
+        option_id: "hey_124",
+        options: ["Option 21", "Option 22", "Option 23", "Option 24"],
         question_text: "This is main question text - 2 ?",
         search_tems: ["Option 21", "Option 22", "Option 23", "Option 24"],
     },
     {
-        options_id: "hey_258",
-        options_data: [
-            {
-                option_id: "31", 
-                option_text: "Option 31", 
-                correct_answer: false, 
-            },
-            {
-                option_id: "32", 
-                option_text: "Option 32", 
-                correct_answer: false, 
-            },
-            {
-                option_id: "33", 
-                option_text: "Option 33", 
-                correct_answer: true, 
-            },
-            {
-                option_id: "34", 
-                option_text: "Option 34", 
-                correct_answer: false, 
-            },
-        ],
-        question_id: "95",
+        option_id: "hey_125",
+        options: ["Option 31", "Option 32", "Option 33", "Option 34"],
         question_text: "This is main question text - 3 ?",
         search_tems: ["Option 31", "Option 32", "Option 33", "Option 34"],
     },
     {
-        options_id: "hey_117",
-        options_data: [
-            {
-                option_id: "41", 
-                option_text: "Option 41", 
-                correct_answer: false, 
-            },
-            {
-                option_id: "42", 
-                option_text: "Option 42", 
-                correct_answer: false, 
-            },
-            {
-                option_id: "43", 
-                option_text: "Option 43", 
-                correct_answer: false, 
-            },
-            {
-                option_id: "44", 
-                option_text: "Option 44", 
-                correct_answer: true, 
-            },
-        ],
-        question_id: "12",
+        option_id: "hey_126",
+        options: ["Option 41", "Option 42", "Option 43", "Option 44"],
         question_text: "This is main question text - 4 ?",
         search_tems: ["Option 41", "Option 42", "Option 43", "Option 44"],
     },
     {
-        options_id: "hey_745",
-        options_data: [
-            {
-                option_id: "51", 
-                option_text: "Option 51", 
-                correct_answer: true, 
-            },
-            {
-                option_id: "52", 
-                option_text: "Option 52", 
-                correct_answer: false, 
-            },
-            {
-                option_id: "53", 
-                option_text: "Option 53", 
-                correct_answer: false, 
-            },
-            {
-                option_id: "54", 
-                option_text: "Option 54", 
-                correct_answer: false, 
-            },
-        ],
-        question_id: "35",
+        option_id: "hey_127",
+        options: ["Option 51", "Option 52", "Option 53", "Option 54"],
         question_text: "This is main question text - 5 ?",
         search_tems: ["Option 51", "Option 52", "Option 53", "Option 54"],
     },
     {
-        options_id: "hey_558",
-        options_data: [
-            {
-                option_id: "61", 
-                option_text: "Option 61", 
-                correct_answer: false, 
-            },
-            {
-                option_id: "62", 
-                option_text: "Option 62", 
-                correct_answer: true, 
-            },
-            {
-                option_id: "63", 
-                option_text: "Option 63", 
-                correct_answer: false, 
-            },
-            {
-                option_id: "64", 
-                option_text: "Option 64", 
-                correct_answer: false, 
-            },
-        ],
-        question_id: "42", 
+        option_id: "hey_128",
+        options: ["Option 61", "Option 62", "Option 63", "Option 64"],
         question_text: "This is main question text - 6 ?",
         search_tems: ["Option 61", "Option 62", "Option 63", "Option 64"],
-    },
-    {
-        options_id: "hey_469",
-        options_data: [
-            {
-                option_id: "71", 
-                option_text: "Option 71", 
-                correct_answer: false, 
-            },
-            {
-                option_id: "72", 
-                option_text: "Option 72", 
-                correct_answer: false, 
-            },
-            {
-                option_id: "73", 
-                option_text: "Option 73", 
-                correct_answer: true, 
-            },
-            {
-                option_id: "74", 
-                option_text: "Option 74", 
-                correct_answer: false, 
-            },
-        ],
-        question_id: "38", 
-        question_text: "This is main question text - 7 ?",
-        search_tems: ["Option 71", "Option 72", "Option 73", "Option 74"],
     },
 ];
 

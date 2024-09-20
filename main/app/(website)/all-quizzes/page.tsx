@@ -36,10 +36,10 @@ export default function Page() {
     const dataPerPage = 6;
     const [srchInp, setSrchInp] = useState<string>("");
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const [quizData, setQuizData] = useState<QuizCardPropsTypes[]>(dump_quizzes_list);
+    const [quizData, setQuizData] = useState<QuizCardPropsTypes[]>([]);
     const [totalPages, setTotalPages] = useState<number>(Math.ceil(quizData.length / dataPerPage));
-    const [quizList, setQuizList] = useState<QuizCardPropsTypes[]>(dump_quizzes_list);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [quizList, setQuizList] = useState<QuizCardPropsTypes[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     const handleSearchInputChange = (e:any) => {
         setSrchInp(e.target.value);
@@ -115,8 +115,25 @@ export default function Page() {
         setQuizList(GFG(quizData, newPage, dataPerPage));
     };
 
+    const getQuizes = async () => {
+        let baseURI = window.location.origin;
+        let resp = await fetch(`${baseURI}/api/site/get-quizes/bulk-list/only-info`, {
+            method: "GET"
+        });
+        const body = await resp.json();
+        if(body.success) {
+            setIsLoading(false);
+            setQuizList(GFG(body.quizes, currentPage, dataPerPage));
+            setQuizData(body.quizes);
+            setTotalPages(Math.ceil(body.quizes.length / dataPerPage));
+        } else {
+            setIsLoading(false);
+        }
+    }
+
     useEffect(() => {
-        setQuizList(GFG(dump_quizzes_list, currentPage, dataPerPage));
+        // setQuizList(GFG(dump_quizzes_list, currentPage, dataPerPage));
+        getQuizes();
         //eslint-disable-next-line
     }, []);
 

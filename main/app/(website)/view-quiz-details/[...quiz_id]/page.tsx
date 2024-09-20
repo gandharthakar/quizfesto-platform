@@ -27,19 +27,19 @@ export default function Page() {
 
     const params = useParams();
     const qz_id = params.quiz_id[0];
-    const data = dump_quizzes_list.filter((dt) => dt.quiz_id.toString() === qz_id);
+    
     let defaultImage = "https://placehold.co/1000x700/png";
 
     const [win, setWin] = useState<string>('');
-    const [quizCats, setQuizCats] = useState<quizCategoriesType[]>(data[0].quiz_categories);
-    const [quizTitle, setQuizTitle] = useState<string>(data[0].quiz_title);
-    const [quizSummary, setQuizSummary] = useState<string>(data[0].quiz_summary);
-    const [quizCover, setQuizCover] = useState<string>(data[0].quiz_cover_photo);
-    const [quizNOQ, setQuizNOQ] = useState<number>(data[0].quiz_total_question);
-    const [quizTotMks, setQuizTotMks] = useState<number>(data[0].quiz_total_marks);
-    const [quizDuration, setQuizDuration] = useState<string>(data[0].quiz_display_time);
-    const [quizDescription, setQuizDescription] = useState<string>(data[0].quiz_about_text);
-    const [quizTerms, setQuizTerms] = useState<string[]>(data[0].quiz_terms);
+    const [quizCats, setQuizCats] = useState<quizCategoriesType[]>([]);
+    const [quizTitle, setQuizTitle] = useState<string>('');
+    const [quizSummary, setQuizSummary] = useState<string>('');
+    const [quizCover, setQuizCover] = useState<string>('');
+    const [quizNOQ, setQuizNOQ] = useState<number>(0);
+    const [quizTotMks, setQuizTotMks] = useState<number>(0);
+    const [quizDuration, setQuizDuration] = useState<string>('');
+    const [quizDescription, setQuizDescription] = useState<string>('');
+    const [quizTerms, setQuizTerms] = useState<string[]>([]);
     const [alreadyPlayedByUser, setAlreadyPlayedByUser] = useState<boolean>(false);
 
     const AuthUser = useSelector((state: RootState) => state.auth_user_id);
@@ -63,6 +63,39 @@ export default function Page() {
             timer: 4000
         });
     }
+
+    const getQuizes = async () => {
+        let baseURI = window.location.origin;
+        let resp = await fetch(`${baseURI}/api/site/get-quizes/single/only-info`, {
+            method: "POST",
+            body: JSON.stringify({ quiz_id: qz_id })
+        });
+        const body = await resp.json();
+        if(body.success) {
+            setQuizCats(body.quiz.quiz_categories);
+            setQuizTitle(body.quiz.quiz_title);
+            setQuizSummary(body.quiz.quiz_summary);
+            setQuizCover(body.quiz.quiz_cover_photo);
+            setQuizNOQ(body.quiz.quiz_total_question);
+            setQuizTotMks(body.quiz.quiz_total_marks);
+            setQuizDuration(body.quiz.quiz_display_time);
+            setQuizDescription(body.quiz.quiz_about_text);
+            setQuizTerms(body.quiz.quiz_terms);
+        } else {
+            Swal.fire({
+                title: "Error!",
+                text: body.message,
+                icon: "error",
+                timer: 3000
+            });
+        }
+    }
+
+    useEffect(() => {
+        // setQuizList(GFG(dump_quizzes_list, currentPage, dataPerPage));
+        getQuizes();
+        //eslint-disable-next-line
+    }, []);
 
     return (
         <>

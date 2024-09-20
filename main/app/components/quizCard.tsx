@@ -7,23 +7,25 @@ import { MdOutlineAccessTimeFilled } from "react-icons/md";
 import { FaLock } from "react-icons/fa";
 import { RootState } from "@/app/redux-service/store";
 import { useSelector } from "react-redux";
+import { useState } from "react";
+import { PiExamFill } from "react-icons/pi";
 
 type quizCategoriesType = {
-    cat_id: number | string,
+    category_id: string,
     category_title: string,
     category_slug: string,
 }
 
 interface QuizCardPropsTypes {
-    quiz_id: number | string,
+    quiz_id: string,
     quiz_cover_photo?: string,
     quiz_title: string,
     quiz_categories?: quizCategoriesType[],
     quiz_summary: string,
-    quiz_description?: string,
-    number_of_question: number | string,
-    quiz_duration: string,
-    quiz_terms?: string,
+    quiz_total_question: number,
+    quiz_total_marks: number,
+    quiz_display_time: string,
+    quiz_terms?: string[],
     quiz_already_played_by_user?: boolean
 }
 
@@ -35,9 +37,9 @@ export default function QuizCard(props: QuizCardPropsTypes) {
         quiz_title, 
         quiz_categories, 
         quiz_summary, 
-        quiz_description, 
-        number_of_question, 
-        quiz_duration, 
+        quiz_total_question, 
+        quiz_total_marks, 
+        quiz_display_time, 
         quiz_terms, 
         quiz_already_played_by_user=false 
     } = props;
@@ -47,6 +49,8 @@ export default function QuizCard(props: QuizCardPropsTypes) {
     const AuthUser = useSelector((state: RootState) => state.auth_user_id.auth_user_id);
     let userID = AuthUser !== '' ? AuthUser : '1';
     let prtLink = userID !== '1' ? `/play-quiz/${quiz_id}/${userID}` : '/sign-in';
+
+    const [haveTerms, setHaveTerms] = useState<boolean>(quiz_terms && quiz_terms.length ? true : false);
 
     return (
         <>
@@ -65,7 +69,7 @@ export default function QuizCard(props: QuizCardPropsTypes) {
                                     <ul className="flex flex-wrap gap-x-[10px] gap-y-[10px]">
                                         {
                                             quiz_categories.map((cat) => (
-                                                <li key={cat.cat_id}>
+                                                <li key={cat.category_id}>
                                                     <Link 
                                                         href={`/view-category/${cat.category_slug}`} 
                                                         title={cat.category_title}
@@ -107,13 +111,19 @@ export default function QuizCard(props: QuizCardPropsTypes) {
                                 <div className="flex gap-x-[5px] items-center">
                                     <MdOutlineAccessTimeFilled size={20} className="transition-all delay-75 w-[15px] h-[15px] md:w-[20px] md:h-[20px] text-zinc-600 dark:text-zinc-300" />
                                     <h2 className="transition-all delay-75 font-ubuntu text-[12] md:text-[14] text-zinc-600 dark:text-zinc-300">
-                                        {quiz_duration}
+                                        {quiz_display_time}
                                     </h2>
                                 </div>
                                 <div className="flex gap-x-[5px] items-center">
                                     <RiQuestionFill size={20} className="transition-all delay-75 w-[15px] h-[15px] md:w-[20px] md:h-[20px] text-zinc-600 dark:text-zinc-300" />
                                     <h2 className="transition-all delay-75 font-ubuntu text-[12] md:text-[14] text-zinc-600 dark:text-zinc-300">
-                                        {number_of_question} {Number(number_of_question) > 1 || !["1", "0"].includes(number_of_question.toString()) ? ('Questions') : ("question")}
+                                        {quiz_total_question} {Number(quiz_total_question) > 1 || !["1", "0"].includes(quiz_total_question.toString()) ? ('Questions') : ("question")}
+                                    </h2>
+                                </div>
+                                <div className="flex gap-x-[5px] items-center">
+                                    <PiExamFill size={20} className="transition-all delay-75 w-[15px] h-[15px] md:w-[20px] md:h-[20px] text-zinc-600 dark:text-zinc-300" />
+                                    <h2 className="transition-all delay-75 font-ubuntu text-[12] md:text-[14] text-zinc-600 dark:text-zinc-300">
+                                        {quiz_total_marks} Total Marks
                                     </h2>
                                 </div>
                             </div>
@@ -121,9 +131,16 @@ export default function QuizCard(props: QuizCardPropsTypes) {
                     </div>
                     <div className="mt-auto w-full">
                         <div className="flex gap-x-[15px] justify-between items-center">
-                            <div className="transition-all delay-75 font-noto_sans text-[12px] md:text-[12px] text-zinc-400">
-                                T & C Applied.
-                            </div>
+                            {
+                                haveTerms ? 
+                                (
+                                    <div className="transition-all delay-75 font-noto_sans text-[12px] md:text-[12px] text-zinc-400">
+                                        T & C Applied.
+                                    </div>
+                                ) 
+                                : 
+                                (<div></div>)
+                            }
                             <div>
                                 {
                                     quiz_already_played_by_user ? 

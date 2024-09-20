@@ -187,86 +187,208 @@ const dump_faqs_content = [
 
 const dump_quizzes_list = [
     {
-        quiz_id: 1,
+        quiz_id: "quiz_1",
         quiz_title: "Quiz on International Day of Persons with Disabilities",
         quiz_cover_photo: "https://placehold.co/1000x700/png",
         quiz_summary: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis aliquam minima dolore. Ex recusandae enim labore quidem voluptatibus? Quae, a.",
-        quiz_description: "<p>Every year on December 3, the world commemorates the International Day of Persons with Disabilities (IDPD) to spread awareness and mobilise support for the rights and well-being of people with disabilities everywhere. Additionally, it aims to promote the inclusion of disabled individuals in all facets of society and increase awareness of the challenges faced by them. The day is observed annually with an array of events such as discussions, and initiatives aimed at raising awareness of the rights and dignity of people with disabilities.</p>",
+        quiz_about_text: "Every year on December 3, the world commemorates the International Day of Persons with Disabilities (IDPD) to spread awareness and mobilise support for the rights and well-being of people with disabilities everywhere. Additionally, it aims to promote the inclusion of disabled individuals in all facets of society and increase awareness of the challenges faced by them. The day is observed annually with an array of events such as discussions, and initiatives aimed at raising awareness of the rights and dignity of people with disabilities.",
         quiz_categories: [
             {
-                cat_id: 1,
+                category_id: "cat_1",
                 category_title: "Disabilities",
                 category_slug: "disabilities"
             },
             {
-                cat_id: 2,
+                category_id: "cat_2",
                 category_title: "Hospitality",
                 category_slug: "hospitality"
             },
             {
-                cat_id: 3,
-                category_title: "Mediacal",
+                category_id: "cat_3",
+                category_title: "Medical",
                 category_slug: "medical"
             },
         ],
-        number_of_question: "20",
-        quiz_duration: "7 Mins",
-        quiz_terms: "<p>The Quiz questions are designed carefully to foster an inclusive and accessible society where everyone can participate fully in all aspects of life.</p>,<p>Each question in the Quiz is in the Multiple-Choice Format and has only one correct answer.</p>,<p>The quiz will have a bilingual format and will be available in English and Hindi.</p>,<p>Each Question carries 1 mark. Participants are required to attempt all questions in total.</p>,<p>Participants will be required to answer 10 questions within 300 seconds.</p>",
+        quiz_total_question: 20,
+        quiz_total_marks: 200,
+        quiz_display_time: "5 Mins",
+        quiz_terms: ["Term 1", "Term 2", "Term 3", "Term 4"]
     },
     {
-        quiz_id: 2,
-        quiz_title: "Income Tax Quiz",
+        quiz_id: "quiz_2",
+        quiz_title: "Quiz on International Yoga Day",
         quiz_cover_photo: "https://placehold.co/1000x700/png",
         quiz_summary: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis aliquam minima dolore. Ex recusandae enim labore quidem voluptatibus? Quae, a.",
-        quiz_description: "<p>Income tax plays a crucial role in fueling the growth of India by providing the Government with essential revenue for infrastructure development, social welfare programs and public services. This Income Tax quiz is a medium through which we can encourage a basic understanding of taxation amidst a larger populace and engage with a wider audience.</p><p>The Income Tax Department, in collaboration with MyGov, intends to run this quiz in order to reach a wider section of citizens, especially the youth of the nation and educate them about basics of direct taxation.</p>",
+        quiz_about_text: "Every year on December 3, the world commemorates the International Day of Persons with Disabilities (IDPD) to spread awareness and mobilise support for the rights and well-being of people with disabilities everywhere. Additionally, it aims to promote the inclusion of disabled individuals in all facets of society and increase awareness of the challenges faced by them. The day is observed annually with an array of events such as discussions, and initiatives aimed at raising awareness of the rights and dignity of people with disabilities.",
         quiz_categories: [
             {
-                cat_id: 1,
+                category_id: "cat_4",
+                category_title: "Yoga",
+                category_slug: "yoga"
+            },
+            {
+                category_id: "cat_5",
+                category_title: "Fitness",
+                category_slug: "fitness"
+            },
+        ],
+        quiz_total_question: 5,
+        quiz_total_marks: 10,
+        quiz_display_time: "2 Mins",
+        quiz_terms: []
+    },
+    {
+        quiz_id: "quiz_3",
+        quiz_title: "Quiz on Gandhi Jayanti",
+        quiz_cover_photo: "https://placehold.co/1000x700/png",
+        quiz_summary: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis aliquam minima dolore. Ex recusandae enim labore quidem voluptatibus? Quae, a.",
+        quiz_about_text: "Every year on December 3, the world commemorates the International Day of Persons with Disabilities (IDPD) to spread awareness and mobilise support for the rights and well-being of people with disabilities everywhere. Additionally, it aims to promote the inclusion of disabled individuals in all facets of society and increase awareness of the challenges faced by them. The day is observed annually with an array of events such as discussions, and initiatives aimed at raising awareness of the rights and dignity of people with disabilities.",
+        quiz_categories: [
+            {
+                category_id: "cat_6",
+                category_title: "Gandhi",
+                category_slug: "gandhi"
+            },
+        ],
+        quiz_total_question: 5,
+        quiz_total_marks: 10,
+        quiz_display_time: "1 Mins",
+        quiz_terms: ["Term 1", "Term 2", "Term 3"]
+    },
+    {
+        quiz_id: "quiz_4",
+        quiz_title: "Quiz on Swami Veveka Nand",
+        quiz_cover_photo: "https://placehold.co/1000x700/png",
+        quiz_summary: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis aliquam minima dolore. Ex recusandae enim labore quidem voluptatibus? Quae, a.",
+        quiz_about_text: "Every year on December 3, the world commemorates the International Day of Persons with Disabilities (IDPD) to spread awareness and mobilise support for the rights and well-being of people with disabilities everywhere. Additionally, it aims to promote the inclusion of disabled individuals in all facets of society and increase awareness of the challenges faced by them. The day is observed annually with an array of events such as discussions, and initiatives aimed at raising awareness of the rights and dignity of people with disabilities.",
+        quiz_categories: [
+            {
+                category_id: "cat_7",
+                category_title: "Revolution",
+                category_slug: "revolution"
+            },
+            {
+                category_id: "cat_8",
+                category_title: "Revolt",
+                category_slug: "revolt"
+            },
+        ],
+        quiz_total_question: 10,
+        quiz_total_marks: 100,
+        quiz_display_time: "3 Mins",
+        quiz_terms: ["Term 1", "Term 2", "Term 3", "Term 4", "Term 5"]
+    },
+    {
+        quiz_id: "quiz_5",
+        quiz_title: "Quiz on Indian Economy",
+        quiz_cover_photo: "https://placehold.co/1000x700/png",
+        quiz_summary: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis aliquam minima dolore. Ex recusandae enim labore quidem voluptatibus? Quae, a.",
+        quiz_about_text: "Every year on December 3, the world commemorates the International Day of Persons with Disabilities (IDPD) to spread awareness and mobilise support for the rights and well-being of people with disabilities everywhere. Additionally, it aims to promote the inclusion of disabled individuals in all facets of society and increase awareness of the challenges faced by them. The day is observed annually with an array of events such as discussions, and initiatives aimed at raising awareness of the rights and dignity of people with disabilities.",
+        quiz_categories: [
+            {
+                category_id: "cat_9",
+                category_title: "Economics",
+                category_slug: "economics"
+            },
+            {
+                category_id: "cat_10",
+                category_title: "GDP",
+                category_slug: "gdp"
+            },
+            {
+                category_id: "cat_11",
+                category_title: "Finance",
+                category_slug: "Finance"
+            },
+        ],
+        quiz_total_question: 20,
+        quiz_total_marks: 200,
+        quiz_display_time: "6 Mins",
+        quiz_terms: ["Term 1", "Term 2"]
+    },
+    {
+        quiz_id: "quiz_6",
+        quiz_title: "Quiz on Income Tax Department Of India.",
+        quiz_cover_photo: "https://placehold.co/1000x700/png",
+        quiz_summary: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis aliquam minima dolore. Ex recusandae enim labore quidem voluptatibus? Quae, a.",
+        quiz_about_text: "Every year on December 3, the world commemorates the International Day of Persons with Disabilities (IDPD) to spread awareness and mobilise support for the rights and well-being of people with disabilities everywhere. Additionally, it aims to promote the inclusion of disabled individuals in all facets of society and increase awareness of the challenges faced by them. The day is observed annually with an array of events such as discussions, and initiatives aimed at raising awareness of the rights and dignity of people with disabilities.",
+        quiz_categories: [
+            {
+                category_id: "cat_12",
+                category_title: "GST",
+                category_slug: "gst"
+            },
+            {
+                category_id: "cat_13",
+                category_title: "Income Tax",
+                category_slug: "income-tax"
+            },
+            {
+                category_id: "cat_14",
                 category_title: "Tax",
                 category_slug: "tax"
             },
             {
-                cat_id: 2,
-                category_title: "Economy",
-                category_slug: "economy"
+                category_id: "cat_15",
+                category_title: "ITR",
+                category_slug: "itr"
             },
         ],
-        number_of_question: "20",
-        quiz_duration: "5 Mins",
-        quiz_terms: "<p>The Quiz will be open on the MyGov portal for 3 months starting 1st May, 2024 till 31st July, 2024.</p>,<p>Entry to the Quiz is open to all Indian citizens.</p>,<p>The Quiz is available both in English and Hindi language. A participant may choose either of the languages.</p>,<p>All participants of this Quiz will receive a participation certificate.</p>,<p>The Quiz will have 10 (ten) multiple choice questions, each carrying one mark. A participant will get 5 (five) minutes to complete the Quiz. There will be no negative marking.</p>",
+        quiz_total_question: 5,
+        quiz_total_marks: 100,
+        quiz_display_time: "2 Mins",
+        quiz_terms: []
     },
     {
-        quiz_id: 3,
-        quiz_title: "Nasha Mukt Bharat Abhiyaan Quiz 2.0",
+        quiz_id: "quiz_7",
+        quiz_title: "Quiz on PMGN Yojna",
         quiz_cover_photo: "https://placehold.co/1000x700/png",
         quiz_summary: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis aliquam minima dolore. Ex recusandae enim labore quidem voluptatibus? Quae, a.",
-        quiz_description: "<p>Nasha Mukt Bharat Abhiyaan (NMBA) was launched on 15th August 2020 by the Ministry of Social Justice & Empowerment in the 272 most vulnerable districts to substance use in the country. Through NMBA, the Ministry of Social Justice & Empowerment intends to create awareness on a mass level on substance use through the participation of its major stakeholders like youth, adolescents, women, educational institutions and the community at large.</p><p>Since its launch, lively discussions have started taking place on substance use in public spheres like educational institutions, community areas and virtual spaces like social media which have prompted those who need help to seek counselling, treatment & rehabilitation services. This has helped people become more aware of substance use and the shedding of stigma related to drug abuse. On August 15, 2023, the Nasha Mukt Bharat Abhiyaan was expanded in all the districts of the country.</p><p>MoSJE and MyGov invite citizens to participate in the quiz competition on the Nasha Mukt Bharat Abhiyaan 2.0 (NMBA). Each participant of the quiz shall be rewarded with an e-certificate.</p>",
+        quiz_about_text: "Every year on December 3, the world commemorates the International Day of Persons with Disabilities (IDPD) to spread awareness and mobilise support for the rights and well-being of people with disabilities everywhere. Additionally, it aims to promote the inclusion of disabled individuals in all facets of society and increase awareness of the challenges faced by them. The day is observed annually with an array of events such as discussions, and initiatives aimed at raising awareness of the rights and dignity of people with disabilities.",
         quiz_categories: [
             {
-                cat_id: 1,
-                category_title: "Cancer",
-                category_slug: "cancer"
+                category_id: "cat_16",
+                category_title: "Population",
+                category_slug: "population"
             },
             {
-                cat_id: 2,
-                category_title: "Tobaco",
-                category_slug: "tobaco"
+                category_id: "cat_17",
+                category_title: "Peoples",
+                category_slug: "peoples"
             },
         ],
-        number_of_question: "10",
-        quiz_duration: "8 Mins",
-        quiz_terms: "<p>The Quiz is being organised by the Ministry of Social Justice & Empowerment, Government of India</p>,<p>Entry to the Quiz is open to all Indian citizens</p>,<p>This is a timed quiz with 20 questions to be answered in 10 minutes (600 seconds)</p>,<p>These questions will be based on Substance Use and Nasha Mukt Bharat Abhiyaan of the Ministry of Social Justice &Empowerment</p>,<p>The quiz will start when the participant clicks the “Start Quiz” button.</p>",
+        quiz_total_question: 10,
+        quiz_total_marks: 200,
+        quiz_display_time: "5 Mins",
+        quiz_terms: ["Term 1", "Term 2", "Term 3"]
     },
     {
-        quiz_id: 4,
-        quiz_title: "Test Quiz 2",
+        quiz_id: "quiz_8",
+        quiz_title: "Quiz on National Heritage Sites",
         quiz_cover_photo: "https://placehold.co/1000x700/png",
         quiz_summary: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis aliquam minima dolore. Ex recusandae enim labore quidem voluptatibus? Quae, a.",
-        quiz_description: "<p>Nasha Mukt Bharat Abhiyaan (NMBA) was launched on 15th August 2020 by the Ministry of Social Justice & Empowerment in the 272 most vulnerable districts to substance use in the country. Through NMBA, the Ministry of Social Justice & Empowerment intends to create awareness on a mass level on substance use through the participation of its major stakeholders like youth, adolescents, women, educational institutions and the community at large.</p><p>Since its launch, lively discussions have started taking place on substance use in public spheres like educational institutions, community areas and virtual spaces like social media which have prompted those who need help to seek counselling, treatment & rehabilitation services. This has helped people become more aware of substance use and the shedding of stigma related to drug abuse. On August 15, 2023, the Nasha Mukt Bharat Abhiyaan was expanded in all the districts of the country.</p><p>MoSJE and MyGov invite citizens to participate in the quiz competition on the Nasha Mukt Bharat Abhiyaan 2.0 (NMBA). Each participant of the quiz shall be rewarded with an e-certificate.</p>",
-        quiz_categories: [],
-        number_of_question: "15",
-        quiz_duration: "4 Mins",
-        quiz_terms: "<p>The Quiz is being organised by the Ministry of Social Justice & Empowerment, Government of India</p>,<p>Entry to the Quiz is open to all Indian citizens</p>,<p>This is a timed quiz with 20 questions to be answered in 10 minutes (600 seconds)</p>,<p>These questions will be based on Substance Use and Nasha Mukt Bharat Abhiyaan of the Ministry of Social Justice &Empowerment</p>,<p>The quiz will start when the participant clicks the “Start Quiz” button.</p>",
+        quiz_about_text: "Every year on December 3, the world commemorates the International Day of Persons with Disabilities (IDPD) to spread awareness and mobilise support for the rights and well-being of people with disabilities everywhere. Additionally, it aims to promote the inclusion of disabled individuals in all facets of society and increase awareness of the challenges faced by them. The day is observed annually with an array of events such as discussions, and initiatives aimed at raising awareness of the rights and dignity of people with disabilities.",
+        quiz_categories: [
+            {
+                category_id: "cat_18",
+                category_title: "National",
+                category_slug: "national"
+            },
+            {
+                category_id: "cat_19",
+                category_title: "International",
+                category_slug: "international"
+            },
+            {
+                category_id: "cat_20",
+                category_title: "Forest",
+                category_slug: "forest"
+            },
+        ],
+        quiz_total_question: 25,
+        quiz_total_marks: 250,
+        quiz_display_time: "6 Mins",
+        quiz_terms: ["Term 1", "Term 2"]
     },
 ];
 

@@ -69,41 +69,42 @@ function Page() {
                 icon: "error",
                 timer: 4000
             });
-        }
+        } else {
 
-        if(quizListData.length > 0) {
+            if(quizListData.length > 0) {
 
-            const res = quizData.filter((item) => {
-                const srch_res = item.quiz_title.toLowerCase().includes(srchInp.toLowerCase()) || item.quiz_status.toLowerCase().includes(srchInp.toLowerCase());
-                return srch_res;
-            });
+                const res = quizData.filter((item) => {
+                    const srch_res = item.quiz_title.toLowerCase().includes(srchInp.toLowerCase()) || item.quiz_status.toLowerCase().includes(srchInp.toLowerCase());
+                    return srch_res;
+                });
 
-            if(res.length > 0) {
-                setCurrentPage(1);
-                setTotalPages(Math.ceil(res.length / dataPerPage));
-                setQuizListData(GFG(res, currentPage, dataPerPage));
-                if(srchInp == "") {
+                if(res.length > 0) {
                     setCurrentPage(1);
-                    setTotalPages(Math.ceil(quizData.length / dataPerPage));
-                    setQuizListData([]);
+                    setTotalPages(Math.ceil(res.length / dataPerPage));
+                    setQuizListData(GFG(res, currentPage, dataPerPage));
+                    if(srchInp == "") {
+                        setCurrentPage(1);
+                        setTotalPages(Math.ceil(quizData.length / dataPerPage));
+                        setQuizListData([]);
+                    }
+                } else {
+                    if(srchInp == "") {
+                        setCurrentPage(1);
+                        setTotalPages(Math.ceil(quizData.length / dataPerPage));
+                        setQuizListData([]);
+                    }
+                    setCurrentPage(1);
+                    setQuizListData(GFG(res, currentPage, dataPerPage));
+                    setTotalPages(Math.ceil(res.length / dataPerPage));
                 }
             } else {
-                if(srchInp == "") {
-                    setCurrentPage(1);
-                    setTotalPages(Math.ceil(quizData.length / dataPerPage));
-                    setQuizListData([]);
-                }
-                setCurrentPage(1);
-                setQuizListData(GFG(res, currentPage, dataPerPage));
-                setTotalPages(Math.ceil(res.length / dataPerPage));
+                Swal.fire({
+                    title: "Error!",
+                    text: "No Quizes Found.",
+                    icon: "error",
+                    timer: 4000
+                });
             }
-        } else {
-            Swal.fire({
-                title: "Error!",
-                text: "No Quizes Found.",
-                icon: "error",
-                timer: 4000
-            });
         }
     }
 

@@ -18,7 +18,7 @@ import { RootState } from "@/app/redux-service/store";
 import { useSelector } from "react-redux";
 
 type quizCategoriesType = {
-    cat_id: number | string,
+    category_id: string,
     category_title: string,
     category_slug: string,
 }
@@ -30,20 +30,16 @@ export default function Page() {
     const data = dump_quizzes_list.filter((dt) => dt.quiz_id.toString() === qz_id);
     let defaultImage = "https://placehold.co/1000x700/png";
 
-    const prepTermsArr = (data:string) => {
-        let strArr:string[] = data.split("</p>,").map((itm) => itm.replace(/(<p[^>]+?>|<p>|<\/p>)/img, ""));
-        return strArr;
-    }
-
     const [win, setWin] = useState<string>('');
     const [quizCats, setQuizCats] = useState<quizCategoriesType[]>(data[0].quiz_categories);
     const [quizTitle, setQuizTitle] = useState<string>(data[0].quiz_title);
     const [quizSummary, setQuizSummary] = useState<string>(data[0].quiz_summary);
     const [quizCover, setQuizCover] = useState<string>(data[0].quiz_cover_photo);
-    const [quizNOQ, setQuizNOQ] = useState<string>(data[0].number_of_question);
-    const [quizDuration, setQuizDuration] = useState<string>(data[0].quiz_duration);
-    const [quizDescription, setQuizDescription] = useState<string>(data[0].quiz_description);
-    const [quizTerms, setQuizTerms] = useState<string[]>(prepTermsArr(data[0].quiz_terms));
+    const [quizNOQ, setQuizNOQ] = useState<number>(data[0].quiz_total_question);
+    const [quizTotMks, setQuizTotMks] = useState<number>(data[0].quiz_total_marks);
+    const [quizDuration, setQuizDuration] = useState<string>(data[0].quiz_display_time);
+    const [quizDescription, setQuizDescription] = useState<string>(data[0].quiz_about_text);
+    const [quizTerms, setQuizTerms] = useState<string[]>(data[0].quiz_terms);
     const [alreadyPlayedByUser, setAlreadyPlayedByUser] = useState<boolean>(false);
 
     const AuthUser = useSelector((state: RootState) => state.auth_user_id);
@@ -82,7 +78,7 @@ export default function Page() {
                                             <ul className="flex flex-wrap gap-x-[10px] gap-y-[10px]">
                                                 {
                                                     quizCats.map((cat) => (
-                                                        <li key={cat.cat_id}>
+                                                        <li key={cat.category_id}>
                                                             <Link 
                                                                 href={`/view-category/${cat.category_slug}`} 
                                                                 title={cat.category_title}
@@ -129,7 +125,7 @@ export default function Page() {
                                     <div className="flex gap-x-[5px] md:gap-x-[10px] items-center">
                                         <RiQuestionFill size={30} className="transition-all delay-75 w-[20px] h-[20px] md:w-[30px] md:h-[30px] text-zinc-600 dark:text-zinc-300" />
                                         <h2 className="transition-all delay-75 font-ubuntu text-[16px] md:text-[25px] text-zinc-600 dark:text-zinc-300">
-                                            {quizNOQ} {Number(quizNOQ) > 1 || !["1", "0"].includes(quizNOQ) ? ('Questions') : ("question")}
+                                            {quizNOQ} {Number(quizNOQ) > 1 || ![1, 0].includes(quizNOQ) ? ('Questions') : ("question")}
                                         </h2>
                                     </div>
                                     <div className="flex gap-x-[5px] md:gap-x-[10px] items-center">
@@ -349,7 +345,7 @@ export default function Page() {
                                         <div className="flex gap-x-[5px] md:gap-x-[10px] items-center">
                                             <RiQuestionFill size={30} className="transition-all delay-75 w-[20px] h-[20px] md:w-[30px] md:h-[30px] text-zinc-600 dark:text-zinc-300" />
                                             <h2 className="transition-all delay-75 font-ubuntu text-[16px] md:text-[25px] text-zinc-600 dark:text-zinc-300">
-                                                {quizNOQ} {Number(quizNOQ) > 1 || !["1", "0"].includes(quizNOQ) ? ('Questions') : ("question")}
+                                                {quizNOQ} {quizNOQ > 1 || ![1, 0].includes(quizNOQ) ? ('Questions') : ("question")}
                                             </h2>
                                         </div>
                                     </div>
@@ -357,7 +353,7 @@ export default function Page() {
                                         <div className="flex gap-x-[5px] md:gap-x-[10px] items-center">
                                             <PiExamFill size={30} className="transition-all delay-75 w-[20px] h-[20px] md:w-[30px] md:h-[30px] text-zinc-600 dark:text-zinc-300" />
                                             <h2 className="transition-all delay-75 font-ubuntu text-[16px] md:text-[25px] text-zinc-600 dark:text-zinc-300">
-                                                Total Marks Is 50
+                                                {quizTotMks} Total Marks
                                             </h2>
                                         </div>
                                     </div>
@@ -407,8 +403,10 @@ export default function Page() {
                                     quiz_cover_photo={item.quiz_cover_photo} 
                                     quiz_categories={item.quiz_categories} 
                                     quiz_summary={item.quiz_summary} 
-                                    number_of_question={item.number_of_question} 
-                                    quiz_duration={item.quiz_duration}
+                                    quiz_total_question={item.quiz_total_question} 
+                                    quiz_total_marks={item.quiz_total_marks} 
+                                    quiz_display_time={item.quiz_display_time} 
+                                    quiz_terms = {item.quiz_terms}
                                 />
                             ))
                         }

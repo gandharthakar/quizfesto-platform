@@ -69,41 +69,42 @@ function Page() {
                 icon: "error",
                 timer: 4000
             });
-        }
+        } else {
 
-        if(optionsListData.length > 0) {
+            if(optionsListData.length > 0) {
 
-            const res = optionData.filter((item) => {
-                const srch_res = item.question_text.toLowerCase().includes(srchInp.toLowerCase()) || item.search_tems.toString().toLowerCase().includes(srchInp.toLowerCase());
-                return srch_res;
-            });
+                const res = optionData.filter((item) => {
+                    const srch_res = item.question_text.toLowerCase().includes(srchInp.toLowerCase()) || item.search_tems.toString().toLowerCase().includes(srchInp.toLowerCase());
+                    return srch_res;
+                });
 
-            if(res.length > 0) {
-                setCurrentPage(1);
-                setTotalPages(Math.ceil(res.length / dataPerPage));
-                setOptionsListData(GFG(res, currentPage, dataPerPage));
-                if(srchInp == "") {
+                if(res.length > 0) {
                     setCurrentPage(1);
-                    setTotalPages(Math.ceil(optionData.length / dataPerPage));
-                    setOptionsListData([]);
+                    setTotalPages(Math.ceil(res.length / dataPerPage));
+                    setOptionsListData(GFG(res, currentPage, dataPerPage));
+                    if(srchInp == "") {
+                        setCurrentPage(1);
+                        setTotalPages(Math.ceil(optionData.length / dataPerPage));
+                        setOptionsListData([]);
+                    }
+                } else {
+                    if(srchInp == "") {
+                        setCurrentPage(1);
+                        setTotalPages(Math.ceil(optionData.length / dataPerPage));
+                        setOptionsListData([]);
+                    }
+                    setCurrentPage(1);
+                    setOptionsListData(GFG(res, currentPage, dataPerPage));
+                    setTotalPages(Math.ceil(res.length / dataPerPage));
                 }
             } else {
-                if(srchInp == "") {
-                    setCurrentPage(1);
-                    setTotalPages(Math.ceil(optionData.length / dataPerPage));
-                    setOptionsListData([]);
-                }
-                setCurrentPage(1);
-                setOptionsListData(GFG(res, currentPage, dataPerPage));
-                setTotalPages(Math.ceil(res.length / dataPerPage));
+                Swal.fire({
+                    title: "Error!",
+                    text: "No Options Found.",
+                    icon: "error",
+                    timer: 4000
+                });
             }
-        } else {
-            Swal.fire({
-                title: "Error!",
-                text: "No Options Found.",
-                icon: "error",
-                timer: 4000
-            });
         }
     }
 

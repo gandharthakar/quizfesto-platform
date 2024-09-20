@@ -163,7 +163,7 @@ function Page() {
 
     type validationSchema = z.infer<typeof validationSchema>;
 
-    const { register, handleSubmit, reset, setValue, formState: { errors }} = useForm<validationSchema>({
+    const { register, handleSubmit, setValue, formState: { errors }} = useForm<validationSchema>({
 		resolver: zodResolver(validationSchema),
 	});
 
@@ -269,6 +269,33 @@ function Page() {
                 timer: 3000
             });
             setIsLoading(false);
+        }
+    }
+
+    const resetData = async () => {
+        let conf = confirm("Are you sure want reset participation data ?");
+        if(conf) {
+            let baseURI = window.location.origin;
+            let resp = await fetch(`${baseURI}/api/admin/users/participation-data/delete`, {
+                method: "DELETE",
+                body: JSON.stringify({ user_id }),
+            });
+            const body = await resp.json();
+            if(body.success) {
+                Swal.fire({
+                    title: "Success!",
+                    text: body.message,
+                    icon: "success",
+                    timer: 3000
+                });
+            } else {
+                Swal.fire({
+                    title: "Error!",
+                    text: body.message,
+                    icon: "error",
+                    timer: 3000
+                });
+            }
         }
     }
 
@@ -441,7 +468,8 @@ function Page() {
                                             <button 
                                                 type="button" 
                                                 title="Reset Data" 
-                                                className="transition-all delay-75 inline-block py-[8px] md:py-[10px] px-[15px] md:px-[20px] font-noto_sans text-[14px] md:text-[16px] bg-red-600 hover:bg-red-700 text-zinc-100"
+                                                className="transition-all delay-75 inline-block py-[8px] md:py-[10px] px-[15px] md:px-[20px] font-noto_sans text-[14px] md:text-[16px] bg-red-600 hover:bg-red-700 text-zinc-100" 
+                                                onClick={resetData}
                                             >
                                                 <div className="flex gap-x-[5px] items-center">
                                                     <FaRegTrashCan size={18} />

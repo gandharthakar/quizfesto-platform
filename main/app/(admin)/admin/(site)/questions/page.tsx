@@ -68,41 +68,42 @@ function Page() {
                 icon: "error",
                 timer: 4000
             });
-        }
+        } else {
 
-        if(qestionListData.length > 0) {
+            if(qestionListData.length > 0) {
 
-            const res = dump_list_of_questions.filter((item) => {
-                const srch_res = item.question_title.toLowerCase().includes(srchInp.toLowerCase());
-                return srch_res;
-            });
+                const res = dump_list_of_questions.filter((item) => {
+                    const srch_res = item.question_title.toLowerCase().includes(srchInp.toLowerCase());
+                    return srch_res;
+                });
 
-            if(res.length > 0) {
-                setCurrentPage(1);
-                setTotalPages(Math.ceil(res.length / dataPerPage));
-                setQestionListData(GFG(res, currentPage, dataPerPage));
-                if(srchInp == "") {
+                if(res.length > 0) {
                     setCurrentPage(1);
-                    setTotalPages(Math.ceil(dump_list_of_questions.length / dataPerPage));
-                    setQestionListData([]);
+                    setTotalPages(Math.ceil(res.length / dataPerPage));
+                    setQestionListData(GFG(res, currentPage, dataPerPage));
+                    if(srchInp == "") {
+                        setCurrentPage(1);
+                        setTotalPages(Math.ceil(dump_list_of_questions.length / dataPerPage));
+                        setQestionListData([]);
+                    }
+                } else {
+                    if(srchInp == "") {
+                        setCurrentPage(1);
+                        setTotalPages(Math.ceil(dump_list_of_questions.length / dataPerPage));
+                        setQestionListData([]);
+                    }
+                    setCurrentPage(1);
+                    setQestionListData(GFG(res, currentPage, dataPerPage));
+                    setTotalPages(Math.ceil(res.length / dataPerPage));
                 }
             } else {
-                if(srchInp == "") {
-                    setCurrentPage(1);
-                    setTotalPages(Math.ceil(dump_list_of_questions.length / dataPerPage));
-                    setQestionListData([]);
-                }
-                setCurrentPage(1);
-                setQestionListData(GFG(res, currentPage, dataPerPage));
-                setTotalPages(Math.ceil(res.length / dataPerPage));
+                Swal.fire({
+                    title: "Error!",
+                    text: "No Questions Found.",
+                    icon: "error",
+                    timer: 4000
+                });
             }
-        } else {
-            Swal.fire({
-                title: "Error!",
-                text: "No Questions Found.",
-                icon: "error",
-                timer: 4000
-            });
         }
     }
 

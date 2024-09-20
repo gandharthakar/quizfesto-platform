@@ -1,10 +1,124 @@
+'use client';
+
 import QuizCard from "@/app/components/quizCard";
-import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
+import { dump_quizzes_list } from "@/app/constant/datafaker"
 import { RiSearch2Line } from "react-icons/ri";
+import { useEffect, useState } from "react";
+import Swal from "sweetalert2";
+import SitePagination from "@/app/components/sitePagination";
+
+type quizCategoriesType = {
+    category_id: string,
+    category_title: string,
+    category_slug: string,
+}
+
+interface QuizCardPropsTypes {
+    quiz_id: string,
+    quiz_cover_photo?: string,
+    quiz_title: string,
+    quiz_categories?: quizCategoriesType[],
+    quiz_summary: string,
+    quiz_total_question: number,
+    quiz_total_marks: number,
+    quiz_display_time: string,
+    quiz_terms?: string[],
+}
+
+function GFG(array: any, currPage: number, pageSize: number) {
+    const startIndex = (currPage - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    return array.slice(startIndex, endIndex);
+}
 
 function Page() {
 
-    const defaultImage = "https://placehold.co/1000x700/png";
+    const dataPerPage = 6;
+    const [srchInp, setSrchInp] = useState<string>("");
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [quizData, setQuizData] = useState<QuizCardPropsTypes[]>(dump_quizzes_list);
+    const [totalPages, setTotalPages] = useState<number>(Math.ceil(quizData.length / dataPerPage));
+    const [quizList, setQuizList] = useState<QuizCardPropsTypes[]>(dump_quizzes_list);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+
+    const handleSearchInputChange = (e:any) => {
+        setSrchInp(e.target.value);
+        if(srchInp.length === 1) {
+            setCurrentPage(1);
+            setQuizList(GFG(quizData, currentPage, dataPerPage));
+            setTotalPages(Math.ceil(quizData.length / dataPerPage));
+        }
+    }
+
+    const handleSearchInputKeyDown = (e:any) => {
+        setSrchInp(e.target.value);
+        if(e.key === "Backspace") {
+            setCurrentPage(1);
+            setQuizList(GFG(quizData, currentPage, dataPerPage));
+            setTotalPages(Math.ceil(quizData.length / dataPerPage));
+        }
+    }
+
+    const handleSearchLogic = (e: any) => {
+        e.preventDefault();
+        if(srchInp == '') {
+            Swal.fire({
+                title: "Error!",
+                text: "Please enter search term first.",
+                icon: "error",
+                timer: 4000
+            });
+        } else {
+
+            if(quizList.length > 0) {
+
+                const res = quizData.filter((item) => {
+                    const srch_res = 
+                        item.quiz_title.toLowerCase().includes(srchInp.toLowerCase()) || 
+                        item.quiz_summary.toLowerCase().includes(srchInp.toLowerCase()) || 
+                        item.quiz_categories?.some(item => item.category_slug.includes(srchInp.toLowerCase()))
+                    return srch_res;
+                });
+
+                if(res.length > 0) {
+                    setCurrentPage(1);
+                    setTotalPages(Math.ceil(res.length / dataPerPage));
+                    setQuizList(GFG(res, currentPage, dataPerPage));
+                    if(srchInp == "") {
+                        setCurrentPage(1);
+                        setTotalPages(Math.ceil(quizData.length / dataPerPage));
+                        setQuizList([]);
+                    }
+                } else {
+                    if(srchInp == "") {
+                        setCurrentPage(1);
+                        setTotalPages(Math.ceil(quizData.length / dataPerPage));
+                        setQuizList([]);
+                    }
+                    setCurrentPage(1);
+                    setQuizList(GFG(res, currentPage, dataPerPage));
+                    setTotalPages(Math.ceil(res.length / dataPerPage));
+                }
+            } else {
+                Swal.fire({
+                    title: "Error!",
+                    text: "No Quizes Found.",
+                    icon: "error",
+                    timer: 4000
+                });
+            }
+        }
+    }
+
+    const handlePageChange = (newPage: number) => {
+        setCurrentPage(newPage);
+        setQuizList(GFG(quizData, newPage, dataPerPage));
+    };
+
+    useEffect(() => {
+        setQuizList(GFG(dump_quizzes_list, currentPage, dataPerPage));
+        //eslint-disable-next-line
+    }, []);
 
     return (
         <>
@@ -17,7 +131,7 @@ function Page() {
                     </div>
 
                     <div className="pt-[20px] md:max-w-[350px] mx-auto">
-                        <form>
+                        <form onSubmit={handleSearchLogic}>
                             <div className="relative ">
                                 <input 
                                     type="text" 
@@ -25,7 +139,10 @@ function Page() {
                                     id="search" 
                                     placeholder="Search ..." 
                                     autoComplete="off" 
-                                    className="transition-all delay-75 block w-full bg-white border-[2px] border-solid border-zinc-400 pl-[15px] pr-[42px] md:pr-[50px] py-[8px] md:py-[10px] font-noto_sans text-[16px] md:text-[18px] font-semibold text-zinc-800 rounded-full focus:outline-0 placeholder-zinc-400 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-200"
+                                    className="transition-all delay-75 block w-full bg-white border-[2px] border-solid border-zinc-400 pl-[15px] pr-[42px] md:pr-[50px] py-[8px] md:py-[10px] font-noto_sans text-[16px] md:text-[18px] font-semibold text-zinc-800 rounded-full focus:outline-0 placeholder-zinc-400 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-200" 
+                                    value={srchInp} 
+                                    onChange={handleSearchInputChange} 
+                                    onKeyDown={handleSearchInputKeyDown} 
                                 />
                                 <div className="absolute right-[16px] md:right-[18px] top-[12px] md:top-[13px] z-[2]">
                                     <button 
@@ -45,100 +162,53 @@ function Page() {
             <section className="transition-all delay-75 py-[50px] px-[15px] bg-zinc-200 dark:bg-zinc-800">
                 <div className="site-container">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[20px]">
-                        <QuizCard 
-                            quiz_id={"658"} 
-                            quiz_title={"This is Quiz 1"} 
-                            quiz_cover_photo={defaultImage} 
-                            quiz_categories={[
-                                {
-                                    cat_id: 33,
-                                    category_title: "Tax",
-                                    category_slug: "tax"
-                                },
-                                {
-                                    cat_id: 34,
-                                    category_title: "New Tax Regim",
-                                    category_slug: "new-tax-regim"
-                                }
-                            ]} 
-                            quiz_summary={"This is quiz summary of quiz 1"} 
-                            number_of_question={20} 
-                            quiz_duration={"5 Mins"}
-                            quiz_already_played_by_user={false}
-                        />
-                        <QuizCard 
-                            quiz_id={"722"} 
-                            quiz_title={"This is Quiz 2"} 
-                            quiz_cover_photo={defaultImage} 
-                            quiz_categories={[
-                                {
-                                    cat_id: 45,
-                                    category_title: "Economics",
-                                    category_slug: "economics"
-                                },
-                                {
-                                    cat_id: 84,
-                                    category_title: "Finance",
-                                    category_slug: "finance"
-                                },
-                                {
-                                    cat_id: 89,
-                                    category_title: "GST",
-                                    category_slug: "gst"
-                                }
-                            ]} 
-                            quiz_summary={"This is quiz summary of quiz 2"} 
-                            number_of_question={50} 
-                            quiz_duration={"10 Mins"}
-                            quiz_already_played_by_user={true}
-                        />
-                        <QuizCard 
-                            quiz_id={"365"} 
-                            quiz_title={"This is Quiz 3"} 
-                            quiz_cover_photo={defaultImage} 
-                            quiz_categories={[
-                                {
-                                    cat_id: 12,
-                                    category_title: "Tech",
-                                    category_slug: "tech"
-                                }
-                            ]} 
-                            quiz_summary={"This is quiz summary of quiz 3"} 
-                            number_of_question={5} 
-                            quiz_duration={"2 Mins"}
-                            quiz_already_played_by_user={true}
-                        />
+                        {
+                            quizList.length > 0 ? 
+                            (
+                                <>
+                                    {
+                                        quizList.map((item) => (
+                                            <QuizCard 
+                                                key={item.quiz_id} 
+                                                quiz_id={item.quiz_id} 
+                                                quiz_title={item.quiz_title} 
+                                                quiz_cover_photo={item.quiz_cover_photo} 
+                                                quiz_categories={item.quiz_categories} 
+                                                quiz_summary={item.quiz_summary} 
+                                                quiz_total_question={item.quiz_total_question} 
+                                                quiz_total_marks={item.quiz_total_marks} 
+                                                quiz_display_time={item.quiz_display_time}
+                                                quiz_terms={item.quiz_terms}
+                                            />
+                                        ))
+                                    }
+                                </>
+                            ) 
+                            : 
+                            (
+                                <>
+                                    {
+                                        isLoading ? 
+                                        (<div className="spinner size-1"></div>) 
+                                        : 
+                                        (
+                                            <h1 className="transition-all delay-75 text-[16px] md:text-[18px] font-semibold text-zinc-800 dark:text-zinc-300">
+                                                No Quizes Found.
+                                            </h1>
+                                        )
+                                    }
+                                </>
+                            )
+                        }
                     </div>
 
-                    <div className="pt-[50px] max-w-[280px] mx-auto">
-                        <div className="flex justify-between gap-x-[15px] items-center">
-                            <div>
-                                <button 
-                                    type="button" 
-                                    title="Previous Page" 
-                                    className="transition-all delay-75 text-zinc-700 dark:text-zinc-200 disabled:text-zinc-400 dark:disabled:text-zinc-600"
-                                    disabled={true}
-                                >
-                                    <FaAngleLeft size={35} className="w-[25px] h-[25px] md:w-[35px] md:h-[35px]" />
-                                </button>
-                            </div>
-                            <div>
-                                <div className="transition-all delay-75 font-ubuntu text-[20px] md:text-[22px] text-zinc-800 dark:text-zinc-200">
-                                    1 / 3
-                                </div>
-                            </div>
-                            <div>
-                                <button 
-                                    type="button" 
-                                    title="Next Page" 
-                                    className="transition-all delay-75 text-zinc-700 dark:text-zinc-200 disabled:text-zinc-400 dark:disabled:text-zinc-600"
-                                    disabled={false}
-                                >
-                                    <FaAngleRight size={35} className="w-[25px] h-[25px] md:w-[35px] md:h-[35px]" />
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    <SitePagination 
+                        totalPages={totalPages} 
+                        dataPerPage={dataPerPage} 
+                        currentPage={currentPage} 
+                        parentClassList="pt-[50px]" 
+                        onPageChange={handlePageChange} 
+                    />
                 </div>
             </section>
         </>

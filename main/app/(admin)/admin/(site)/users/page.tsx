@@ -71,41 +71,42 @@ function Page() {
                 icon: "error",
                 timer: 4000
             });
-        }
+        } else {
 
-        if(userList.length > 0) {
+            if(userList.length > 0) {
 
-            const res = userData.filter((item) => {
-                const srch_res = item.user_name.toLowerCase().includes(srchInp.toLowerCase());
-                return srch_res;
-            });
+                const res = userData.filter((item) => {
+                    const srch_res = item.user_name.toLowerCase().includes(srchInp.toLowerCase());
+                    return srch_res;
+                });
 
-            if(res.length > 0) {
-                setCurrentPage(1);
-                setTotalPages(Math.ceil(res.length / dataPerPage));
-                setUserList(GFG(res, currentPage, dataPerPage));
-                if(srchInp == "") {
+                if(res.length > 0) {
                     setCurrentPage(1);
-                    setTotalPages(Math.ceil(userData.length / dataPerPage));
-                    setUserList([]);
+                    setTotalPages(Math.ceil(res.length / dataPerPage));
+                    setUserList(GFG(res, currentPage, dataPerPage));
+                    if(srchInp == "") {
+                        setCurrentPage(1);
+                        setTotalPages(Math.ceil(userData.length / dataPerPage));
+                        setUserList([]);
+                    }
+                } else {
+                    if(srchInp == "") {
+                        setCurrentPage(1);
+                        setTotalPages(Math.ceil(userData.length / dataPerPage));
+                        setUserList([]);
+                    }
+                    setCurrentPage(1);
+                    setUserList(GFG(res, currentPage, dataPerPage));
+                    setTotalPages(Math.ceil(res.length / dataPerPage));
                 }
             } else {
-                if(srchInp == "") {
-                    setCurrentPage(1);
-                    setTotalPages(Math.ceil(userData.length / dataPerPage));
-                    setUserList([]);
-                }
-                setCurrentPage(1);
-                setUserList(GFG(res, currentPage, dataPerPage));
-                setTotalPages(Math.ceil(res.length / dataPerPage));
+                Swal.fire({
+                    title: "Error!",
+                    text: "No Quizes Found.",
+                    icon: "error",
+                    timer: 4000
+                });
             }
-        } else {
-            Swal.fire({
-                title: "Error!",
-                text: "No Quizes Found.",
-                icon: "error",
-                timer: 4000
-            });
         }
     }
 
@@ -139,10 +140,39 @@ function Page() {
     //     setIsMenuOpen(false);
     // }
 
-    const handleRDSelectedBulkLogic = () => {
-        const conf = confirm("Are you sure want to reset participation data for selected users ?");
-        if(conf) {
-
+    const handleRDSelectedBulkLogic = async () => {
+        if(selectedItems.length > 0) {
+            const conf = confirm("Are you sure want to reset participation data for selected users ?");
+            if(conf) {
+                let baseURI = window.location.origin;
+                let resp = await fetch(`${baseURI}/api/admin/users/participation-data/delete-selected`, {
+                    method: "DELETE",
+                    body: JSON.stringify({ user_id_list: selectedItems }),
+                });
+                const body = await resp.json();
+                if(body.success) {
+                    Swal.fire({
+                        title: "Success!",
+                        text: body.message,
+                        icon: "success",
+                        timer: 3000
+                    });
+                } else {
+                    Swal.fire({
+                        title: "Error!",
+                        text: body.message,
+                        icon: "error",
+                        timer: 3000
+                    });
+                }
+            }
+        } else {
+            Swal.fire({
+                title: "Error!",
+                text: "Please Select Users First!",
+                icon: "error",
+                timer: 3000
+            });
         }
         setIsMenuOpen(false);
     }
@@ -150,7 +180,26 @@ function Page() {
     const handleRDAllBulkLogic = async () => {
         const conf = confirm("Are you sure want to reset participation data for all users ?");
         if(conf) {
-            
+            let baseURI = window.location.origin;
+            let resp = await fetch(`${baseURI}/api/admin/users/participation-data/delete-all`, {
+                method: "DELETE",
+            });
+            const body = await resp.json();
+            if(body.success) {
+                Swal.fire({
+                    title: "Success!",
+                    text: body.message,
+                    icon: "success",
+                    timer: 3000
+                });
+            } else {
+                Swal.fire({
+                    title: "Error!",
+                    text: body.message,
+                    icon: "error",
+                    timer: 3000
+                });
+            }
         }
         setIsMenuOpen(false);
     }

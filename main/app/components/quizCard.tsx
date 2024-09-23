@@ -7,7 +7,7 @@ import { MdOutlineAccessTimeFilled } from "react-icons/md";
 import { FaLock } from "react-icons/fa";
 import { RootState } from "@/app/redux-service/store";
 import { useSelector } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PiExamFill } from "react-icons/pi";
 
 type quizCategoriesType = {
@@ -26,7 +26,6 @@ interface QuizCardPropsTypes {
     quiz_total_marks: number,
     quiz_display_time: string,
     quiz_terms?: string[],
-    quiz_already_played_by_user?: boolean
 }
 
 export default function QuizCard(props: QuizCardPropsTypes) {
@@ -41,7 +40,6 @@ export default function QuizCard(props: QuizCardPropsTypes) {
         quiz_total_marks, 
         quiz_display_time, 
         quiz_terms, 
-        quiz_already_played_by_user=false 
     } = props;
 
     const defaultImage = "https://placehold.co/1000x700/png";
@@ -51,6 +49,33 @@ export default function QuizCard(props: QuizCardPropsTypes) {
     let prtLink = userID !== '1' ? `/play-quiz/${quiz_id}/${userID}` : '/sign-in';
 
     const [haveTerms, setHaveTerms] = useState<boolean>(quiz_terms && quiz_terms.length ? true : false);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [qapbu, setQapbu]  = useState<boolean>(false);
+
+    const checkQuiz = async () => {
+        let baseURI = window.location.origin;
+        let resp = await fetch(`${baseURI}/api/site/check-quiz`, {
+            method: "POST",
+            body: JSON.stringify({ quiz_id, user_id: AuthUser })
+        });
+        const body = await resp.json();
+        if(body.success) {
+            setQapbu(true);
+            setIsLoading(false);
+        } else {
+            setQapbu(false);
+            setIsLoading(false);
+        }
+    }
+
+    useEffect(() => {
+        if(AuthUser) {
+            checkQuiz();
+        } else {
+            setIsLoading(false);
+        }
+        //eslint-disable-next-line
+    }, []);
 
     return (
         <>
@@ -139,24 +164,35 @@ export default function QuizCard(props: QuizCardPropsTypes) {
                                     </div>
                                 ) 
                                 : 
-                                (<div></div>)
+                                (
+                                    <div></div>
+                                )
                             }
                             <div>
                                 {
-                                    quiz_already_played_by_user ? 
-                                    (
-                                        <div className="flex gap-x-[5px] items-center">
-                                            <FaLock size={18} className="w-[16px] h-[16px] md:w-[18px] md:h-[18px] text-theme-color-2" />
-                                            <div className="transition-all delay-75 font-noto_sans text-[14px] md:text-[16px] text-zinc-700 dark:text-zinc-300">
-                                                Locked
-                                            </div>
-                                        </div>
-                                    ) 
+                                    isLoading ? 
+                                    (<div className="spinner size-4"></div>) 
                                     : 
                                     (
-                                        <Link href={prtLink} title="Participate" className="transition-all delay-75 inline-block px-[15px] py-[6px] md:px-[25px] md:py-[8px] font-ubuntu text-[16px] md:text-[18px] text-white bg-theme-color-1 hover:bg-theme-color-1-hover-dark">
-                                            Participate
-                                        </Link>
+                                        <>
+                                            {
+                                                qapbu ? 
+                                                (
+                                                    <div className="flex gap-x-[5px] items-center">
+                                                        <FaLock size={18} className="w-[16px] h-[16px] md:w-[18px] md:h-[18px] text-theme-color-2" />
+                                                        <div className="transition-all delay-75 font-noto_sans text-[14px] md:text-[16px] text-zinc-700 dark:text-zinc-300">
+                                                            Locked
+                                                        </div>
+                                                    </div>
+                                                ) 
+                                                : 
+                                                (
+                                                    <Link href={prtLink} title="Participate" className="transition-all delay-75 inline-block px-[15px] py-[6px] md:px-[25px] md:py-[8px] font-ubuntu text-[16px] md:text-[18px] text-white bg-theme-color-1 hover:bg-theme-color-1-hover-dark">
+                                                        Participate
+                                                    </Link>
+                                                )
+                                            }
+                                        </>
                                     )
                                 }
                             </div>

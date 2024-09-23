@@ -24,7 +24,11 @@ const getQT = async (qid: string) => {
 }
 
 const getOpts = async () => {
-    let data = await prisma.qF_Option.findMany();
+    let data = await prisma.qF_Option.findMany({
+        orderBy: {
+            createdAt: 'desc'
+        }
+    });
     let opts: QF_Opt[] = [];
     for(let i = 0; i < data.length; i++) {
         let obj = {

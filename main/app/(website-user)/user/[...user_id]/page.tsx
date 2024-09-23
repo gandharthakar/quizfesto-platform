@@ -3,8 +3,46 @@
 import { FaTrophy } from "react-icons/fa6";
 import { IoChatboxEllipses } from "react-icons/io5";
 import { FaFlag } from "react-icons/fa6";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+
+interface QF_User_Stats {
+    user_score: number,
+    user_participation: number,
+    user_winnings: number
+}
 
 export default function Page() {
+
+    const params = useParams();
+    const user_id = params.user_id[0];
+
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [userStats, setUserStats] = useState<QF_User_Stats>({
+        user_score: 0,
+        user_participation: 0,
+        user_winnings: 0
+    });
+
+    const getUserStats = async () => {
+        let baseURI = window.location.origin;
+        const resp = await fetch(`${baseURI}/api/site/auth-user/get-user-stats`, {
+            method: "POST",
+            body: JSON.stringify({ user_id })
+        });
+        const body = await resp.json();
+        if(body.success) {
+            setUserStats(body.user_stats);
+            setIsLoading(false);
+        } else {
+            setIsLoading(false);
+        }
+    }
+
+    useEffect(() => {
+        getUserStats();
+    //eslint-disable-next-line
+    }, []);
 
     return (
         <>
@@ -23,7 +61,12 @@ export default function Page() {
                                 </h2>
                                 <div>
                                     <h2 className="transition-all delay-75 block font-ubuntu text-[30px] md:text-[40px] font-semibold text-zinc-900 dark:text-zinc-200 leading-[30px] md:leading-[45px]">
-                                        0
+                                        {
+                                            isLoading ? 
+                                            (<div className="spinner size-4"></div>) 
+                                            : 
+                                            (<>{userStats.user_score}</>)
+                                        }
                                     </h2>
                                 </div>
                             </div>
@@ -42,7 +85,12 @@ export default function Page() {
                                 </h2>
                                 <div>
                                     <h2 className="transition-all delay-75 block font-ubuntu text-[30px] md:text-[40px] font-semibold text-zinc-900 dark:text-zinc-200 leading-[30px] md:leading-[45px]">
-                                        0
+                                        {
+                                            isLoading ? 
+                                            (<div className="spinner size-4"></div>) 
+                                            : 
+                                            (<>{userStats.user_winnings}</>)
+                                        }
                                     </h2>
                                 </div>
                             </div>
@@ -61,7 +109,12 @@ export default function Page() {
                                 </h2>
                                 <div>
                                     <h2 className="transition-all delay-75 block font-ubuntu text-[30px] md:text-[40px] font-semibold text-zinc-900 dark:text-zinc-200 leading-[30px] md:leading-[45px]">
-                                        0
+                                        {
+                                            isLoading ? 
+                                            (<div className="spinner size-4"></div>) 
+                                            : 
+                                            (<>{userStats.user_participation}</>)
+                                        }
                                     </h2>
                                 </div>
                             </div>

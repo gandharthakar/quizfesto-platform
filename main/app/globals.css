@@ -220,6 +220,12 @@
     width: 35px;
     height: 35px;
  }
+
+ .spinner.size-4 {
+    --spinner-width: 4px;
+    width: 30px;
+    height: 30px;
+ }
  
  @keyframes spinner-c7wet2 {
     100% {

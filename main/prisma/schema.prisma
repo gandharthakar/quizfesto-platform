@@ -43,12 +43,13 @@ model User_Participation {
   quiz_total_question        Int
   quiz_total_marks           Int
   quiz_estimated_time        String
+  quiz_display_time          String
   quiz_time_taken            String
   quiz_id                    String
   quiz_title                 String
   quiz_cover_photo           String?
   quiz_total_score           Int
-  quiz_coorect_answers_count Int
+  quiz_correct_answers_count Int
   User                       User?    @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
   user_id                    String?
   createdAt                  DateTime @default(now())

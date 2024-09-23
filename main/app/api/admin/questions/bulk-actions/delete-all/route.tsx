@@ -24,7 +24,7 @@ export async function DELETE() {
                 message: "Questions Deleted Successfully!"
             }
         } else {
-            sts = 400;
+            sts = 200;
             resp = {
                 success: false,
                 message: "Questions Not Found!",

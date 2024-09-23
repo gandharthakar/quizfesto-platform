@@ -23,7 +23,11 @@ export async function GET() {
 
     try {
 
-        let data = await prisma.qF_Question.findMany();
+        let data = await prisma.qF_Question.findMany({
+            orderBy: {
+                createdAt: 'desc'
+            }
+        });
         if(data.length > 0) {
             sts = 200;
             resp = {
@@ -38,7 +42,7 @@ export async function GET() {
                 })
             }
         } else {
-            sts = 400;
+            sts = 200;
             resp = {
                 success: false,
                 message: "Questions Not Found!",

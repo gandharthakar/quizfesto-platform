@@ -1,7 +1,7 @@
 'use client';
 
 import { set_dark_mode, unset_dark_mode } from "@/app/redux-service/slices/theme-mode/themeSwitcherSlice";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useStopwatch } from "react-timer-hook";
 import { FaClock } from "react-icons/fa6";
@@ -10,8 +10,8 @@ import QuizInfoModal from "@/app/components/quizInfomodal";
 import { useRouter, useParams } from "next/navigation";
 import { dump_quiz_data } from "@/app/constant/datafaker";
 import { clear_tqd, set_tqd } from "@/app/redux-service/slices/quiz-playground/transferQuizDataslice";
-import { RootState } from "@/app/redux-service/store";
-import { useSelector } from "react-redux";
+// import { RootState } from "@/app/redux-service/store";
+// import { useSelector } from "react-redux";
 
 interface AnswObj {
     question_id: string,
@@ -21,6 +21,24 @@ interface AnswObj {
 
 let currentQuestionIndex:number = 0;
 let atm_data:AnswObj[] = [];
+
+interface QuizQuestion {
+    question_id: string,
+    question_title: string,
+    question_marks: number,
+    question_options?: any
+}
+
+interface QF_Quiz_Pub_QA {
+    quiz_id: string,
+    quiz_title: string,
+    quiz_total_question: number,
+    quiz_total_marks: number,
+    quiz_estimated_time: string,
+    quiz_display_time: string,
+    quiz_cover_photo: string,
+    questions: QuizQuestion[]
+}
 
 export default function Page() {
 
@@ -35,28 +53,32 @@ export default function Page() {
 
     const [currentQuestionCount, setCurrentQuestionCount] = useState<number>(1);
     // const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
-    const [totalQuestions, setTotalQuestions] = useState<number>(dump_quiz_data.quiz_total_question);
-    const [totalMarks, setTotalMarks] = useState<string | number>(dump_quiz_data.quiz_total_marks);
-    const [quizEstTime, setQuizEstTime] = useState<string>(dump_quiz_data.quiz_estimated_time);
+    const [totalQuestions, setTotalQuestions] = useState<number>(0);
+    const [totalMarks, setTotalMarks] = useState<number>(0);
+    const [quizEstTime, setQuizEstTime] = useState<string>("00:00:00");
+    const [quizDispTime, setQuizDispTime] = useState<string>("");
     const [selectedAnswer, setSelectedAnswer] = useState<string>('');
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isError, setIsError] = useState<boolean>(false);
     const [isFinishing, setIsFinishing] = useState<boolean>(false);
-    interface QuizQuestion {
-        question_id: string,
-        question_text: string,
-        question_marks: number
-    }
-    const [currentQuestion, setCurrentQuestion] = useState<QuizQuestion>(
-        {
-            question_id: dump_quiz_data.only_q_a_opts[currentQuestionIndex].question_id,
-            question_text: dump_quiz_data.only_q_a_opts[currentQuestionIndex].question_text,
-            question_marks: dump_quiz_data.only_q_a_opts[currentQuestionIndex].question_marks,
-        }
-    );
-    const [currentQuestionMarks, setCurrentQuestionMarks] = useState<number>(dump_quiz_data.only_q_a_opts[currentQuestionIndex].question_marks);
-
-    const [currentQuestionOptions, setCurrentQuestionOptions] = useState<string[]>(dump_quiz_data.only_q_a_opts[currentQuestionIndex].question_options.split(", "));
+    
+    const [quesData, setQuesData] = useState<QF_Quiz_Pub_QA>({
+        quiz_id: '',
+        quiz_title: '',
+        quiz_cover_photo: '',
+        quiz_display_time: '',
+        quiz_estimated_time: '',
+        quiz_total_marks: 0,
+        quiz_total_question: 0,
+        questions: []
+    });
+    const [currentQuestion, setCurrentQuestion] = useState<QuizQuestion>({
+        question_id: '',
+        question_title: '',
+        question_marks: 0,
+    });
+    const [currentQuestionMarks, setCurrentQuestionMarks] = useState<number>(0);
+    const [currentQuestionOptions, setCurrentQuestionOptions] = useState<string[]>([]);
     const [timing, setTiming] = useState<string>('');
 
     const CreateRadioButton = (opt_id:string, opt_txt:string, sa:string, ch:any) => {
@@ -116,13 +138,13 @@ export default function Page() {
             });
             setCurrentQuestion(() => {
                 return {
-                    question_id: dump_quiz_data.only_q_a_opts[currentQuestionIndex].question_id,
-                    question_text: dump_quiz_data.only_q_a_opts[currentQuestionIndex].question_text,
-                    question_marks: dump_quiz_data.only_q_a_opts[currentQuestionIndex].question_marks,
+                    question_id: quesData.questions[currentQuestionIndex].question_id,
+                    question_title: quesData.questions[currentQuestionIndex].question_title,
+                    question_marks: quesData.questions[currentQuestionIndex].question_marks,
                 }
             });
-            setCurrentQuestionMarks(dump_quiz_data.only_q_a_opts[currentQuestionIndex].question_marks);
-            setCurrentQuestionOptions(dump_quiz_data.only_q_a_opts[currentQuestionIndex].question_options.split(", "));
+            setCurrentQuestionMarks(quesData.questions[currentQuestionIndex].question_marks);
+            setCurrentQuestionOptions(quesData.questions[currentQuestionIndex].question_options.split(", ")??[]);
             
             let obj = {
                 question_id: currentQuestion.question_id,
@@ -130,25 +152,24 @@ export default function Page() {
                 question_marks: currentQuestion.question_marks
             }
             atm_data.push(obj);
-            // console.log(atm_data);
-
+            
             if(currentQuestionCount === totalQuestions) {
                 pause();
                 router.push(`/submit-score/${quiz_id}/${user_id}`);
                 setIsFinishing(true);
                 const prepData = {
                     quiz_id: quiz_id,
-                    quiz_title: dump_quiz_data.quiz_title,
-                    quiz_cover_photo: dump_quiz_data.quiz_cover_photo,
+                    quiz_title: quesData.quiz_title,
+                    quiz_cover_photo: quesData.quiz_cover_photo,
 
-                    quiz_total_question: dump_quiz_data.quiz_total_question,
+                    quiz_total_question: quesData.quiz_total_question,
                     quiz_total_marks: totalMarks,
                     quiz_estimated_time: quizEstTime,
+                    quiz_display_time: quizDispTime,
                     time_taken: timing,
 
                     attempted_data: atm_data,
                 }
-                // console.log(prepData);
 
                 // let temp_ls_dt = localStorage.getItem('transfer_quiz_data');
                 // if(temp_ls_dt) {
@@ -170,6 +191,39 @@ export default function Page() {
         setShowInfoModal(false);
         start();
     }
+
+    const getQuizQuestions = async () => {
+        let baseURI = window.location.origin;
+        let resp = await fetch(`${baseURI}/api/site/get-quizes/single/only-questions`, {
+            method: "POST",
+            body: JSON.stringify({ quiz_id })
+        });
+        const body = await resp.json();
+        if(body.success) {
+            setIsLoading(false);
+            setTotalQuestions(body.quiz.quiz_total_question);
+            setTotalMarks(body.quiz.quiz_total_marks);
+            setQuizEstTime(body.quiz.quiz_estimated_time);
+            setQuizDispTime(body.quiz.quiz_display_time);
+            setQuesData(body.quiz);
+            setCurrentQuestion(() => {
+                return {
+                    question_id: body.quiz.questions[currentQuestionIndex].question_id??"",
+                    question_title: body.quiz.questions[currentQuestionIndex].question_title??"",
+                    question_marks: body.quiz.questions[currentQuestionIndex].question_marks??0
+                }
+            })
+            setCurrentQuestionMarks(body.quiz.questions[currentQuestionIndex].question_marks??0);
+            setCurrentQuestionOptions(body.quiz.questions[currentQuestionIndex].question_options.split(", ")??[]);
+        } else {
+            setIsLoading(false);
+        }
+    }
+
+    useEffect(() => {
+        getQuizQuestions();
+        //eslint-disable-next-line
+    }, []);
 
     useEffect(() => {
         let glsi = localStorage.getItem('site-dark-mode');
@@ -268,7 +322,7 @@ export default function Page() {
                         <div className="py-[25px] md:py-[50px] px-[15px] md:px-[30px] w-full">
                             <div className="pb-[15px] md:pb-[25px]">
                                 <h2 className="transition-all delay-75 font-noto_sans text-[20px] md:text-[25px] text-zinc-800 font-semibold dark:text-zinc-300">
-                                    {currentQuestion.question_text}
+                                    {currentQuestion.question_title}
                                 </h2>
                             </div>
                             <div className="pb-[15px]">

@@ -6,6 +6,7 @@ import { RiSearch2Line } from "react-icons/ri";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import SitePagination from "@/app/components/sitePagination";
+import { useParams } from "next/navigation";
 
 type quizCategoriesType = {
     category_id: string,
@@ -33,13 +34,17 @@ function GFG(array: any, currPage: number, pageSize: number) {
 
 function Page() {
 
+    const params = useParams();
+    const cat_slug = params.category_slug[0];
+
     const dataPerPage = 6;
     const [srchInp, setSrchInp] = useState<string>("");
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const [quizData, setQuizData] = useState<QuizCardPropsTypes[]>(dump_quizzes_list);
+    const [quizData, setQuizData] = useState<QuizCardPropsTypes[]>([]);
     const [totalPages, setTotalPages] = useState<number>(Math.ceil(quizData.length / dataPerPage));
-    const [quizList, setQuizList] = useState<QuizCardPropsTypes[]>(dump_quizzes_list);
+    const [quizList, setQuizList] = useState<QuizCardPropsTypes[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [catName, setCatName] = useState<string>('Category');
 
     const handleSearchInputChange = (e:any) => {
         setSrchInp(e.target.value);
@@ -115,8 +120,27 @@ function Page() {
         setQuizList(GFG(quizData, newPage, dataPerPage));
     };
 
+    const getQuizes = async () => {
+        let baseURI = window.location.origin;
+        let resp = await fetch(`${baseURI}/api/site/get-quizes/bulk-list/category-wise`, {
+            method: "POST",
+            body: JSON.stringify({ category_slug: cat_slug })
+        });
+        const body = await resp.json();
+        if(body.success) {
+            setIsLoading(false);
+            setQuizList(GFG(body.quizes, currentPage, dataPerPage));
+            setQuizData(body.quizes);
+            setTotalPages(Math.ceil(body.quizes.length / dataPerPage));
+            setCatName(body.category.category_title);
+        } else {
+            setIsLoading(false);
+        }
+    }
+
     useEffect(() => {
-        setQuizList(GFG(dump_quizzes_list, currentPage, dataPerPage));
+        getQuizes();
+        // setQuizList(GFG(dump_quizzes_list, currentPage, dataPerPage));
         //eslint-disable-next-line
     }, []);
 
@@ -126,7 +150,7 @@ function Page() {
                 <div className="site-container">
                     <div className="text-center">
                         <h1 className="transition-all delay-75 inline-block font-ubuntu text-[20px] md:text-[30px] break-words font-semibold text-zinc-900 dark:text-zinc-200">
-                            Category Name
+                            {catName}
                         </h1>
                     </div>
 

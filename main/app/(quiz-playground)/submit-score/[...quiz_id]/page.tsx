@@ -6,6 +6,8 @@ import { set_dark_mode, unset_dark_mode } from "@/app/redux-service/slices/theme
 import Link from "next/link";
 import Image from "next/image";
 import { RootState } from "@/app/redux-service/store";
+import { useParams } from "next/navigation";
+import Swal from "sweetalert2";
 
 interface QuizGivenAns {
     question_id: string,
@@ -15,6 +17,9 @@ interface QuizGivenAns {
 
 export default function Page() {
 
+    const params = useParams();
+    let quiz_id = params.quiz_id[0];
+    let user_id = params.quiz_id[1];
     const dispatch = useDispatch();
     const trqzdt = useSelector((state: RootState) => state.transfer_quiz_data);
 
@@ -26,6 +31,7 @@ export default function Page() {
 
     const [timeTaken, setTimeTaken] = useState<string>("00:00:00");
     const [estTime, setEstTime] = useState<string>("00:00:00");
+    const [qdt, setQdt] = useState<string>('');
     const [totalMarks, setTotalMarks] = useState<number>(0);
     const [totalQues, setTotalQues] = useState<number>(0);
 
@@ -36,7 +42,7 @@ export default function Page() {
     const [isSubmiting, setIsSubmiting] = useState<boolean>(false);
     const [isSubmited, setIsSubmited] = useState<boolean>(false);
 
-    const handleScoreSubmissionClick = () => {
+    const handleScoreSubmissionClick = async () => {
         setIsSubmiting(true);
         let prepData = {
             quiz_id: qzId,
@@ -46,19 +52,45 @@ export default function Page() {
             quiz_total_question: totalQues,
             quiz_total_marks: totalMarks,
             quiz_estimated_time: estTime,
-            time_taken: timeTaken,
+            quiz_display_time: qdt,
+            quiz_time_taken: timeTaken,
 
-            quiz_coorect_answers_count: correctAnswers,
-            quiz_total_score: totalScore
+            quiz_correct_answers_count: correctAnswers,
+            quiz_total_score: totalScore,
+            user_id
         }
         if(trqzdt.attempted_data.length > 0) {
-            let st_12 = setTimeout(() => {
-                console.log(prepData);
+            
+            let baseURI = window.location.origin;
+            const resp = await fetch(`${baseURI}/api/site/submit-score`, {
+                method: "POST",
+                body: JSON.stringify(prepData)
+            });
+            const body = await resp.json();
+            if(body.success) {
                 setIsSubmited(true);
-                clearTimeout(st_12);
-            }, 1000);
+                Swal.fire({
+                    title: "Success!",
+                    text: body.message,
+                    icon: "success",
+                    timer: 3000
+                });
+            } else {
+                setIsSubmited(false);
+                Swal.fire({
+                    title: "Error!",
+                    text: body.message,
+                    icon: "error",
+                    timer: 3000
+                });
+            }
         } else {
-            alert("No Data Found.");
+            Swal.fire({
+                title: "Error!",
+                text: "No Data Found.",
+                icon: "error",
+                timer: 3000
+            });
         }
     }
 
@@ -66,7 +98,7 @@ export default function Page() {
         let baseURI = window.location.origin;
         const resp = await fetch(`${baseURI}/api/site/get-score`, {
             method: "POST",
-            body: JSON.stringify(ugadtArr)
+            body: JSON.stringify({ attempted_data: ugadtArr, quiz_id })
         });
         const body = await resp.json();
         if(body.success) {
@@ -107,6 +139,7 @@ export default function Page() {
         //     setTotalQues(prsfid.quiz_total_question);
         //     setTimeTaken(prsfid.time_taken);
         //     setEstTime(prsfid.quiz_estimated_time);
+        //     setQdt(prsfid.quiz_display_time);
         //     setTotalMarks(prsfid.quiz_total_marks);
 
         //     setUserAnsw(prsfid.attempted_data);
@@ -124,6 +157,7 @@ export default function Page() {
             setTotalQues(trqzdt.quiz_total_question);
             setTimeTaken(trqzdt.time_taken);
             setEstTime(trqzdt.quiz_estimated_time);
+            setQdt(trqzdt.quiz_display_time);
             setTotalMarks(trqzdt.quiz_total_marks);
 
             setUserAnsw(trqzdt.attempted_data);

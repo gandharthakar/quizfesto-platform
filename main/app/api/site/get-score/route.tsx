@@ -1,6 +1,6 @@
 import prisma from "@/app/lib/db";
 import { NextResponse } from "next/server";
-import { dump_quiz_data } from "@/app/constant/datafaker";
+// import { dump_quiz_data } from "@/app/constant/datafaker";
 
 interface Respo {
     success: boolean,
@@ -51,6 +51,18 @@ function countCorrectAnswers(questions: QuizQues[], answers: QuizGivenAns[]) {
     };
 }
 
+const getCorrectOption = async (qid: string) => {
+    const qdata = await prisma.qF_Option.findFirst({
+        where: {
+            questionid: qid
+        },
+        select: {
+            correct_option: true
+        }
+    });
+    return qdata?.correct_option;
+}
+
 export async function POST(req: Request) {
     let resp: Respo = {
         success: false,
@@ -63,9 +75,26 @@ export async function POST(req: Request) {
     try {
 
         const body = await req.json();
+        let { attempted_data, quiz_id } = body;
 
-        if(body) {
-            let data = countCorrectAnswers(dump_quiz_data.only_corr_answ, body);
+        if(attempted_data.length > 0 && quiz_id) {
+
+            let qdata = await prisma.qF_Question.findMany({
+                where: {
+                    quizid: quiz_id
+                }
+            });
+
+            let qArrData: QuizQues[] = [];
+            for(let i = 0; i < qdata.length; i++) {
+                let obj = {
+                    question_id: qdata[i].question_id,
+                    correct_option: await getCorrectOption(qdata[i].question_id)??""
+                }
+                qArrData.push(obj);
+            }
+
+            let data = countCorrectAnswers(qArrData, attempted_data);
             sts = 200;
             resp = {
                 success: true,

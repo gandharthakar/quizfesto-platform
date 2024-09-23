@@ -23,7 +23,11 @@ export async function GET() {
 
     try {
 
-        const data = await prisma.qF_Quiz_Category.findMany();
+        const data = await prisma.qF_Quiz_Category.findMany({
+            orderBy: {
+                category_id: 'desc'
+            }
+        });
         if(data.length > 0) {
             sts = 200;
             resp = {

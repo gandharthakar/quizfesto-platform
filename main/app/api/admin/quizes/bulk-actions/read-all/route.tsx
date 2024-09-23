@@ -23,7 +23,11 @@ export async function GET() {
 
     try {
 
-        let data = await prisma.qF_Quiz.findMany();
+        let data = await prisma.qF_Quiz.findMany({
+            orderBy: {
+                createdAt: 'desc'
+            }
+        });
         if(data.length > 0) {
             sts = 200;
             resp = {

@@ -23,6 +23,18 @@ type quizCategoriesType = {
     category_slug: string,
 }
 
+interface QuizCardPropsTypes {
+    quiz_id: string,
+    quiz_cover_photo?: string,
+    quiz_title: string,
+    quiz_categories?: quizCategoriesType[],
+    quiz_summary: string,
+    quiz_total_question: number,
+    quiz_total_marks: number,
+    quiz_display_time: string,
+    quiz_terms?: string[],
+}
+
 export default function Page() {
 
     const params = useParams();
@@ -40,10 +52,12 @@ export default function Page() {
     const [quizDuration, setQuizDuration] = useState<string>('');
     const [quizDescription, setQuizDescription] = useState<string>('');
     const [quizTerms, setQuizTerms] = useState<string[]>([]);
+    const [relatedQuizes, setRelatedQuizes] = useState<QuizCardPropsTypes[]>([]);
     const [alreadyPlayedByUser, setAlreadyPlayedByUser] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     const AuthUser = useSelector((state: RootState) => state.auth_user_id);
-    let userID = !AuthUser ? AuthUser : '1';
+    let userID = AuthUser.auth_user_id ? AuthUser.auth_user_id : '1';
     let prtLink = userID !== '1' ? `/play-quiz/${qz_id}/${userID}` : '/sign-in';
 
     useEffect(() => {
@@ -91,9 +105,42 @@ export default function Page() {
         }
     }
 
+    const getRelatedQuizes = async () => {
+        let baseURI = window.location.origin;
+        let resp = await fetch(`${baseURI}/api/site/get-quizes/bulk-list/related-quizes`, {
+            method: "POST",
+            body: JSON.stringify({ quiz_id: qz_id })
+        });
+        const body = await resp.json();
+        if(body.success) {
+            setIsLoading(false);
+            setRelatedQuizes(body.quizes);
+        } else {
+            setIsLoading(false);
+        }
+    }
+
+    const checkQuiz = async () => {
+        let baseURI = window.location.origin;
+        let resp = await fetch(`${baseURI}/api/site/check-quiz`, {
+            method: "POST",
+            body: JSON.stringify({ quiz_id: qz_id, user_id: userID })
+        });
+        const body = await resp.json();
+        if(body.success) {
+            setAlreadyPlayedByUser(true);
+        } else {
+            setAlreadyPlayedByUser(false);
+        }
+    }
+
     useEffect(() => {
         // setQuizList(GFG(dump_quizzes_list, currentPage, dataPerPage));
         getQuizes();
+        getRelatedQuizes();
+        if(userID) {
+            checkQuiz();
+        }
         //eslint-disable-next-line
     }, []);
 
@@ -428,20 +475,42 @@ export default function Page() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[20px]">
                         {
-                            dump_quizzes_list.slice(0, 3).map((item) => (
-                                <QuizCard 
-                                    key={item.quiz_id} 
-                                    quiz_id={item.quiz_id} 
-                                    quiz_title={item.quiz_title} 
-                                    quiz_cover_photo={item.quiz_cover_photo} 
-                                    quiz_categories={item.quiz_categories} 
-                                    quiz_summary={item.quiz_summary} 
-                                    quiz_total_question={item.quiz_total_question} 
-                                    quiz_total_marks={item.quiz_total_marks} 
-                                    quiz_display_time={item.quiz_display_time} 
-                                    quiz_terms = {item.quiz_terms}
-                                />
-                            ))
+                            relatedQuizes.length > 0 ? 
+                            (
+                                <>
+                                    {
+                                        relatedQuizes.map((item) => (
+                                            <QuizCard 
+                                                key={item.quiz_id} 
+                                                quiz_id={item.quiz_id} 
+                                                quiz_title={item.quiz_title} 
+                                                quiz_cover_photo={item.quiz_cover_photo} 
+                                                quiz_categories={item.quiz_categories} 
+                                                quiz_summary={item.quiz_summary} 
+                                                quiz_total_question={item.quiz_total_question} 
+                                                quiz_total_marks={item.quiz_total_marks} 
+                                                quiz_display_time={item.quiz_display_time} 
+                                                quiz_terms = {item.quiz_terms}
+                                            />
+                                        ))
+                                    }
+                                </>
+                            ) 
+                            : 
+                            (
+                                <>
+                                    {
+                                        isLoading ? 
+                                        (<div className="spinner size-1"></div>) 
+                                        : 
+                                        (
+                                            <h1 className="transition-all delay-75 text-[16px] md:text-[18px] font-semibold text-zinc-800 dark:text-zinc-300">
+                                                No Quizes Found.
+                                            </h1>
+                                        )
+                                    }
+                                </>
+                            )
                         }
                     </div>
                 </div>

@@ -21,16 +21,17 @@ export async function POST(req: Request) {
             quiz_total_marks,
             quiz_total_score, 
             quiz_estimated_time, 
+            quiz_display_time, 
             quiz_time_taken, 
             quiz_id, 
             quiz_title, 
-            quiz_coorect_answers_count, 
+            quiz_correct_answers_count, 
             user_id, 
             quiz_cover_photo,
 
          } = body;
 
-         if(quiz_total_question && quiz_total_marks && quiz_total_score && quiz_estimated_time && quiz_time_taken && quiz_id && quiz_title && quiz_coorect_answers_count && user_id) {
+         if(quiz_total_question && quiz_total_marks && quiz_total_score && quiz_estimated_time && quiz_display_time && quiz_time_taken && quiz_id && quiz_title && quiz_correct_answers_count && user_id) {
 
             await prisma.user_Participation.create({
                 data: {
@@ -38,10 +39,11 @@ export async function POST(req: Request) {
                     quiz_total_marks,
                     quiz_total_score, 
                     quiz_estimated_time, 
+                    quiz_display_time, 
                     quiz_time_taken, 
                     quiz_id, 
                     quiz_title, 
-                    quiz_coorect_answers_count, 
+                    quiz_correct_answers_count, 
                     user_id, 
                     quiz_cover_photo: quiz_cover_photo ? quiz_cover_photo : '',
                 }

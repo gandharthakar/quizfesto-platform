@@ -290,6 +290,7 @@ function WinnerPrizeForm(props: WinPriFrm) {
                                     placeholder="Description" 
                                     value={descr} 
                                     onChange={handleChangeDscr} 
+                                    autoComplete="off"
                                 />
                                 {descError && (<div className="ws-input-error mt-[2px]">{descError}</div>)}
                             </div>

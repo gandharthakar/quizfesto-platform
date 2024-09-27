@@ -18,6 +18,7 @@ interface AnswObj {
     quiz_total_marks: number,
     quiz_estimated_time: string,
     quiz_display_time: string,
+    negative_marking_score: number
 }
 
 let initialState:AnswObj = {
@@ -29,7 +30,8 @@ let initialState:AnswObj = {
     attempted_data: [],
     quiz_total_marks: 0,
     quiz_estimated_time: '',
-    quiz_display_time: ''
+    quiz_display_time: '',
+    negative_marking_score: 0
 };
 
 const transferQuizDataReducer = createSlice({
@@ -51,7 +53,8 @@ const transferQuizDataReducer = createSlice({
                 attempted_data: arr,
                 quiz_total_marks: 0,
                 quiz_estimated_time: '',
-                quiz_display_time: ''
+                quiz_display_time: '',
+                negative_marking_score: 0
             };
             return state;
         },

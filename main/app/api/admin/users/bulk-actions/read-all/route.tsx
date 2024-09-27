@@ -23,7 +23,11 @@ export async function GET() {
 
     try {
 
-        const data = await prisma.user.findMany();
+        const data = await prisma.user.findMany({
+            orderBy: {
+                user_id: 'desc'
+            }
+        });
         if(data.length > 0) {
             let user = data.map((item) => {
                 let obj = { 

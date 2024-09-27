@@ -6,8 +6,7 @@ interface Respo {
     message: string
 }
 
-export async function GET(req: Request) {
-
+export async function DELETE() {
     let resp: Respo = {
         success: false,
         message: ''
@@ -15,31 +14,30 @@ export async function GET(req: Request) {
     let sts:number = 400;
 
     try {
-        const data = await prisma.qF_Winning_Prizes.findMany();
+
+        const data = await prisma.qF_Winners.findMany();
+        
         if(data.length > 0) {
+            await prisma.qF_Winners.deleteMany();
             sts = 200;
             resp = {
                 success: true,
-                message: "Prizes Found!",
+                message: "Winner Deleted Successfully!"
             }
-            let db_data = {
-                prizes: data,
-                ...resp
-            };
-            return NextResponse.json(db_data, {status: sts});
         } else {
             sts = 200;
             resp = {
-                success: true,
-                message: "No Prizes Found!",
+                success: false,
+                message: "No Winners Found!"
             }
-            return NextResponse.json(resp, {status: sts});
         }
+        
+        return NextResponse.json(resp, {status: sts});
     } catch (error: any) {
         sts = 500;
         resp = {
             success: false,
-            message: error.message,
+            message: error.message
         }
         return NextResponse.json(resp, {status: sts});
     }

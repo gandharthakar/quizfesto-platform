@@ -1,9 +1,8 @@
 import { FaTrophy } from "react-icons/fa";
 
 interface UsrAraWinCrd {
-    winning_type: string | number,
-    winning_possition_text: string | number, 
-    winning_type_text: string, 
+    winning_type: number,
+    winning_position_text: string, 
     winning_description: string,
     winning_date: string,
 }
@@ -11,9 +10,8 @@ interface UsrAraWinCrd {
 function UserAreaWinningCard(props: UsrAraWinCrd) {
 
     const { 
-        winning_type=3, 
-        winning_possition_text=3, 
-        winning_type_text="rd", 
+        winning_type=0, 
+        winning_position_text, 
         winning_description="-", 
         winning_date="-"
     } = props;
@@ -22,20 +20,19 @@ function UserAreaWinningCard(props: UsrAraWinCrd) {
         const tr_classes:string[] = ["text-amber-500", "text-gray-400", "text-orange-700"];
         let cls:string = '';
         switch (winning_type) {
-            case 1 || "1":
+            case 1:
                 cls = tr_classes[0];
                 break;
-            case 2 || "2":
+            case 2:
                 cls = tr_classes[1];
                 break;
-            case 3 || "3":
+            case 3:
                 cls = tr_classes[2];
                 break;
             default:
                 cls = tr_classes[0];
                 break;
         }
-        console.log(cls);
         return cls;
     }
 
@@ -49,7 +46,7 @@ function UserAreaWinningCard(props: UsrAraWinCrd) {
                 </div>
                 <div className="pb-0">
                     <h1 className="transition-all delay-75 font-noto_sans font-semibold text-[20px] md:text-[25px] text-zinc-900 dark:text-zinc-200">
-                        {winning_possition_text}<sup>{winning_type_text}</sup> Winner
+                        {winning_type}<sup>{winning_position_text}</sup> Winner
                     </h1>
                 </div>
                 <div className="pb-[10px]">

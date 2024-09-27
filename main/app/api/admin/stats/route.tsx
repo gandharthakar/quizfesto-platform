@@ -7,7 +7,7 @@ interface QF_Stats {
     total_options: number,
     total_categories: number,
     total_users: number,
-    total_prizes: number
+    total_winners: number
 }
 
 interface Respo {
@@ -31,7 +31,7 @@ export async function GET() {
             total_options: await prisma.qF_Option.count(),
             total_categories: await prisma.qF_Quiz_Category.count(),
             total_users: await prisma.user.count(),
-            total_prizes: await prisma.qF_Winning_Prizes.count()
+            total_winners: await prisma.qF_Winners.count()
         }
         sts = 200;
         resp = {

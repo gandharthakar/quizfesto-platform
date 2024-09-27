@@ -16,45 +16,30 @@ export async function DELETE(req: Request) {
     try {
 
         const body = await req.json();
-        let { user_id_list } = body;
-        console.log(user_id_list);
+        let { winner_type } = body;
 
-        if(user_id_list) {
-
-            let data = await prisma.user_Participation.findMany({
+        if(winner_type) {
+            let alreadyExist = await prisma.qF_Winners.findFirst({
                 where: {
-                    user_id: {
-                        in: user_id_list
-                    }
+                    winner_type
                 }
             });
-
-            if(data.length > 0) {
-                await prisma.user_Participation.deleteMany({
+            if(alreadyExist !== null) {
+                await prisma.qF_Winners.delete({
                     where: {
-                        user_id: {
-                            in: user_id_list
-                        }
+                        winner_type
                     }
                 });
                 sts = 200;
                 resp = {
                     success: true,
-                    message: "Selected Users Participation Data Reset Successfully!"
+                    message: "Winner Deleted Successfully!"
                 }
-
-                await prisma.aggrigate_Scores.deleteMany({
-                    where: {
-                        user_id: {
-                            in: user_id_list
-                        }
-                    }
-                });
             } else {
                 sts = 200;
                 resp = {
                     success: false,
-                    message: "Participation Data Not Found!"
+                    message: "Winner Not Found!"
                 }
             }
         } else {

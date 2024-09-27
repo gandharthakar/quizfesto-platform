@@ -37,6 +37,12 @@ export async function DELETE(req: Request) {
                     success: true,
                     message: "Participation Data Reset Successfully!"
                 }
+
+                await prisma.aggrigate_Scores.delete({
+                    where: {
+                        user_id
+                    }
+                })
             } else {
                 sts = 200;
                 resp = {

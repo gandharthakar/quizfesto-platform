@@ -90,12 +90,6 @@ function Page() {
         }
     }
 
-    // const options: TwSelInt[] = [
-    //     { value: "fox", label: "🦊 Fox" },
-    //     { value: "Butterfly", label: "🦋 Butterfly" },
-    //     { value: "Honeybee", label: "🐝 Honeybee" }
-    // ];
-
     const validationSchema = z.object({
         quiz_main_title: z.string({
 			required_error: "Please enter quiz title",
@@ -126,6 +120,11 @@ function Page() {
         quiz_total_ques: z.number({
             required_error: "Please enter quiz total questions",
 			invalid_type_error: "Quiz total questions be in integer (number) format."
+        }),
+
+        quiz_neg_marks: z.number({
+            required_error: "Please enter negative marking score",
+			invalid_type_error: "Negative marking score be in integer (number) format."
         }),
 
         quiz_sts: z.string({
@@ -221,6 +220,7 @@ function Page() {
             quiz_status: formdata.quiz_sts,
             quiz_about_text: quizAboutContent,
             quiz_terms: terms,
+            negative_marking_score: formdata.quiz_neg_marks
         }
         setIsLoading(true);
         let baseURI = window.location.origin;
@@ -390,25 +390,41 @@ function Page() {
                                             />
                                             {errors.quiz_total_marks && (<div className="ws-input-error mt-[2px]">{errors.quiz_total_marks.message}</div>)}
                                         </div>
+                                        <div>
+                                            <label 
+                                                className="transition-all delay-75 block mb-[5px] font-noto_sans text-[16px] font-semibold text-zinc-900 dark:text-zinc-300" 
+                                                htmlFor="cq-qnms"
+                                            >
+                                                Negative Marking Score <span className="text-red-500">*</span>
+                                            </label>
+                                            <input 
+                                                type="text" 
+                                                id="cq-qnms" 
+                                                className="ws-input-pwd-m1-v1" 
+                                                autoComplete="off" 
+                                                {...register("quiz_neg_marks", {valueAsNumber: true})} 
+                                            />
+                                            {errors.quiz_neg_marks && (<div className="ws-input-error mt-[2px]">{errors.quiz_neg_marks.message}</div>)}
+                                        </div>
+                                        <div>
+                                            <label 
+                                                className="transition-all delay-75 block mb-[5px] font-noto_sans text-[16px] font-semibold text-zinc-900 dark:text-zinc-300" 
+                                                htmlFor="cq-qsts"
+                                            >
+                                                Quiz Status <span className="text-red-500">*</span>
+                                            </label>
+                                            <select
+                                                id="cq-qsts" 
+                                                className="ws-input-pwd-m1-v1" 
+                                                {...register("quiz_sts")} 
+                                            >
+                                                <option value="">- Select -</option>
+                                                <option value="draft">Draft</option>
+                                                <option value="published">Published</option>
+                                            </select>
+                                            {errors.quiz_sts && (<div className="ws-input-error mt-[2px]">{errors.quiz_sts.message}</div>)}
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="pb-[20px]">
-                                    <label 
-                                        className="transition-all delay-75 block mb-[5px] font-noto_sans text-[16px] font-semibold text-zinc-900 dark:text-zinc-300" 
-                                        htmlFor="cq-qsts"
-                                    >
-                                        Quiz Status <span className="text-red-500">*</span>
-                                    </label>
-                                    <select
-                                        id="cq-qsts" 
-                                        className="ws-input-pwd-m1-v1" 
-                                        {...register("quiz_sts")} 
-                                    >
-                                        <option value="">- Select -</option>
-                                        <option value="draft">Draft</option>
-                                        <option value="published">Published</option>
-                                    </select>
-                                    {errors.quiz_sts && (<div className="ws-input-error mt-[2px]">{errors.quiz_sts.message}</div>)}
                                 </div>
                                 <div className="pb-[20px]">
                                     <label 

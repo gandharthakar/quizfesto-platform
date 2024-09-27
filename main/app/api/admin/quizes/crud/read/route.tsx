@@ -18,7 +18,8 @@ interface qF_Quiz {
     quiz_about_text: string,
     quiz_terms: string[],
     quiz_cover_photo: string,
-    quiz_categories: Cats[]
+    quiz_categories: Cats[],
+    negative_marking_score: number
 }
 
 interface Respo {
@@ -62,7 +63,8 @@ export async function POST(req: Request) {
             quiz_about_text: '',
             quiz_terms: [],
             quiz_cover_photo: '',
-            quiz_categories: []
+            quiz_categories: [],
+            negative_marking_score: 0
         }
     }
     let sts:number = 400;
@@ -95,7 +97,8 @@ export async function POST(req: Request) {
                         quiz_about_text: alreadQuizExited.quiz_about_text??"",
                         quiz_terms: alreadQuizExited.quiz_terms,
                         quiz_cover_photo: alreadQuizExited.quiz_cover_photo??"",
-                        quiz_categories: await getCatsLabel(alreadQuizExited.quiz_categories)
+                        quiz_categories: await getCatsLabel(alreadQuizExited.quiz_categories),
+                        negative_marking_score: alreadQuizExited.negative_marking_score
                     }
                 }
             } else {
@@ -115,7 +118,8 @@ export async function POST(req: Request) {
                         quiz_about_text: '',
                         quiz_terms: [],
                         quiz_cover_photo: '',
-                        quiz_categories: []
+                        quiz_categories: [],
+                        negative_marking_score: 0
                     }
                 }
             }
@@ -136,7 +140,8 @@ export async function POST(req: Request) {
                     quiz_about_text: '',
                     quiz_terms: [],
                     quiz_cover_photo: '',
-                    quiz_categories: []
+                    quiz_categories: [],
+                    negative_marking_score: 0
                 }
             }
         }
@@ -159,7 +164,8 @@ export async function POST(req: Request) {
                 quiz_about_text: '',
                 quiz_terms: [],
                 quiz_cover_photo: '',
-                quiz_categories: []
+                quiz_categories: [],
+                negative_marking_score: 0
             }
         }
         return NextResponse.json(resp, {status: sts});

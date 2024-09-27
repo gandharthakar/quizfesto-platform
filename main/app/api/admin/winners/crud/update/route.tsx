@@ -6,7 +6,7 @@ interface Respo {
     message: string
 }
 
-export async function DELETE(req: Request) {
+export async function POST(req: Request) {
     let resp: Respo = {
         success: false,
         message: ''
@@ -16,45 +16,34 @@ export async function DELETE(req: Request) {
     try {
 
         const body = await req.json();
-        let { user_id_list } = body;
-        console.log(user_id_list);
+        let { winner_type, winner_description} = body;
 
-        if(user_id_list) {
-
-            let data = await prisma.user_Participation.findMany({
+        if(winner_type && winner_description) {
+            let alreadyExist = await prisma.qF_Winners.findFirst({
                 where: {
-                    user_id: {
-                        in: user_id_list
-                    }
+                    winner_type
                 }
             });
-
-            if(data.length > 0) {
-                await prisma.user_Participation.deleteMany({
+            
+            if(alreadyExist !== null) {
+                await prisma.qF_Winners.update({
                     where: {
-                        user_id: {
-                            in: user_id_list
-                        }
+                        winner_type
+                    },
+                    data: {
+                        winner_description
                     }
                 });
                 sts = 200;
                 resp = {
                     success: true,
-                    message: "Selected Users Participation Data Reset Successfully!"
+                    message: "Winner Updated Successfully!"
                 }
-
-                await prisma.aggrigate_Scores.deleteMany({
-                    where: {
-                        user_id: {
-                            in: user_id_list
-                        }
-                    }
-                });
             } else {
                 sts = 200;
                 resp = {
                     success: false,
-                    message: "Participation Data Not Found!"
+                    message: "Winner Not Found!"
                 }
             }
         } else {
@@ -64,6 +53,7 @@ export async function DELETE(req: Request) {
                 message: "Missing Required Fields!"
             }
         }
+        
         
         return NextResponse.json(resp, {status: sts});
     } catch (error: any) {

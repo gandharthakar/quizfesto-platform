@@ -24,6 +24,8 @@ model User {
   user_participations User_Participation[]
   createdAt           DateTime             @default(now())
   updatedAt           DateTime             @updatedAt
+  Aggrigate_Scores    Aggrigate_Scores[]
+  QF_Winners          QF_Winners[]
 }
 
 model Admin_User {
@@ -57,21 +59,22 @@ model User_Participation {
 }
 
 model QF_Quiz {
-  quiz_id             String        @id @default(uuid())
-  quiz_title          String
-  quiz_summary        String
-  quiz_display_time   String
-  quiz_estimated_time String
-  quiz_total_question Int
-  quiz_total_marks    Int
-  quiz_status         String
-  quiz_about_text     String?
-  quiz_terms          String[]
-  quiz_cover_photo    String?
-  Questions           QF_Question[]
-  quiz_categories     String[]
-  createdAt           DateTime      @default(now())
-  updatedAt           DateTime      @updatedAt
+  quiz_id                String        @id @default(uuid())
+  quiz_title             String
+  quiz_summary           String
+  quiz_display_time      String
+  quiz_estimated_time    String
+  quiz_total_question    Int
+  quiz_total_marks       Int
+  quiz_status            String
+  quiz_about_text        String?
+  quiz_terms             String[]
+  quiz_cover_photo       String?
+  Questions              QF_Question[]
+  quiz_categories        String[]
+  negative_marking_score Int
+  createdAt              DateTime      @default(now())
+  updatedAt              DateTime      @updatedAt
 }
 
 model QF_Question {
@@ -109,16 +112,26 @@ model QF_Winning_Prizes {
 }
 
 model QF_Winners {
-  winner_id          String @id @default(uuid())
-  winner_type        Int    @unique
-  winner_user_id     String
+  winner_id          String  @id @default(uuid())
+  winner_type        Int     @unique
+  user_id            String? @unique
   winner_date        String
   winner_description String
+  User               User?   @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
 }
 
 model Homepage_Categories {
   home_cat_id String   @id @default(uuid())
   home_cats   String[]
+}
+
+model Aggrigate_Scores {
+  ags_id          String  @id @default(uuid())
+  aggregate_score Int
+  record_date     String
+  record_time     String
+  User            User?   @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  user_id         String? @unique
 }
 
 enum Role {

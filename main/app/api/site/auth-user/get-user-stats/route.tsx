@@ -44,7 +44,7 @@ export async function POST(req: Request) {
                 user_stats: {
                     user_score: totalScore,
                     user_participation: (await prisma.user_Participation.findMany({ where: { user_id } })).length,
-                    user_winnings: 0
+                    user_winnings: (await prisma.qF_Winners.findMany({ where: { user_id: user_id } })).length
                 }
             }
         } else {

@@ -80,6 +80,7 @@ export default function Page() {
     const [currentQuestionMarks, setCurrentQuestionMarks] = useState<number>(0);
     const [currentQuestionOptions, setCurrentQuestionOptions] = useState<string[]>([]);
     const [timing, setTiming] = useState<string>('');
+    const [negScore, setNegScore] = useState<number>();
 
     const CreateRadioButton = (opt_id:string, opt_txt:string, sa:string, ch:any) => {
         return (
@@ -167,6 +168,7 @@ export default function Page() {
                     quiz_estimated_time: quizEstTime,
                     quiz_display_time: quizDispTime,
                     time_taken: timing,
+                    negative_marking_score: negScore,
 
                     attempted_data: atm_data,
                 }
@@ -206,6 +208,7 @@ export default function Page() {
             setQuizEstTime(body.quiz.quiz_estimated_time);
             setQuizDispTime(body.quiz.quiz_display_time);
             setQuesData(body.quiz);
+            setNegScore(body.quiz.negative_marking_score);
             setCurrentQuestion(() => {
                 return {
                     question_id: body.quiz.questions[currentQuestionIndex].question_id??"",

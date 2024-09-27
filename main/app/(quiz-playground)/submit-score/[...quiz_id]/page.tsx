@@ -41,6 +41,7 @@ export default function Page() {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isSubmiting, setIsSubmiting] = useState<boolean>(false);
     const [isSubmited, setIsSubmited] = useState<boolean>(false);
+    const [negScore, setNegScore] = useState<number>();
 
     const handleScoreSubmissionClick = async () => {
         setIsSubmiting(true);
@@ -76,7 +77,9 @@ export default function Page() {
                     timer: 3000
                 });
             } else {
+                setIsSubmiting(false);
                 setIsSubmited(false);
+                setIsLoading(false);
                 Swal.fire({
                     title: "Error!",
                     text: body.message,
@@ -103,7 +106,13 @@ export default function Page() {
         const body = await resp.json();
         if(body.success) {
             setCorectAnswers(body.quiz_coorect_answers_count);
-            setTotalScore(body.quiz_total_score);
+            if(timeTaken > estTime) {
+                if(negScore) {
+                    setTotalScore(body.quiz_total_score - negScore);
+                }
+            } else {
+                setTotalScore(body.quiz_total_score);
+            }
             setIsLoading(false);
         }
     }
@@ -141,6 +150,7 @@ export default function Page() {
         //     setEstTime(prsfid.quiz_estimated_time);
         //     setQdt(prsfid.quiz_display_time);
         //     setTotalMarks(prsfid.quiz_total_marks);
+        //     setNegScore(prsfid.negative_marking_score);
 
         //     setUserAnsw(prsfid.attempted_data);
 
@@ -159,6 +169,7 @@ export default function Page() {
             setEstTime(trqzdt.quiz_estimated_time);
             setQdt(trqzdt.quiz_display_time);
             setTotalMarks(trqzdt.quiz_total_marks);
+            setNegScore(trqzdt.negative_marking_score);
 
             setUserAnsw(trqzdt.attempted_data);
         }
@@ -228,7 +239,7 @@ export default function Page() {
                         </div>
                         <div className="pb-[15px] text-center">
                             <h5 className="transition-all delay-75 font-ubuntu text-[12px] font-semibold md:text-[14px] text-zinc-500 dark:text-zinc-500">
-                                Your Score Will Be Saved Only After Your Submit.
+                                Your Score Will Be Saved Only After You clicked "Submit Score" Button.
                             </h5>
                         </div>
 

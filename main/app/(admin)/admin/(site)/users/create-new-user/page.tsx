@@ -195,6 +195,7 @@ function Page() {
             });
             setIsLoading(false);
             removeButtonClick();
+            setPhone('');
             reset();
         } else {
             Swal.fire({

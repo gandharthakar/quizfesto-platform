@@ -30,22 +30,22 @@ export default function QuizPrizes() {
             setLoading2(false);
             setLoading3(false);
         } else {
-            for(let i = 0; i < body.length; i++) {
-                if(body[i].prize_type === 1) {
-                    setPrize1Photo(body[i].prize_cover_photo);
-                    setPrize1Dscr(body[i].prize_description);
+            for(let i = 0; i < body.prizes.length; i++) {
+                if(body.prizes[i].prize_type === 1) {
+                    setPrize1Photo(body.prizes[i].prize_cover_photo);
+                    setPrize1Dscr(body.prizes[i].prize_description);
                     setLoading1(false);
                 }
 
-                if(body[i].prize_type === 2) {
-                    setPrize2Photo(body[i].prize_cover_photo);
-                    setPrize2Dscr(body[i].prize_description);
+                if(body.prizes[i].prize_type === 2) {
+                    setPrize2Photo(body.prizes[i].prize_cover_photo);
+                    setPrize2Dscr(body.prizes[i].prize_description);
                     setLoading2(false);
                 }
 
-                if(body[i].prize_type === 3) {
-                    setPrize3Photo(body[i].prize_cover_photo);
-                    setPrize3Dscr(body[i].prize_description);
+                if(body.prizes[i].prize_type === 3) {
+                    setPrize3Photo(body.prizes[i].prize_cover_photo);
+                    setPrize3Dscr(body.prizes[i].prize_description);
                     setLoading3(false);
                 }
             }
@@ -54,6 +54,7 @@ export default function QuizPrizes() {
 
     useEffect(() => {
         getPrizes();
+        //eslint-disable-next-line
     }, []);
 
     return (
@@ -68,7 +69,7 @@ export default function QuizPrizes() {
                         </div>
                         <div className="max-w-[500px] mx-auto text-center">
                             <p className="transition-all delay-75 font-noto_sans text-[16px] md:text-[18px] text-zinc-800 font-normal dark:text-zinc-300">
-                                {parse(prize1Dscr)}
+                                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aut exercitationem, harum facere sapiente consequuntur dolores optio placeat quod nostrum ratione?
                             </p>
                         </div>
                     </div>
@@ -98,7 +99,7 @@ export default function QuizPrizes() {
                                 </div>
                                 <div>
                                     <p className="transition-all delay-75 font-noto_sans text-[16px] md:text-[18px] dark:text-zinc-400">
-                                        {parse(prize2Dscr)}
+                                        {parse(prize1Dscr)}
                                     </p>
                                 </div>
                             </div>
@@ -127,7 +128,7 @@ export default function QuizPrizes() {
                                 </div>
                                 <div>
                                     <p className="transition-all delay-75 font-noto_sans text-[16px] md:text-[18px] dark:text-zinc-400">
-                                        {parse(prize3Dscr)}
+                                        {parse(prize2Dscr)}
                                     </p>
                                 </div>
                             </div>
@@ -156,7 +157,7 @@ export default function QuizPrizes() {
                                 </div>
                                 <div>
                                     <p className="transition-all delay-75 font-noto_sans text-[16px] md:text-[18px] dark:text-zinc-400">
-                                        Score 6000 and 3<sup>rd</sup> winner will get paytm cashback upto rupees 500.
+                                        {parse(prize3Dscr)}
                                     </p>
                                 </div>
                             </div>

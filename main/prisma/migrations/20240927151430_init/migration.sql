@@ -65,6 +65,7 @@ CREATE TABLE "QF_Quiz" (
     "quiz_terms" TEXT[],
     "quiz_cover_photo" TEXT,
     "quiz_categories" TEXT[],
+    "negative_marking_score" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -118,7 +119,7 @@ CREATE TABLE "QF_Winning_Prizes" (
 CREATE TABLE "QF_Winners" (
     "winner_id" TEXT NOT NULL,
     "winner_type" INTEGER NOT NULL,
-    "winner_user_id" TEXT NOT NULL,
+    "user_id" TEXT,
     "winner_date" TEXT NOT NULL,
     "winner_description" TEXT NOT NULL,
 
@@ -131,6 +132,17 @@ CREATE TABLE "Homepage_Categories" (
     "home_cats" TEXT[],
 
     CONSTRAINT "Homepage_Categories_pkey" PRIMARY KEY ("home_cat_id")
+);
+
+-- CreateTable
+CREATE TABLE "Aggrigate_Scores" (
+    "ags_id" TEXT NOT NULL,
+    "aggregate_score" INTEGER NOT NULL,
+    "record_date" TEXT NOT NULL,
+    "record_time" TEXT NOT NULL,
+    "user_id" TEXT,
+
+    CONSTRAINT "Aggrigate_Scores_pkey" PRIMARY KEY ("ags_id")
 );
 
 -- CreateIndex
@@ -148,6 +160,12 @@ CREATE UNIQUE INDEX "QF_Winning_Prizes_prize_type_key" ON "QF_Winning_Prizes"("p
 -- CreateIndex
 CREATE UNIQUE INDEX "QF_Winners_winner_type_key" ON "QF_Winners"("winner_type");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "QF_Winners_user_id_key" ON "QF_Winners"("user_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Aggrigate_Scores_user_id_key" ON "Aggrigate_Scores"("user_id");
+
 -- AddForeignKey
 ALTER TABLE "User_Participation" ADD CONSTRAINT "User_Participation_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("user_id") ON DELETE CASCADE ON UPDATE CASCADE;
 
@@ -156,3 +174,9 @@ ALTER TABLE "QF_Question" ADD CONSTRAINT "QF_Question_quizid_fkey" FOREIGN KEY (
 
 -- AddForeignKey
 ALTER TABLE "QF_Option" ADD CONSTRAINT "QF_Option_questionid_fkey" FOREIGN KEY ("questionid") REFERENCES "QF_Question"("question_id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "QF_Winners" ADD CONSTRAINT "QF_Winners_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("user_id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Aggrigate_Scores" ADD CONSTRAINT "Aggrigate_Scores_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("user_id") ON DELETE CASCADE ON UPDATE CASCADE;

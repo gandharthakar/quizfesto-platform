@@ -16,7 +16,8 @@ interface QF_Quiz_Pub_QA {
     quiz_estimated_time: string,
     quiz_display_time: string,
     quiz_cover_photo: string,
-    questions?: QF_Quiz_Pub_Quess[]
+    questions?: QF_Quiz_Pub_Quess[],
+    negative_marking_score: number
 }
 
 interface Respo {
@@ -86,7 +87,8 @@ export async function POST(req: Request) {
                         quiz_total_marks: data.quiz_total_marks,
                         quiz_total_question: data.quiz_total_question,
                         questions: qArrData,
-                        quiz_cover_photo: data.quiz_cover_photo??""
+                        quiz_cover_photo: data.quiz_cover_photo??"",
+                        negative_marking_score: data.negative_marking_score
                     }
                 }
                 // console.log(await getQuestions([]));

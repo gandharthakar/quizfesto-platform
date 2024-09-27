@@ -14,7 +14,7 @@ interface QF_Stats {
     total_options: number,
     total_categories: number,
     total_users: number,
-    total_prizes: number
+    total_winners: number
 }
 
 function Page() {
@@ -25,7 +25,7 @@ function Page() {
         total_options: 0,
         total_categories: 0,
         total_users: 0,
-        total_prizes: 0
+        total_winners: 0
     });
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -143,12 +143,12 @@ function Page() {
                             : 
                             (
                                 <h1 className="text-[28px] md:text-[50px] font-ubuntu font-light text-white relative z-[5]">
-                                    {stats.total_prizes}
+                                    {stats.total_winners}
                                 </h1>
                             )
                         }
                         <h1 className="text-[18px] md:text-[26px] font-ubuntu font-medium text-white relative z-[5]">
-                            Prizes
+                            Winners
                         </h1>
                     </div>
                 </div>

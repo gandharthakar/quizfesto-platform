@@ -27,7 +27,7 @@ export default function UserAreaNavBar() {
     //eslint-disable-next-line
     const getUser = async () => {
         let baseURI = window.location.origin;
-        const resp = await fetch(`${baseURI}/api/site/get-single-user`, {
+        const resp = await fetch(`${baseURI}/api/site/auth-user/get-single-user`, {
             method: 'POST',
             body: JSON.stringify({ user_id: AuthUser })
         });
@@ -52,7 +52,7 @@ export default function UserAreaNavBar() {
                     <div>
                         <div className="pt-[25px] md:pt-[40px] px-[15px] w-full">
                             <div className="pb-[5px] text-center">
-                                <div className="concard p-[4px] inline-block rounded-full">
+                                <div className="concard p-[2px] md:p-[3px] inline-block rounded-full">
                                     <div className="transition-all delay-75 w-[70px] h-[70px] md:w-[100px] md:h-[100px] relative flex items-center justify-center border-[4px] border-solid border-white bg-zinc-200 rounded-full dark:bg-zinc-800 dark:border-zinc-950 font-ubuntu text-[30px] md:text-[40px] text-zinc-800 dark:text-zinc-300">
                                         <span className="uppercase">{nameLetter}</span>
                                         {profilePict && (<Image src={profilePict} width={100} height={100} className="absolute left-0 top-0 z-[2] w-full h-full rounded-full" alt="photo" priority={true} />)}

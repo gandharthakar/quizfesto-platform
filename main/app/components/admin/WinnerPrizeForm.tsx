@@ -197,10 +197,18 @@ function WinnerPrizeForm(props: WinPriFrm) {
                     icon: "success",
                     timer: 1500
                 });
-                let s1 = setTimeout(() => {
-                    window.location.reload();
-                    clearTimeout(s1);
-                }, 1500);
+                // let s1 = setTimeout(() => {
+                //     window.location.reload();
+                //     clearTimeout(s1);
+                // }, 1500);
+            } else {
+                setIsLoading(false);
+                Swal.fire({
+                    title: "Error!",
+                    text: body.message,
+                    icon: "error",
+                    timer: 1500
+                });
             }
         }
     }

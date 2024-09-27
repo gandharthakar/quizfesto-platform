@@ -41,7 +41,7 @@ export default function Page() {
     const handleFormSubmit: SubmitHandler<validationSchema> = async (formdata) => {
         setIsLoading(true);
         let baseURI = window.location.origin;
-        const resp = await fetch(`${baseURI}/api/site/update-single-user/password`, {
+        const resp = await fetch(`${baseURI}/api/site/auth-user/update-single-user/password`, {
             method: 'POST',
             body: JSON.stringify({ user_id: AuthUser, user_password: formdata.password, confirm_password: formdata.confirm_password })
         });

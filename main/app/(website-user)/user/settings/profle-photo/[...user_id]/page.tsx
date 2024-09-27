@@ -79,7 +79,7 @@ export default function Page() {
     const removeImageButtonClick = async () => {
         setIsLoadRmv(true);
         let baseURI = window.location.origin;
-        const resp = await fetch(`${baseURI}/api/site/update-single-user/profile-photo`, {
+        const resp = await fetch(`${baseURI}/api/site/auth-user/update-single-user/profile-photo`, {
             method: 'POST',
             body: JSON.stringify({ user_id: AuthUser, user_photo: '' })
         });
@@ -101,7 +101,7 @@ export default function Page() {
     //eslint-disable-next-line
     const getUser = async () => {
         let baseURI = window.location.origin;
-        const resp = await fetch(`${baseURI}/api/site/get-single-user`, {
+        const resp = await fetch(`${baseURI}/api/site/auth-user/get-single-user`, {
             method: 'POST',
             body: JSON.stringify({ user_id: AuthUser })
         });
@@ -144,7 +144,7 @@ export default function Page() {
         if(isValidImage) {
             setIsLoading(true);
             let baseURI = window.location.origin;
-            const resp = await fetch(`${baseURI}/api/site/update-single-user/profile-photo`, {
+            const resp = await fetch(`${baseURI}/api/site/auth-user/update-single-user/profile-photo`, {
                 method: 'POST',
                 body: JSON.stringify({ user_id: AuthUser, user_photo: imageFile })
             });

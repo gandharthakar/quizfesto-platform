@@ -8,7 +8,14 @@ import { useSelector } from "react-redux";
 import { useEffect, useRef, useState } from "react";
 import { CgProfile } from "react-icons/cg";
 import { IoSettingsOutline } from "react-icons/io5";
-import { MdOutlinePowerSettingsNew } from "react-icons/md";
+import { getCookie } from "cookies-next";
+import { jwtDecode } from "jwt-decode";
+
+interface JWTDec {
+    is_auth_user: string,
+    exp: number,
+    iat: number
+}
 
 export default function HeaderProfileMenu() {
 
@@ -20,14 +27,20 @@ export default function HeaderProfileMenu() {
 
     //eslint-disable-next-line
     const getUser = async () => {
-        let baseURI = window.location.origin;
-        const resp = await fetch(`${baseURI}/api/site/get-single-user`, {
-            method: 'POST',
-            body: JSON.stringify({ user_id: AuthUser })
-        });
-        let body = await resp.json();
-        setNameLetter(body.user_full_name.charAt(0));
-        setProfilePict(body.user_photo);
+        let gau = getCookie('is_auth_user');
+        if(gau) {
+            let user_id: JWTDec = jwtDecode(gau);
+            let baseURI = window.location.origin;
+            const resp = await fetch(`${baseURI}/api/site/auth-user/get-single-user`, {
+                method: 'POST',
+                body: JSON.stringify({ user_id: user_id.is_auth_user })
+            });
+            let body = await resp.json();
+            if(body.success) {
+                setNameLetter(body.user.user_full_name.charAt(0));
+                setProfilePict(body.user.user_photo);
+            }
+        }
     }
 
     useEffect(()=> {
@@ -45,11 +58,9 @@ export default function HeaderProfileMenu() {
     }, []);
 
     useEffect(() => {
-        if(AuthUser !== '') {
-            getUser();
-        }
+        getUser();
     //eslint-disable-next-line
-    }, [getUser]);
+    }, []);
 
     return (
         <>

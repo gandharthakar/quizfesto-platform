@@ -13,7 +13,7 @@ interface WinUsrFrm {
     user_profile_picture?: string
 }
 
-export default function page() {
+export default function Page() {
 
     const [haveWinners, setHaveWinners] = useState<boolean>(false);
     const [winData1, setWin1Data] = useState<WinUsrFrm>();

@@ -239,7 +239,7 @@ export default function Page() {
                         </div>
                         <div className="pb-[15px] text-center">
                             <h5 className="transition-all delay-75 font-ubuntu text-[12px] font-semibold md:text-[14px] text-zinc-500 dark:text-zinc-500">
-                                Your Score Will Be Saved Only After You clicked "Submit Score" Button.
+                                Your Score Will Be Saved Only After You clicked &quot;Submit Score&quot; Button.
                             </h5>
                         </div>
 

@@ -20,6 +20,7 @@ export async function POST(req: Request) {
         const body = await req.json();
         const { user_password, confirm_password, user_id, token } = body;
 
+        console.log(token);
         if(user_password && confirm_password && user_id && token) {
             if(user_password === confirm_password) {
                 const user = await prisma.user.findFirst({
@@ -27,9 +28,8 @@ export async function POST(req: Request) {
                         user_id
                     }
                 });
-                if(user) {
-                    const new_token = user.user_id + process.env.JWT_SECRET;
-                    const vrfy = jwt.verify(token, new_token);
+                if(user !== null) {
+                    const vrfy = jwt.verify(token, process.env.JWT_SECRET??"");
                     const hashPwd = await hash(user_password, 10);
                     if(vrfy) {
                         await prisma.user.update({
@@ -76,10 +76,19 @@ export async function POST(req: Request) {
         
         return NextResponse.json(resp, {status: sts});
     } catch (error: any) {
-        sts = 500;
-        resp = {
-            success: false,
-            message: error.message
+        
+        if(error.message == "jwt expired") {
+            sts = 200;
+            resp = {
+                success: false,
+                message: "Token is invalid or expired."
+            }
+        } else {
+            sts = 500;
+            resp = {
+                success: false,
+                message: error.message
+            }
         }
         return NextResponse.json(resp, {status: sts});
     }

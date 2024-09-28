@@ -111,9 +111,9 @@ export default function Page() {
         setIsError(false);
     };
 
-    const Radio = useMemo(() => {
-        return currentQuestionOptions.map((itm, idx) => (<li key={idx}>{CreateRadioButton(idx.toString(), itm, selectedAnswer, handleChange)}</li>));
-    }, [currentQuestionOptions, selectedAnswer]);
+    // const Radio = useMemo(() => {
+    //     return currentQuestionOptions.map((itm, idx) => (<li key={idx}>{CreateRadioButton(idx.toString(), itm, selectedAnswer, handleChange)}</li>));
+    // }, [currentQuestionOptions, selectedAnswer]);
 
     const handleClick = (e: any) => {
         e.preventDefault();
@@ -330,30 +330,30 @@ export default function Page() {
                             </div>
                             <div className="pb-[15px]">
                                 <ul className="quizques-options-list">
-                                    {Radio}
-                                    {/* {
-                                        currentQuestionOptions.map((itm) => (
-                                            <li key={itm.option_id}>
+                                    {/* {Radio} */}
+                                    {
+                                        currentQuestionOptions.map((itm, idx) => (
+                                            <li key={idx}>
                                                 <input 
                                                     type="radio" 
                                                     name="answer_option" 
-                                                    id={itm.option_id} 
+                                                    id={idx.toString()} 
                                                     className="radio-btn" 
-                                                    value={itm.option_id} 
-                                                    checked={selectedAnswer === itm.option_id}
+                                                    value={itm} 
+                                                    checked={selectedAnswer === itm}
                                                     onChange={handleChange}
                                                 />
-                                                <label htmlFor={itm.option_id} role="button" title="Option 1" className="option-btn">
+                                                <label htmlFor={idx.toString()} role="button" title="Option 1" className="option-btn">
                                                     <div className="check-round">
                                                         <IoIosCheckmarkCircle size={20} className="tick-icon" />
                                                     </div>
                                                     <div>
-                                                        {itm.option_text}
+                                                        {itm}
                                                     </div>
                                                 </label>
                                             </li>
                                         ))
-                                    } */}
+                                    }
                                     {/* <li>
                                         <input type="radio" name="answer_option" id="opt2" className="radio-btn" value={`Option 2`} />
                                         <label htmlFor="opt2" role="button" title="Option 2" className="option-btn">

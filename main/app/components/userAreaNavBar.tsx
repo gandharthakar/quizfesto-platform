@@ -9,7 +9,7 @@ import { FaPowerOff } from "react-icons/fa6";
 import { ImCog } from "react-icons/im";
 import { IoChatboxEllipses } from "react-icons/io5";
 import { AiOutlineTrophy } from "react-icons/ai";
-import { usePathname, redirect } from "next/navigation";
+import { usePathname, redirect, useParams } from "next/navigation";
 import { close_user_area_menu } from "../redux-service/slices/user-area/userAreaMenuToggleSlice";
 import { useEffect, useState } from "react";
 
@@ -17,32 +17,34 @@ export default function UserAreaNavBar() {
     
     const dispatch = useDispatch();
     const pathName = usePathname();
+    const params = useParams();
+    const user_id = params.user_id[0];
+
     const isMenuOpen = useSelector((state: RootState) => state.user_area_menu_toggle.is_user_area_menu_open);
-    const AuthUser = useSelector((state: RootState) => state.auth_user_id.auth_user_id);
     const [nameLetter, setNameLetter] = useState<string>('');
     const [profilePict, setProfilePict] = useState<string>("");
     const [userName, setUserName] = useState<string>("");
-    const settingRoutes:string[] = [`/user/settings/${AuthUser}`, `/user/settings/password/${AuthUser}`, `/user/settings/phone/${AuthUser}`, `/user/settings/profle-photo/${AuthUser}`];
+    const settingRoutes:string[] = [`/user/settings/${user_id}`, `/user/settings/password/${user_id}`, `/user/settings/phone/${user_id}`, `/user/settings/profle-photo/${user_id}`];
 
     //eslint-disable-next-line
     const getUser = async () => {
         let baseURI = window.location.origin;
         const resp = await fetch(`${baseURI}/api/site/auth-user/get-single-user`, {
             method: 'POST',
-            body: JSON.stringify({ user_id: AuthUser })
+            body: JSON.stringify({ user_id })
         });
         let body = await resp.json();
-        setNameLetter(body.user_full_name.charAt(0));
-        setProfilePict(body.user_photo);
-        setUserName(body.user_full_name);
+        if(body.success) {
+            setNameLetter(body.user.user_full_name.charAt(0));
+            setProfilePict(body.user.user_photo);
+            setUserName(body.user.user_full_name);
+        }
     }
 
     useEffect(() => {
-        if(AuthUser !== '') {
-            getUser();
-        }
+        getUser();
     //eslint-disable-next-line
-    }, [getUser]);
+    }, []);
 
     return (
         <>
@@ -73,9 +75,9 @@ export default function UserAreaNavBar() {
                             <ul className="flex flex-col user-area-nav">
                                 <li className="w-full">
                                     <Link 
-                                        href={`/user/${AuthUser}`} 
+                                        href={`/user/${user_id}`} 
                                         title="Profile" 
-                                        className={`transition-all delay-75 py-[10px] md:py-[15px] block px-[15px] border-l-[4px] border-solid border-transparent font-noto_sans font-semibold text-[16px] md:text-[18px] text-zinc-800 hover:bg-zinc-100 hover:border-theme-color-2 dark:text-zinc-400 dark:hover:bg-zinc-900 ${pathName === '/user/'+AuthUser ? 'active' : ''}`}
+                                        className={`transition-all delay-75 py-[10px] md:py-[15px] block px-[15px] border-l-[4px] border-solid border-transparent font-noto_sans font-semibold text-[16px] md:text-[18px] text-zinc-800 hover:bg-zinc-100 hover:border-theme-color-2 dark:text-zinc-400 dark:hover:bg-zinc-900 ${pathName === '/user/'+user_id ? 'active' : ''}`}
                                         onClick={() => dispatch(close_user_area_menu())}
                                     >
                                         <div className="flex gap-x-[10px] items-center">
@@ -88,9 +90,9 @@ export default function UserAreaNavBar() {
                                 </li>
                                 <li className="w-full">
                                     <Link 
-                                        href={`/user/my-winnings/${AuthUser}`} 
+                                        href={`/user/my-winnings/${user_id}`} 
                                         title="My Winnings" 
-                                        className={`transition-all delay-75 py-[10px] md:py-[15px] block px-[15px] border-l-[4px] border-solid border-transparent font-noto_sans font-semibold text-[16px] md:text-[18px] text-zinc-800 hover:bg-zinc-100 hover:border-theme-color-2 dark:text-zinc-400 dark:hover:bg-zinc-900 ${pathName === '/user/my-winnings/'+AuthUser ? 'active' : ''}`}
+                                        className={`transition-all delay-75 py-[10px] md:py-[15px] block px-[15px] border-l-[4px] border-solid border-transparent font-noto_sans font-semibold text-[16px] md:text-[18px] text-zinc-800 hover:bg-zinc-100 hover:border-theme-color-2 dark:text-zinc-400 dark:hover:bg-zinc-900 ${pathName === '/user/my-winnings/'+user_id ? 'active' : ''}`}
                                         onClick={() => dispatch(close_user_area_menu())}
                                     >
                                         <div className="flex gap-x-[10px] items-center">
@@ -103,9 +105,9 @@ export default function UserAreaNavBar() {
                                 </li>
                                 <li className="w-full">
                                     <Link 
-                                        href={`/user/my-participation/${AuthUser}`} 
+                                        href={`/user/my-participation/${user_id}`} 
                                         title="My Participation" 
-                                        className={`transition-all delay-75 py-[10px] md:py-[15px] block px-[15px] border-l-[4px] border-solid border-transparent font-noto_sans font-semibold text-[16px] md:text-[18px] text-zinc-800 hover:bg-zinc-100 hover:border-theme-color-2 dark:text-zinc-400 dark:hover:bg-zinc-900 ${pathName === '/user/my-participation/'+AuthUser ? 'active' : ''}`}
+                                        className={`transition-all delay-75 py-[10px] md:py-[15px] block px-[15px] border-l-[4px] border-solid border-transparent font-noto_sans font-semibold text-[16px] md:text-[18px] text-zinc-800 hover:bg-zinc-100 hover:border-theme-color-2 dark:text-zinc-400 dark:hover:bg-zinc-900 ${pathName === '/user/my-participation/'+user_id ? 'active' : ''}`}
                                         onClick={() => dispatch(close_user_area_menu())}
                                     >
                                         <div className="flex gap-x-[10px] items-center">
@@ -118,7 +120,7 @@ export default function UserAreaNavBar() {
                                 </li>
                                 <li className="w-full">
                                     <Link 
-                                        href={`/user/settings/${AuthUser}`} 
+                                        href={`/user/settings/${user_id}`} 
                                         title="Settings" 
                                         className={`transition-all delay-75 py-[10px] md:py-[15px] block px-[15px] border-l-[4px] border-solid border-transparent font-noto_sans font-semibold text-[16px] md:text-[18px] text-zinc-800 hover:bg-zinc-100 hover:border-theme-color-2 dark:text-zinc-400 dark:hover:bg-zinc-900 ${settingRoutes.includes(pathName) ? 'active' : ''}`}
                                         onClick={() => dispatch(close_user_area_menu())}

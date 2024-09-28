@@ -3,8 +3,16 @@
 import MyParticipationCard from "@/app/components/myParticipationCard";
 import SitePagination from "@/app/components/sitePagination";
 // import { dump_my_participation } from "@/app/constant/datafaker";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { getCookie } from "cookies-next";
+import { jwtDecode } from "jwt-decode";
+
+interface JWTDec {
+    is_auth_user: string,
+    exp: number,
+    iat: number
+}
 
 interface MyPartCrd {
     user_participation_id: string,
@@ -27,8 +35,18 @@ function GFG(array: any, currPage: number, pageSize: number) {
 
 export default function Page() {
 
+    const router = useRouter();
     const params = useParams();
     const user_id = params.user_id[0];
+
+    let gau = getCookie('is_auth_user');
+    if(gau) {
+        let user_id_ck: JWTDec = jwtDecode(gau);
+        let fin_uid = user_id_ck.is_auth_user;
+        if(user_id !== fin_uid) {
+            router.push('/logout');
+        }
+    }
 
     const dataPerPage = 5;
     const [currentPage, setCurrentPage] = useState<number>(1);

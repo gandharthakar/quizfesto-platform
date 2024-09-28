@@ -1,27 +1,44 @@
 'use client';
 
-import { RootState } from "@/app/redux-service/store";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { FaCloudUploadAlt } from "react-icons/fa";
-import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
+import { getCookie } from "cookies-next";
+import { jwtDecode } from "jwt-decode";
+
+interface JWTDec {
+    is_auth_user: string,
+    exp: number,
+    iat: number
+}
 
 export default function Page() {
 
     let defaultImage = "https://placehold.co/1000x1000/png";
 
     const router = useRouter();
-    const AuthUser = useSelector((state: RootState) => state.auth_user_id.auth_user_id);
+    const params = useParams();
+    const user_id = params.user_id[0];
+
+    let gau = getCookie('is_auth_user');
+    if(gau) {
+        let user_id_ck: JWTDec = jwtDecode(gau);
+        let fin_uid = user_id_ck.is_auth_user;
+        if(user_id !== fin_uid) {
+            router.push('/logout');
+        }
+    }
+
     const [prevImageURI, setPrevImageURI] = useState<string>(defaultImage);
     const [imageFile, setImageFile] = useState<string>('');
     const [fileExt, setFileExt] = useState<string>('');
     const [imageFileSize, setImageFileSize] = useState<boolean>(false);
     const [imageDimensions, setImageDimensions] = useState<boolean>(false);
     const [errorInput, setErrorInput] = useState<string>('');
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [alreadyHaveImage, setAlreadyHaveImage] = useState<boolean>(false);
     const [userImage, setUserImage] = useState<string>("");
     const [isLoadRmv, setIsLoadRmv] = useState<boolean>(false);
@@ -81,7 +98,7 @@ export default function Page() {
         let baseURI = window.location.origin;
         const resp = await fetch(`${baseURI}/api/site/auth-user/update-single-user/profile-photo`, {
             method: 'POST',
-            body: JSON.stringify({ user_id: AuthUser, user_photo: '' })
+            body: JSON.stringify({ user_id, user_photo: '' })
         });
         let body = await resp.json();
         if(body.success) {
@@ -103,14 +120,25 @@ export default function Page() {
         let baseURI = window.location.origin;
         const resp = await fetch(`${baseURI}/api/site/auth-user/get-single-user`, {
             method: 'POST',
-            body: JSON.stringify({ user_id: AuthUser })
+            body: JSON.stringify({ user_id })
         });
         let body = await resp.json();
-        setUserImage(body.user_photo);
-        if(body.user_photo == '') {
-            setAlreadyHaveImage(false);
+        if(body.success) {
+            setUserImage(body.user.user_photo);
+            if(body.user.user_photo == '') {
+                setAlreadyHaveImage(false);
+            } else {
+                setAlreadyHaveImage(true);
+            }
+            setIsLoading(false);
         } else {
-            setAlreadyHaveImage(true);
+            Swal.fire({
+                title: "Error!",
+                text: body.message,
+                icon: "error",
+                timer: 4000
+            });
+            setIsLoading(false);
         }
     }
 
@@ -146,7 +174,7 @@ export default function Page() {
             let baseURI = window.location.origin;
             const resp = await fetch(`${baseURI}/api/site/auth-user/update-single-user/profile-photo`, {
                 method: 'POST',
-                body: JSON.stringify({ user_id: AuthUser, user_photo: imageFile })
+                body: JSON.stringify({ user_id, user_photo: imageFile })
             });
             let body = await resp.json();
             if(body.success) {
@@ -175,7 +203,7 @@ export default function Page() {
     useEffect(() => {
         getUser();
     //eslint-disable-next-line
-    }, [getUser]);
+    }, []);
 
     return (
         <>

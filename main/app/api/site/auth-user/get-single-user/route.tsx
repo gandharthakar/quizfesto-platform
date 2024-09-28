@@ -1,92 +1,78 @@
 import prisma from "@/app/lib/db";
 import { NextResponse } from "next/server";
 
-type UsrParts = {
-    user_participation_id: string,
-    quiz_estimated_time: string,
-    quiz_total_marks: string,
-    time_taken: string,
-}
-
-interface Respo {
+interface QF_User {
     user_id: string,
     user_full_name: string,
     user_email: string,
-    user_phone?: string,
-    user_photo?: string,
-    user_participations?: UsrParts[]
+    user_phone: string,
+    user_photo: string,
 }
 
-interface ShtResp {
+interface Respo {
     success: boolean,
-    message: string
+    message: string,
+    user?: QF_User
 }
 
 export async function POST(req: Request) {
-    let resp_main: Respo = {
-        user_id: '',
-        user_full_name: '',
-        user_email: '',
-        user_phone: '',
-        user_photo: '',
-        user_participations: [],
-    }
-
-    let sts:number = 400;
-
-    let short_resp: ShtResp = {
+    
+    let resp: Respo = {
         success: false,
         message: '',
     }
 
-    let MixResp: any = '';
+    let sts:number = 400;
 
     try {
 
         const body = await req.json();
         let { user_id } = body;
 
-        if(!user_id) {
-            short_resp = {
-                success: false,
-                message: 'User id not provided',
-            }
-            MixResp = short_resp;
-            sts = 400;
-        } else {
-            const gtUsr = await prisma.user.findFirst({
+        if(user_id) {
+
+            let alrreadyExistUser = await prisma.user.findFirst({
                 where: {
                     user_id
                 }
             });
-            if(gtUsr) {
-                resp_main = {
-                    user_id: gtUsr.user_id,
-                    user_full_name: gtUsr.user_full_name,
-                    user_email: gtUsr.user_email,
-                    user_phone: gtUsr.user_phone ?? '',
-                    user_photo: gtUsr.user_photo ?? '',
-                    user_participations: [],
-                };
-                MixResp = resp_main;
+
+            if(alrreadyExistUser !== null) {
                 sts = 200;
-            } else {
-                short_resp = {
-                    success: false,
-                    message: 'User not found with this user id.',
+                resp = {
+                    success: true,
+                    message: "User Found!",
+                    user: {
+                        user_id: alrreadyExistUser.user_id,
+                        user_full_name: alrreadyExistUser.user_full_name,
+                        user_email: alrreadyExistUser.user_email,
+                        user_phone: alrreadyExistUser.user_phone??"",
+                        user_photo: alrreadyExistUser.user_photo??""
+                    }
                 }
-                MixResp = short_resp;
+            } else {
                 sts = 200;
+                resp = {
+                    success: false,
+                    message: "User Not Found!"
+                }
+            }
+
+        } else {
+            sts = 400;
+            resp = {
+                success: false,
+                message: "Missing Required Fields!"
             }
         }
 
-        return NextResponse.json(MixResp, {status: sts});
+        return NextResponse.json(resp, {status: sts});
     } catch (error: any) {
         sts = 500;
-        short_resp = {
+        resp = {
             success: false,
             message: error.message
         }
-        return NextResponse.json(short_resp, {status: sts});
+        return NextResponse.json(resp, {status: sts});
     }
 }

@@ -4,10 +4,18 @@ import { FaTrophy } from "react-icons/fa6";
 import { IoChatboxEllipses } from "react-icons/io5";
 import { FaFlag } from "react-icons/fa6";
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { FaLongArrowAltRight } from "react-icons/fa";
+import { getCookie } from "cookies-next";
+import { jwtDecode } from "jwt-decode";
+
+interface JWTDec {
+    is_auth_user: string,
+    exp: number,
+    iat: number
+}
 
 interface QF_User_Stats {
     user_score: number,
@@ -23,8 +31,18 @@ interface Check_Winner {
 
 export default function Page() {
 
+    const router = useRouter();
     const params = useParams();
     const user_id = params.user_id[0];
+
+    let gau = getCookie('is_auth_user');
+    if(gau) {
+        let user_id_ck: JWTDec = jwtDecode(gau);
+        let fin_uid = user_id_ck.is_auth_user;
+        if(user_id !== fin_uid) {
+            router.push('/logout');
+        }
+    }
 
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [userStats, setUserStats] = useState<QF_User_Stats>({

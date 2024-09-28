@@ -9,15 +9,36 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import Swal from "sweetalert2";
 import { RootState } from "@/app/redux-service/store";
 import { useSelector } from "react-redux";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { getCookie } from "cookies-next";
+import { jwtDecode } from "jwt-decode";
+
+interface JWTDec {
+    is_auth_user: string,
+    exp: number,
+    iat: number
+}
 
 export default function Page() {
 
     const router = useRouter();
+    const params = useParams();
+    const user_id = params.user_id[0];
+
+    let gau = getCookie('is_auth_user');
+    if(gau) {
+        let user_id_ck: JWTDec = jwtDecode(gau);
+        let fin_uid = user_id_ck.is_auth_user;
+        if(user_id !== fin_uid) {
+            router.push('/logout');
+        }
+    }
+
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [showConfPassword, setShowConfPassword] = useState<boolean>(false);
     const AuthUser = useSelector((state: RootState) => state.auth_user_id.auth_user_id);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    
 
     const validationSchema = z.object({
         password: z.string({

@@ -4,18 +4,33 @@ import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useEffect, useState } from "react";
-import { RootState } from "@/app/redux-service/store";
-import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { getCookie } from "cookies-next";
+import { jwtDecode } from "jwt-decode";
+
+interface JWTDec {
+    is_auth_user: string,
+    exp: number,
+    iat: number
+}
 
 export default function Page() {
 
     const router = useRouter();
-    const AuthUser = useSelector((state: RootState) => state.auth_user_id.auth_user_id);
-    const [fullName, setfullName] = useState<string>();
-    const [email, setEmail] = useState<string>();
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const params = useParams();
+    const user_id = params.user_id[0];
+
+    let gau = getCookie('is_auth_user');
+    if(gau) {
+        let user_id_ck: JWTDec = jwtDecode(gau);
+        let fin_uid = user_id_ck.is_auth_user;
+        if(user_id !== fin_uid) {
+            router.push('/logout');
+        }
+    }
+
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     const validationSchema = z.object({
         full_name: z.string({
@@ -42,7 +57,7 @@ export default function Page() {
         let baseURI = window.location.origin;
         const resp = await fetch(`${baseURI}/api/site/auth-user/update-single-user/general`, {
             method: 'POST',
-            body: JSON.stringify({ user_id: AuthUser, user_full_name: formdata.full_name, user_email: formdata.email })
+            body: JSON.stringify({ user_id, user_full_name: formdata.full_name, user_email: formdata.email })
         });
         let body = await resp.json();
         if(body.success) {
@@ -71,23 +86,34 @@ export default function Page() {
         let baseURI = window.location.origin;
         const resp = await fetch(`${baseURI}/api/site/auth-user/get-single-user`, {
             method: 'POST',
-            body: JSON.stringify({ user_id: AuthUser })
+            body: JSON.stringify({ user_id })
         });
         let body = await resp.json();
-        setfullName(body.user_full_name);
-        setEmail(body.user_email);
+        if(body.success) {
+            setValue("full_name", body.user.user_full_name);
+            setValue("email", body.user.user_email);
+            setIsLoading(false);
+        } else {
+            Swal.fire({
+                title: "Error!",
+                text: body.message,
+                icon: "error",
+                timer: 4000
+            });
+            setIsLoading(false);
+        }
     }
 
     useEffect(() => {
         getUser();
     //eslint-disable-next-line
-    }, [getUser]);
+    }, []);
 
-    useEffect(() => {
-        setValue("full_name", fullName??'');
-        setValue("email", email??'');
-    //eslint-disable-next-line
-    }, [fullName]);
+    // useEffect(() => {
+    //     setValue("full_name", fullName??'');
+    //     setValue("email", email??'');
+    // //eslint-disable-next-line
+    // }, [fullName]);
 
     return (
         <>

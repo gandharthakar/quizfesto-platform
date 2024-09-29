@@ -6,11 +6,11 @@ QuizeFesto is the online platform where you can participate on many quizzes crea
 
 ### Project Demo / View Link
 
-Here is the link --> <a href="#" title="Click Here" target="_blank">Click Here</a>
+Here is the link --> <a href="https://quizfesto-platform.vercel.app/" title="Click Here" target="_blank">Click Here</a>
 
 ### Screenshot Of The Project
 
-<img src="https://raw.githubusercontent.com/gandharthakar/gt-next-auth/main/public/proj-screenshot.png" alt="Project Screenshot" />
+<img src="https://raw.githubusercontent.com/gandharthakar/quizfesto-platform/refs/heads/main/main/public/images/screenshot.png" alt="Project Screenshot" />
 
 ### Major Technologies Used
 <p>

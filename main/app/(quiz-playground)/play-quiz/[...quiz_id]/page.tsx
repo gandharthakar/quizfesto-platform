@@ -111,9 +111,9 @@ export default function Page() {
         setIsError(false);
     };
 
-    // const Radio = useMemo(() => {
-    //     return currentQuestionOptions.map((itm, idx) => (<li key={idx}>{CreateRadioButton(idx.toString(), itm, selectedAnswer, handleChange)}</li>));
-    // }, [currentQuestionOptions, selectedAnswer]);
+    const Radio = useMemo(() => {
+        return currentQuestionOptions.map((itm, idx) => (<li key={idx}>{CreateRadioButton(idx.toString(), itm, selectedAnswer, handleChange)}</li>));
+    }, [currentQuestionOptions, selectedAnswer]);
 
     const handleClick = (e: any) => {
         e.preventDefault();
@@ -330,9 +330,13 @@ export default function Page() {
                             </div>
                             <div className="pb-[15px]">
                                 <ul className="quizques-options-list">
-                                    {/* {Radio} */}
-                                    {
+                                    {Radio}
+                                    {/* {
                                         currentQuestionOptions.map((itm, idx) => (
+                                            // <li key={idx}>
+                                            //     <input type="radio" id={idx.toString()} value={itm} />
+                                            //     <label htmlFor={idx.toString()}>itm</label>
+                                            // </li>
                                             <li key={idx}>
                                                 <input 
                                                     type="radio" 
@@ -353,7 +357,7 @@ export default function Page() {
                                                 </label>
                                             </li>
                                         ))
-                                    }
+                                    } */}
                                     {/* <li>
                                         <input type="radio" name="answer_option" id="opt2" className="radio-btn" value={`Option 2`} />
                                         <label htmlFor="opt2" role="button" title="Option 2" className="option-btn">

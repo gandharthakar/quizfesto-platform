@@ -21,7 +21,7 @@ export async function POST(req: Request) {
         const { email, password } = body;
 
         if(email && password) {
-            let fuser = await prisma.user.findUnique({
+            let fuser = await prisma.qF_User.findUnique({
                 where: {
                     user_email: email
                 }

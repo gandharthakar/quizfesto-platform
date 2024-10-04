@@ -198,7 +198,9 @@ export default function Page() {
         let baseURI = window.location.origin;
         let resp = await fetch(`${baseURI}/api/site/get-quizes/single/only-questions`, {
             method: "POST",
-            body: JSON.stringify({ quiz_id })
+            body: JSON.stringify({ quiz_id }),
+            cache: 'no-store',
+            next: { revalidate: 60 }
         });
         const body = await resp.json();
         if(body.success) {

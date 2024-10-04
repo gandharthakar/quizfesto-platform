@@ -64,7 +64,9 @@ export default function Page() {
         let baseURI = window.location.origin;
         const resp = await fetch(`${baseURI}/api/site/auth-user/get-my-participation`, {
             method: "POST",
-            body: JSON.stringify({ user_id })
+            body: JSON.stringify({ user_id }),
+            cache: 'no-store',
+            next: { revalidate: 60 }
         });
         const body = await resp.json();
         if(body.success) {

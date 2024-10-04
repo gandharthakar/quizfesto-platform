@@ -1,6 +1,9 @@
 import prisma from "@/app/lib/db";
 import { NextResponse } from "next/server";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 interface QF_User {
     user_id: string,
     user_full_name: string,
@@ -31,7 +34,7 @@ export async function POST(req: Request) {
 
         if(user_id) {
 
-            let alrreadyExistUser = await prisma.user.findFirst({
+            let alrreadyExistUser = await prisma.qF_User.findFirst({
                 where: {
                     user_id
                 }

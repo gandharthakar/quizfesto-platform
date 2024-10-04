@@ -21,7 +21,7 @@ export async function DELETE(req: Request) {
 
         if(user_id_list) {
 
-            let data = await prisma.user_Participation.findMany({
+            let data = await prisma.qF_User_Participation.findMany({
                 where: {
                     user_id: {
                         in: user_id_list
@@ -30,7 +30,7 @@ export async function DELETE(req: Request) {
             });
 
             if(data.length > 0) {
-                await prisma.user_Participation.deleteMany({
+                await prisma.qF_User_Participation.deleteMany({
                     where: {
                         user_id: {
                             in: user_id_list
@@ -43,7 +43,7 @@ export async function DELETE(req: Request) {
                     message: "Selected Users Participation Data Reset Successfully!"
                 }
 
-                await prisma.aggrigate_Scores.deleteMany({
+                await prisma.qF_Aggrigate_Scores.deleteMany({
                     where: {
                         user_id: {
                             in: user_id_list

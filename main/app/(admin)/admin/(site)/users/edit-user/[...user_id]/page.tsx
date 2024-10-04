@@ -242,6 +242,8 @@ function Page() {
         let resp = await fetch(`${baseURI}/api/admin/users/crud/read`, {
             method: "POST",
             body: JSON.stringify({ user_id }),
+            cache: 'no-store',
+            next: { revalidate: 60 }
         });
         const body = await resp.json();
         if(body.success) {

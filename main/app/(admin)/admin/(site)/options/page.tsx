@@ -202,7 +202,9 @@ function Page() {
     const getOptions = async () => {
         let baseURI = window.location.origin;
         let resp = await fetch(`${baseURI}/api/admin/options/bulk-actions/read-all`, {
-            method: "GET"
+            method: "GET",
+            cache: 'no-store',
+            next: { revalidate: 60 }
         });
         const body = await resp.json();
         if(body.success) {

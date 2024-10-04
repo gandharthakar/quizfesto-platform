@@ -1,6 +1,9 @@
 import prisma from "@/app/lib/db";
 import { NextResponse } from "next/server";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 interface WinUsrFrm {
     winner_id: string, 
     winner_type: number, 
@@ -39,7 +42,7 @@ const getWinnerPosTxt = (winType: number) => {
 }
 
 const getUserDetails = async (user_id: string, onlyName: boolean) => {
-    const data = await prisma.user.findFirst({
+    const data = await prisma.qF_User.findFirst({
         where: {
             user_id
         }

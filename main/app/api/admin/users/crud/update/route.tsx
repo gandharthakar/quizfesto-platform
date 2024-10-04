@@ -22,7 +22,7 @@ export async function POST(req: Request) {
         if(user_id && user_full_name && user_email && role) {
             
             // Find existing user by email
-            const existinUserByEmail = await prisma.user.findUnique({
+            const existinUserByEmail = await prisma.qF_User.findUnique({
                 where: {
                     user_email
                 }
@@ -31,7 +31,7 @@ export async function POST(req: Request) {
                 if(user_password) {
                     if(user_password === user_conf_password) {
                         const hashPassword = await hash(user_password, 10);
-                        await prisma.user.update({
+                        await prisma.qF_User.update({
                             where: {
                                 user_id,
                             },
@@ -57,7 +57,7 @@ export async function POST(req: Request) {
                         }
                     }
                 } else {
-                    await prisma.user.update({
+                    await prisma.qF_User.update({
                         where: {
                             user_id,
                         },

@@ -1,6 +1,9 @@
 import prisma from "@/app/lib/db";
 import { NextResponse } from "next/server";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 // interface QF_Winning_Record {
 //     user_id: string,
 //     aggregate_score: number,
@@ -146,8 +149,8 @@ const prepScoreRecord = async (winData: any[], winType: number, WinTypeDscr: str
             }
         });
     }
-    let ufn = await prisma.user.findFirst({ where: { user_id: c1.user_id }, select: { user_full_name: true } });
-    let upp = await prisma.user.findFirst({ where: { user_id: c1.user_id }, select: { user_photo: true } });
+    let ufn = await prisma.qF_User.findFirst({ where: { user_id: c1.user_id }, select: { user_full_name: true } });
+    let upp = await prisma.qF_User.findFirst({ where: { user_id: c1.user_id }, select: { user_photo: true } });
     obj = {
         winner_id: c1.winner_id,
         winner_type: winType,
@@ -171,7 +174,7 @@ export async function GET() {
 
     try {
 
-        const data = await prisma.aggrigate_Scores.findMany();
+        const data = await prisma.qF_Aggrigate_Scores.findMany();
         if(data.length > 0) {
             let propData = data.map((item) => {
                 return {

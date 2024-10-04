@@ -27,7 +27,7 @@ export async function POST(req: Request) {
             }
             sts = 400;
         } else {
-            const user = await prisma.user.findFirst({
+            const user = await prisma.qF_User.findFirst({
                 where: {
                     user_id
                 }
@@ -35,7 +35,7 @@ export async function POST(req: Request) {
             if(user) {
                 if(user_password === confirm_password) {
                     const hashPassword = await hash(user_password, 10);
-                    await prisma.user.update({
+                    await prisma.qF_User.update({
                         where: {
                             user_id
                         },

@@ -39,6 +39,20 @@ function Page() {
     const [fileDimensions, setFileDimensions] = useState<boolean>(false);
     const [options, setOptions] = useState<TwSelInt[]>();
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [negMarks, setNegMarks] = useState<string>('');
+    const [negMErr, setNegMErr] = useState<string>('');
+
+    const handleNegMarksInputChange = (e: any) => {
+        let { value } = e.target;
+        setNegMarks(value);
+        if(value !== '') {
+            if(!isNaN(Number(value))) {
+                setNegMErr("");
+            } else {
+                setNegMErr("Value must contains only numerics.");
+            }
+        }
+    }
 
     const handleChangeSelect = (value:any) => {
         setQuizCats(value);
@@ -126,11 +140,6 @@ function Page() {
 			invalid_type_error: "Quiz total questions be in integer (number) format."
         }),
 
-        quiz_neg_marks: z.number({
-            required_error: "Please enter negative marking score",
-			invalid_type_error: "Negative marking score be in integer (number) format."
-        }),
-
         quiz_sts: z.string({
 			required_error: "Please select quiz status",
 			invalid_type_error: "Quiz status must be in string format."
@@ -214,6 +223,14 @@ function Page() {
             }
         });
 
+        if(negMarks !== '') {
+            if(!isNaN(Number(negMarks))) {
+                setNegMErr("");
+            } else {
+                setNegMErr("Value must contains only numerics.");
+            }
+        }
+
         const prepData = {
             quiz_id,
             quiz_title: formdata.quiz_main_title,
@@ -227,7 +244,7 @@ function Page() {
             quiz_status: formdata.quiz_sts,
             quiz_about_text: quizAboutContent,
             quiz_terms: terms,
-            negative_marking_score: formdata.quiz_neg_marks
+            negative_marking_score: Number(negMarks)
         }
         setIsLoading(true);
         let baseURI = window.location.origin;
@@ -298,7 +315,7 @@ function Page() {
             setValue("quiz_total_ques", body.quiz.quiz_total_question);
             setValue("quiz_total_marks", body.quiz.quiz_total_marks);
             setValue("quiz_sts", body.quiz.quiz_status);
-            setValue("quiz_neg_marks", body.quiz.negative_marking_score);
+            setNegMarks(body.quiz.negative_marking_score);
 
             if(body.quiz.quiz_about_text) {
                 setQuizAboutContent(body.quiz.quiz_about_text);
@@ -462,9 +479,10 @@ function Page() {
                                                 id="cq-qnms" 
                                                 className="ws-input-pwd-m1-v1" 
                                                 autoComplete="off" 
-                                                {...register("quiz_neg_marks", {valueAsNumber: true})} 
+                                                value={negMarks} 
+                                                onChange={handleNegMarksInputChange}
                                             />
-                                            {errors.quiz_neg_marks && (<div className="ws-input-error mt-[2px]">{errors.quiz_neg_marks.message}</div>)}
+                                            {negMErr && (<div className="ws-input-error mt-[2px]">{negMErr}</div>)}
                                         </div>
                                         <div>
                                             <label 

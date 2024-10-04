@@ -1,6 +1,9 @@
 import prisma from "@/app/lib/db";
 import { NextResponse } from "next/server";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 interface QF_User {
     user_id: string,
     user_name: string,
@@ -23,7 +26,7 @@ export async function GET() {
 
     try {
 
-        const data = await prisma.user.findMany({
+        const data = await prisma.qF_User.findMany({
             orderBy: {
                 createdAt: 'desc'
             }

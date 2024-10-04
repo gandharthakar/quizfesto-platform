@@ -32,7 +32,7 @@ export async function POST(req: Request) {
             negative_marking_score
         } = body;
 
-        if(quiz_id && quiz_title && quiz_summary && quiz_display_time && quiz_estimated_time && quiz_total_question && quiz_total_marks && quiz_status && negative_marking_score) {
+        if(quiz_id && quiz_title && quiz_summary && quiz_display_time && quiz_estimated_time && quiz_total_question && quiz_total_marks && quiz_status) {
             const alreadQuizExited = await prisma.qF_Quiz.findFirst({
                 where: {
                     quiz_id

@@ -25,7 +25,9 @@ function Page() {
         let isCatsExist = false;
         let baseURI = window.location.origin;
         let resp = await fetch(`${baseURI}/api/admin/categories/home-categories/read`, {
-            method: "GET"
+            method: "GET",
+            cache: 'no-store',
+            next: { revalidate: 60 }
         });
         const body = await resp.json();
         if(body.success) {
@@ -143,7 +145,9 @@ function Page() {
     const getCats = async () => {
         let baseURI = window.location.origin;
         let resp = await fetch(`${baseURI}/api/admin/categories/bulk-actions/read-all`, {
-            method: "GET"
+            method: "GET",
+            cache: 'no-store',
+            next: { revalidate: 60 }
         });
         const body = await resp.json();
         if(body.success) {

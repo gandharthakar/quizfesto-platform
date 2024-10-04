@@ -1,7 +1,7 @@
 'use client';
 
 import QuizCard from "@/app/components/quizCard";
-import { dump_quizzes_list } from "@/app/constant/datafaker"
+// import { dump_quizzes_list } from "@/app/constant/datafaker"
 import { RiSearch2Line } from "react-icons/ri";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
@@ -124,7 +124,9 @@ function Page() {
         let baseURI = window.location.origin;
         let resp = await fetch(`${baseURI}/api/site/get-quizes/bulk-list/category-wise`, {
             method: "POST",
-            body: JSON.stringify({ category_slug: cat_slug })
+            body: JSON.stringify({ category_slug: cat_slug }),
+            cache: 'no-store',
+            next: { revalidate: 60 }
         });
         const body = await resp.json();
         if(body.success) {

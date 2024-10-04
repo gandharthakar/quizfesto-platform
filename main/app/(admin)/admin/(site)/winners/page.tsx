@@ -25,7 +25,9 @@ function Page() {
         setWinnersData([]);
         let baseURI = window.location.origin;
         let resp = await fetch(`${baseURI}/api/admin/winners/crud/find`, {
-            method: "GET"
+            method: "GET",
+            cache: 'no-store',
+            next: { revalidate: 60 }
         });
         const body = await resp.json();
         if(body.success) {
@@ -39,7 +41,9 @@ function Page() {
     const readWinners = async () => {
         let baseURI = window.location.origin;
         let resp = await fetch(`${baseURI}/api/admin/winners/bulk-actions/read-all`, {
-            method: "GET"
+            method: "GET",
+            cache: 'no-store',
+            next: { revalidate: 60 }
         });
         const body = await resp.json();
         if(body.success) {

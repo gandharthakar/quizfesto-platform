@@ -92,7 +92,9 @@ function Page() {
         let baseURI = window.location.origin;
         const resp = await fetch(`${baseURI}/api/admin/categories/crud/read`, {
             method: "POST",
-            body: JSON.stringify({category_id: cat_id})
+            body: JSON.stringify({category_id: cat_id}),
+            cache: 'no-store',
+            next: { revalidate: 60 }
         });
         const body = await resp.json();
         if(body.success) {

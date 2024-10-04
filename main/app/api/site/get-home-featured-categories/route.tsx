@@ -1,6 +1,9 @@
 import prisma from "@/app/lib/db";
 import { NextResponse } from "next/server";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 interface Cats {
     category_id: string,
     category_title: string,
@@ -24,7 +27,7 @@ const getCatsLabel = async (id_list: string[]) => {
     return data;
 }
 
-export async function GET(req: Request) {
+export async function GET() {
     let resp: Respo = {
         success: false,
         message: '',
@@ -34,7 +37,7 @@ export async function GET(req: Request) {
 
     try {
 
-        const data = await prisma.homepage_Categories.findFirst();
+        const data = await prisma.qF_Homepage_Categories.findFirst();
         if(data === null) {
             sts = 200;
             resp = {

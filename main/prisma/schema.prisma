@@ -15,22 +15,22 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
-model User {
-  user_id             String               @id @default(uuid())
+model QF_User {
+  user_id             String                  @id @default(uuid())
   user_full_name      String
-  user_email          String               @unique
+  user_email          String                  @unique
   user_password       String
   user_phone          String?
   user_photo          String?
-  role                Role?                @default(User)
-  user_participations User_Participation[]
-  createdAt           DateTime             @default(now())
-  updatedAt           DateTime             @updatedAt
-  Aggrigate_Scores    Aggrigate_Scores[]
+  role                Role?                   @default(User)
+  user_participations QF_User_Participation[]
+  Aggrigate_Scores    QF_Aggrigate_Scores[]
   QF_Winners          QF_Winners[]
+  createdAt           DateTime                @default(now())
+  updatedAt           DateTime                @updatedAt
 }
 
-model Admin_User {
+model QF_Admin_User {
   admin_user_id       String   @id @default(uuid())
   admin_user_name     String
   admin_user_email    String   @unique
@@ -42,7 +42,7 @@ model Admin_User {
   updatedAt           DateTime @updatedAt
 }
 
-model User_Participation {
+model QF_User_Participation {
   user_participation_id      String   @id @default(uuid())
   quiz_total_question        Int
   quiz_total_marks           Int
@@ -54,7 +54,7 @@ model User_Participation {
   quiz_cover_photo           String?
   quiz_total_score           Int
   quiz_correct_answers_count Int
-  User                       User?    @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  User                       QF_User? @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
   user_id                    String?
   createdAt                  DateTime @default(now())
   updatedAt                  DateTime @updatedAt
@@ -101,39 +101,49 @@ model QF_Option {
 }
 
 model QF_Quiz_Category {
-  category_id    String @id @default(uuid())
-  category_title String @unique
+  category_id    String   @id @default(uuid())
+  category_title String   @unique
   category_slug  String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
 
 model QF_Winning_Prizes {
-  prize_id          String  @id @default(uuid())
-  prize_type        Int     @unique
+  prize_id          String   @id @default(uuid())
+  prize_type        Int      @unique
   prize_description String
   prize_cover_photo String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }
 
 model QF_Winners {
-  winner_id          String  @id @default(uuid())
-  winner_type        Int     @unique
-  user_id            String? @unique
+  winner_id          String   @id @default(uuid())
+  winner_type        Int      @unique
+  user_id            String?  @unique
   winner_date        String
   winner_description String
-  User               User?   @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  User               QF_User? @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 }
 
-model Homepage_Categories {
+model QF_Homepage_Categories {
   home_cat_id String   @id @default(uuid())
   home_cats   String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
-model Aggrigate_Scores {
-  ags_id          String  @id @default(uuid())
+model QF_Aggrigate_Scores {
+  ags_id          String   @id @default(uuid())
   aggregate_score Int
   record_date     String
   record_time     String
-  User            User?   @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
-  user_id         String? @unique
+  User            QF_User? @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  user_id         String?  @unique
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
 
 enum Role {

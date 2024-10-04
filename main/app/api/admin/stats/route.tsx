@@ -1,6 +1,9 @@
 import prisma from "@/app/lib/db";
 import { NextResponse } from "next/server";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 interface QF_Stats {
     total_quizes: number,
     total_questions: number,
@@ -30,7 +33,7 @@ export async function GET() {
             total_questions: await prisma.qF_Question.count(),
             total_options: await prisma.qF_Option.count(),
             total_categories: await prisma.qF_Quiz_Category.count(),
-            total_users: await prisma.user.count(),
+            total_users: await prisma.qF_User.count(),
             total_winners: await prisma.qF_Winners.count()
         }
         sts = 200;

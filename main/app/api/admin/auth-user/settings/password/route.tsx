@@ -25,7 +25,7 @@ export async function POST(req: Request) {
 
         if(user_id && password && confirm_password) {
             
-            const fu__in__usrtblmdl = await prisma.user.findFirst({
+            const fu__in__usrtblmdl = await prisma.qF_User.findFirst({
                 where: {
                     AND: [
                         {
@@ -37,7 +37,7 @@ export async function POST(req: Request) {
                     ]
                 }
             });
-            const fu__in__admntblmdl = await prisma.admin_User.findFirst({
+            const fu__in__admntblmdl = await prisma.qF_Admin_User.findFirst({
                 where: {
                     admin_user_id: user_id,
                 }
@@ -58,7 +58,7 @@ export async function POST(req: Request) {
                 if(password === confirm_password) {
                     const hashPassword = await hash(password, 10);
                     if(fu__in__usrtblmdl) {
-                        await prisma.user.update({
+                        await prisma.qF_User.update({
                             where: {
                                 user_id
                             },
@@ -68,7 +68,7 @@ export async function POST(req: Request) {
                         });
                     } else {
                         if(fu__in__admntblmdl) {
-                            await prisma.admin_User.update({
+                            await prisma.qF_Admin_User.update({
                                 where: {
                                     admin_user_id: user_id
                                 },

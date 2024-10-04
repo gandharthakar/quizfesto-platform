@@ -56,7 +56,9 @@ export default function QuizCard(props: QuizCardPropsTypes) {
         let baseURI = window.location.origin;
         let resp = await fetch(`${baseURI}/api/site/check-quiz`, {
             method: "POST",
-            body: JSON.stringify({ quiz_id, user_id: AuthUser })
+            body: JSON.stringify({ quiz_id, user_id: AuthUser }),
+            cache: 'no-store',
+            next: { revalidate: 60 }
         });
         const body = await resp.json();
         if(body.success) {

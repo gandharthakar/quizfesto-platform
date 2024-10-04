@@ -31,7 +31,7 @@ export async function POST(req: Request) {
             negative_marking_score
         } = body;
 
-        if(quiz_title && quiz_summary && quiz_display_time && quiz_estimated_time && quiz_total_question && quiz_total_marks && quiz_status && negative_marking_score) {
+        if(quiz_title && quiz_summary && quiz_display_time && quiz_estimated_time && quiz_total_question && quiz_total_marks && quiz_status) {
             await prisma.qF_Quiz.create({
                 data: {
                     quiz_title,

@@ -201,7 +201,9 @@ function Page() {
     const getCatData = async () => {
         let baseURI = window.location.origin;
         let resp = await fetch(`${baseURI}/api/admin/questions/bulk-actions/read-all`, {
-            method: "GET"
+            method: "GET",
+            cache: 'no-store',
+            next: { revalidate: 60 }
         });
         const body = await resp.json();
         if(body.success) {

@@ -1,6 +1,9 @@
 import prisma from "@/app/lib/db";
 import { NextResponse } from "next/server";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 interface Cats {
     category_id: string,
     category_title: string,
@@ -25,7 +28,7 @@ export async function GET() {
 
         const data = await prisma.qF_Quiz_Category.findMany({
             orderBy: {
-                category_id: 'desc'
+                createdAt: 'desc'
             }
         });
         if(data.length > 0) {

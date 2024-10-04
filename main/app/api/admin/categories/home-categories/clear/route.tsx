@@ -15,9 +15,9 @@ export async function DELETE() {
 
     try {
 
-        let data = await prisma.homepage_Categories.findFirst();
+        let data = await prisma.qF_Homepage_Categories.findFirst();
         if(data !== null) {
-            await prisma.homepage_Categories.delete({
+            await prisma.qF_Homepage_Categories.delete({
                 where: {
                     home_cat_id: data.home_cat_id
                 }

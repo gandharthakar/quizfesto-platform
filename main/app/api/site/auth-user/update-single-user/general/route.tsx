@@ -26,13 +26,13 @@ export async function POST(req: Request) {
             }
             sts = 400;
         } else {
-            const user = await prisma.user.findFirst({
+            const user = await prisma.qF_User.findFirst({
                 where: {
                     user_id
                 }
             });
             if(user) {
-                await prisma.user.update({
+                await prisma.qF_User.update({
                     where: {
                         user_id
                     },

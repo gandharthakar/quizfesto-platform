@@ -1,6 +1,9 @@
 import prisma from "@/app/lib/db";
 import { NextResponse } from "next/server";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 interface Respo {
     user_full_name: string,
     user_email: string,
@@ -42,7 +45,7 @@ export async function POST(req: Request) {
             sts = 400;
         } else {
             let user:any = {};
-            const fu__in__usrtblmdl = await prisma.user.findFirst({
+            const fu__in__usrtblmdl = await prisma.qF_User.findFirst({
                 where: {
                     AND: [
                         {
@@ -54,7 +57,7 @@ export async function POST(req: Request) {
                     ]
                 }
             });
-            const fu__in__admntblmdl = await prisma.admin_User.findFirst({
+            const fu__in__admntblmdl = await prisma.qF_Admin_User.findFirst({
                 where: {
                     admin_user_id: user_id,
                 }

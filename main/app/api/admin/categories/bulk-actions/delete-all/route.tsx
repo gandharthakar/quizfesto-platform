@@ -25,9 +25,9 @@ export async function DELETE() {
             }
 
             // Remove 'All' Categories From Home Top Categories List. 
-            let hcats = await prisma.homepage_Categories.findFirst();
+            let hcats = await prisma.qF_Homepage_Categories.findFirst();
             if(hcats !== null) {
-                await prisma.homepage_Categories.delete({
+                await prisma.qF_Homepage_Categories.delete({
                     where: {
                         home_cat_id: hcats.home_cat_id
                     }

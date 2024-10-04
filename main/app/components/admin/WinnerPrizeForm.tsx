@@ -218,7 +218,9 @@ function WinnerPrizeForm(props: WinPriFrm) {
         let baseURI = window.location.origin;
         const resp = await fetch(`${baseURI}/api/admin/prizes/read`, {
             method: "POST",
-            body: JSON.stringify({ prize_type: prize_type_text })
+            body: JSON.stringify({ prize_type: prize_type_text }),
+            cache: 'no-store',
+            next: { revalidate: 60 }
         });
         const body = await resp.json();
         if(body.success) {

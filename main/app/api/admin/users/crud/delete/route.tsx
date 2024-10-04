@@ -19,13 +19,13 @@ export async function DELETE(req: Request) {
         let { user_id } = body;
 
         if(user_id) {
-            const DB_User = await prisma.user.findFirst({
+            const DB_User = await prisma.qF_User.findFirst({
                 where: {
                     user_id
                 }
             });
             if(DB_User) {
-                await prisma.user.delete({
+                await prisma.qF_User.delete({
                     where: {
                         user_id
                     }

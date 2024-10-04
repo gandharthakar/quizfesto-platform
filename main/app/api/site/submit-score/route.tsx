@@ -48,7 +48,7 @@ export async function POST(req: Request) {
 
          if(quiz_total_question && quiz_total_marks && quiz_total_score && quiz_estimated_time && quiz_display_time && quiz_time_taken && quiz_id && quiz_title && quiz_correct_answers_count && user_id) {
 
-            let ifAlready = await prisma.user_Participation.findFirst({
+            let ifAlready = await prisma.qF_User_Participation.findFirst({
                 where: {
                     AND: [
                         {
@@ -62,7 +62,7 @@ export async function POST(req: Request) {
             });
             
             if(ifAlready == null)  {
-                await prisma.user_Participation.create({
+                await prisma.qF_User_Participation.create({
                     data: {
                         quiz_total_question,
                         quiz_total_marks,
@@ -84,14 +84,14 @@ export async function POST(req: Request) {
                     message: "Score Submited Successfully!"
                 }
 
-                let existASU = await prisma.aggrigate_Scores.findFirst({
+                let existASU = await prisma.qF_Aggrigate_Scores.findFirst({
                     where: {
                         user_id
                     }
                 });
                 if(existASU !== null) {
                     let ags = existASU.aggregate_score + quiz_total_score;
-                    await prisma.aggrigate_Scores.update({
+                    await prisma.qF_Aggrigate_Scores.update({
                         where: {
                             user_id
                         },
@@ -103,7 +103,7 @@ export async function POST(req: Request) {
                         }
                     })
                 } else {
-                    await prisma.aggrigate_Scores.create({
+                    await prisma.qF_Aggrigate_Scores.create({
                         data: {
                             user_id,
                             record_date: getTodaysDate(),

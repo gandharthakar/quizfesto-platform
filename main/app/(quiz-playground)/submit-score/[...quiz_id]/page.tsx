@@ -101,7 +101,9 @@ export default function Page() {
         let baseURI = window.location.origin;
         const resp = await fetch(`${baseURI}/api/site/get-score`, {
             method: "POST",
-            body: JSON.stringify({ attempted_data: ugadtArr, quiz_id })
+            body: JSON.stringify({ attempted_data: ugadtArr, quiz_id }),
+            cache: 'no-store',
+            next: { revalidate: 60 }
         });
         const body = await resp.json();
         if(body.success) {

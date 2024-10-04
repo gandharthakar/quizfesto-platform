@@ -74,7 +74,9 @@ function Page() {
         let baseURI = window.location.origin;
         const resp = await fetch(`${baseURI}/api/admin/questions/crud/read`, {
             method: "POST",
-            body: JSON.stringify({question_id})
+            body: JSON.stringify({question_id}),
+            cache: 'no-store',
+            next: { revalidate: 60 }
         });
         const body = await resp.json();
         if(body.success) {

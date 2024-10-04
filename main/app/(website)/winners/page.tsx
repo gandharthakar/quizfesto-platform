@@ -25,6 +25,8 @@ export default function Page() {
         let baseURI = window.location.origin;
         const resp = await fetch(`${baseURI}/api/site/get-winners`, {
             method: "GET",
+            cache: 'no-store',
+            next: { revalidate: 60 }
         });
         const body = await resp.json();
         if(body.success) {

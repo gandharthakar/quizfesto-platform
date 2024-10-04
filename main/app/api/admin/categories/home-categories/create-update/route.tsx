@@ -19,9 +19,9 @@ export async function POST(req: Request) {
         const { home_cats, home_cats_id } = body;
 
         if(home_cats || home_cats_id) {
-            let existingCat = await prisma.homepage_Categories.findFirst();
+            let existingCat = await prisma.qF_Homepage_Categories.findFirst();
             if(existingCat === null) {
-                await prisma.homepage_Categories.create({
+                await prisma.qF_Homepage_Categories.create({
                     data: {
                         home_cats: home_cats
                     }
@@ -32,7 +32,7 @@ export async function POST(req: Request) {
                     message: "Categories Added Successfully!"
                 }
             } else {
-                await prisma.homepage_Categories.update({
+                await prisma.qF_Homepage_Categories.update({
                     where: {
                         home_cat_id: home_cats_id,
                     },

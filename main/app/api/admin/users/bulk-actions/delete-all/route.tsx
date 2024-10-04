@@ -15,9 +15,9 @@ export async function DELETE(req: Request) {
 
     try {
 
-        const data = await prisma.user.findMany();
+        const data = await prisma.qF_User.findMany();
         if(data.length > 0) {
-            await prisma.user.deleteMany();
+            await prisma.qF_User.deleteMany();
             sts = 200;
             resp = {
                 success: true,

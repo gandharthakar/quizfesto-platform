@@ -3,6 +3,9 @@ import { NextResponse } from "next/server";
 const emailTransporter = require("@/app/nodemailer/emailConfig");
 import jwt from "jsonwebtoken";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 interface Respo {
     success: boolean,
     message: string,
@@ -21,7 +24,7 @@ export async function POST(req: Request) {
         const { user_email } = body;
 
         if(user_email) {
-            const user = await prisma.user.findFirst({
+            const user = await prisma.qF_User.findFirst({
                 where: {
                     user_email
                 }

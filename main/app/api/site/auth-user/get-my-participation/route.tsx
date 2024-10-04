@@ -1,6 +1,9 @@
 import prisma from "@/app/lib/db";
 import { NextResponse } from "next/server";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 interface MyPartCrd {
     user_participation_id: string,
     quiz_title: string,
@@ -33,7 +36,7 @@ export async function POST(req: Request) {
         let { user_id } = body;
 
         if(user_id) {
-            const usrPart = await prisma.user_Participation.findMany({
+            const usrPart = await prisma.qF_User_Participation.findMany({
                 where: {
                     user_id
                 },

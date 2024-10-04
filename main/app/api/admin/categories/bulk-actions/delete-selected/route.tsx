@@ -76,12 +76,12 @@ export async function DELETE(req: Request) {
                 }
 
                 // Remove 'Selected' Categories From Home Top Categories List. 
-                let hcats = await prisma.homepage_Categories.findFirst();
+                let hcats = await prisma.qF_Homepage_Categories.findFirst();
                 if(hcats !== null) {
                     let commonIDs = findCommonItems(category_id_list, hcats.home_cats);
                     if(commonIDs.length > 0) {
                         let updated = removeItemsFromArray(hcats.home_cats, category_id_list);
-                        await prisma.homepage_Categories.update({
+                        await prisma.qF_Homepage_Categories.update({
                             where: {
                                 home_cat_id: hcats.home_cat_id
                             },

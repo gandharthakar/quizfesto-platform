@@ -15,10 +15,10 @@ export async function DELETE() {
 
     try {
 
-        let data = await prisma.user_Participation.findMany();
+        let data = await prisma.qF_User_Participation.findMany();
 
         if(data.length > 0) {
-            await prisma.user_Participation.deleteMany();
+            await prisma.qF_User_Participation.deleteMany();
             sts = 200;
             resp = {
                 success: true,

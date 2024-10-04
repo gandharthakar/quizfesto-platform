@@ -202,6 +202,8 @@ function Page() {
         let baseURI = window.location.origin;
         let resp = await fetch(`${baseURI}/api/admin/quizes/bulk-actions/read-all`, {
             method: "GET",
+            cache: 'no-store',
+            next: { revalidate: 60 }
         });
         const body = await resp.json();
         if(body.success) {

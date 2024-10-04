@@ -1,6 +1,9 @@
 import prisma from "@/app/lib/db";
 import { NextResponse } from "next/server";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 interface Respo {
     success: boolean,
     message: string
@@ -19,7 +22,7 @@ export async function POST(req: Request) {
         let { quiz_id, user_id } = body;
 
         if(quiz_id) {
-            let gquiz = await prisma.user_Participation.findFirst({
+            let gquiz = await prisma.qF_User_Participation.findFirst({
                 where: {
                     AND: [
                         {

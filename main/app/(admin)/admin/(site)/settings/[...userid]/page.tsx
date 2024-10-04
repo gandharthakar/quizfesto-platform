@@ -75,7 +75,9 @@ function Page() {
         let baseURI = window.location.origin;
         const resp = await fetch(`${baseURI}/api/admin/auth-user/settings/general/get`, {
             method: 'POST',
-            body: JSON.stringify({ user_id: AuthUser })
+            body: JSON.stringify({ user_id: AuthUser }),
+            cache: 'no-store',
+            next: { revalidate: 60 }
         });
         let body = await resp.json();
         if(body.success) {

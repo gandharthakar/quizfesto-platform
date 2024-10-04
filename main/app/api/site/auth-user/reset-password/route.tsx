@@ -3,6 +3,9 @@ import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { hash } from "bcrypt";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 interface Respo {
     success: boolean,
     message: string,
@@ -20,10 +23,9 @@ export async function POST(req: Request) {
         const body = await req.json();
         const { user_password, confirm_password, user_id, token } = body;
 
-        console.log(token);
         if(user_password && confirm_password && user_id && token) {
             if(user_password === confirm_password) {
-                const user = await prisma.user.findFirst({
+                const user = await prisma.qF_User.findFirst({
                     where: {
                         user_id
                     }
@@ -32,7 +34,7 @@ export async function POST(req: Request) {
                     const vrfy = jwt.verify(token, process.env.JWT_SECRET??"");
                     const hashPwd = await hash(user_password, 10);
                     if(vrfy) {
-                        await prisma.user.update({
+                        await prisma.qF_User.update({
                             where: {
                                 user_id
                             },

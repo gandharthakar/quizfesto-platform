@@ -1,6 +1,9 @@
 import prisma from "@/app/lib/db";
 import { NextResponse } from "next/server";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 interface QF_User_Stats {
     user_score: number,
     user_participation: number,
@@ -27,7 +30,7 @@ export async function POST(req: Request) {
 
         if(user_id) {
 
-            let upd = await prisma.user_Participation.findMany({
+            let upd = await prisma.qF_User_Participation.findMany({
                 where: {
                     user_id
                 },
@@ -43,7 +46,7 @@ export async function POST(req: Request) {
                 message: "Data Found!",
                 user_stats: {
                     user_score: totalScore,
-                    user_participation: (await prisma.user_Participation.findMany({ where: { user_id } })).length,
+                    user_participation: (await prisma.qF_User_Participation.findMany({ where: { user_id } })).length,
                     user_winnings: (await prisma.qF_Winners.findMany({ where: { user_id: user_id } })).length
                 }
             }

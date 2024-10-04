@@ -1,6 +1,9 @@
 import prisma from "@/app/lib/db";
 import { NextResponse } from "next/server";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 interface Check_Winner {
     winner_type: number,
     winning_position_text: string,
@@ -60,7 +63,7 @@ export async function POST(req: Request) {
                     winner: {
                         winner_type: ifWinner.winner_type,
                         winning_position_text: getWinnerPosTxt(ifWinner.winner_type),
-                        winning_score: (await prisma.aggrigate_Scores.findFirst({ where: { user_id } }))?.aggregate_score??0
+                        winning_score: (await prisma.qF_Aggrigate_Scores.findFirst({ where: { user_id } }))?.aggregate_score??0
                     }
                 }
             } else {

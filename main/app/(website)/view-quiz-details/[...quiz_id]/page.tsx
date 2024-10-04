@@ -1,7 +1,7 @@
 'use client';
 
 import QuizPrizes from "@/app/components/quizPrizes";
-import { dump_quizzes_list } from "@/app/constant/datafaker";
+// import { dump_quizzes_list } from "@/app/constant/datafaker";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -82,7 +82,9 @@ export default function Page() {
         let baseURI = window.location.origin;
         let resp = await fetch(`${baseURI}/api/site/get-quizes/single/only-info`, {
             method: "POST",
-            body: JSON.stringify({ quiz_id: qz_id })
+            body: JSON.stringify({ quiz_id: qz_id }),
+            cache: 'no-store',
+            next: { revalidate: 60 }
         });
         const body = await resp.json();
         if(body.success) {
@@ -109,7 +111,9 @@ export default function Page() {
         let baseURI = window.location.origin;
         let resp = await fetch(`${baseURI}/api/site/get-quizes/bulk-list/related-quizes`, {
             method: "POST",
-            body: JSON.stringify({ quiz_id: qz_id })
+            body: JSON.stringify({ quiz_id: qz_id }),
+            cache: 'no-store',
+            next: { revalidate: 60 }
         });
         const body = await resp.json();
         if(body.success) {
@@ -124,7 +128,9 @@ export default function Page() {
         let baseURI = window.location.origin;
         let resp = await fetch(`${baseURI}/api/site/check-quiz`, {
             method: "POST",
-            body: JSON.stringify({ quiz_id: qz_id, user_id: userID })
+            body: JSON.stringify({ quiz_id: qz_id, user_id: userID }),
+            cache: 'no-store',
+            next: { revalidate: 60 }
         });
         const body = await resp.json();
         if(body.success) {

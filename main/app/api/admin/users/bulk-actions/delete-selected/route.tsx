@@ -19,7 +19,7 @@ export async function DELETE(req: Request) {
         let { user_id_list } = body;
 
         if(user_id_list) {
-            const user_list = await prisma.user.findMany({
+            const user_list = await prisma.qF_User.findMany({
                 where: {
                     user_id: {
                         in: user_id_list
@@ -28,7 +28,7 @@ export async function DELETE(req: Request) {
             });
 
             if(user_list.length > 0) {
-                await prisma.user.deleteMany({
+                await prisma.qF_User.deleteMany({
                     where: {
                         user_id: {
                             in: user_id_list

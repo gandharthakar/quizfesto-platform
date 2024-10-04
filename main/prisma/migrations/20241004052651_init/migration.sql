@@ -2,7 +2,7 @@
 CREATE TYPE "Role" AS ENUM ('User', 'Admin');
 
 -- CreateTable
-CREATE TABLE "User" (
+CREATE TABLE "QF_User" (
     "user_id" TEXT NOT NULL,
     "user_full_name" TEXT NOT NULL,
     "user_email" TEXT NOT NULL,
@@ -13,11 +13,11 @@ CREATE TABLE "User" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "User_pkey" PRIMARY KEY ("user_id")
+    CONSTRAINT "QF_User_pkey" PRIMARY KEY ("user_id")
 );
 
 -- CreateTable
-CREATE TABLE "Admin_User" (
+CREATE TABLE "QF_Admin_User" (
     "admin_user_id" TEXT NOT NULL,
     "admin_user_name" TEXT NOT NULL,
     "admin_user_email" TEXT NOT NULL,
@@ -28,11 +28,11 @@ CREATE TABLE "Admin_User" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Admin_User_pkey" PRIMARY KEY ("admin_user_id")
+    CONSTRAINT "QF_Admin_User_pkey" PRIMARY KEY ("admin_user_id")
 );
 
 -- CreateTable
-CREATE TABLE "User_Participation" (
+CREATE TABLE "QF_User_Participation" (
     "user_participation_id" TEXT NOT NULL,
     "quiz_total_question" INTEGER NOT NULL,
     "quiz_total_marks" INTEGER NOT NULL,
@@ -48,7 +48,7 @@ CREATE TABLE "User_Participation" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "User_Participation_pkey" PRIMARY KEY ("user_participation_id")
+    CONSTRAINT "QF_User_Participation_pkey" PRIMARY KEY ("user_participation_id")
 );
 
 -- CreateTable
@@ -101,6 +101,8 @@ CREATE TABLE "QF_Quiz_Category" (
     "category_id" TEXT NOT NULL,
     "category_title" TEXT NOT NULL,
     "category_slug" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "QF_Quiz_Category_pkey" PRIMARY KEY ("category_id")
 );
@@ -111,6 +113,8 @@ CREATE TABLE "QF_Winning_Prizes" (
     "prize_type" INTEGER NOT NULL,
     "prize_description" TEXT NOT NULL,
     "prize_cover_photo" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "QF_Winning_Prizes_pkey" PRIMARY KEY ("prize_id")
 );
@@ -122,34 +126,40 @@ CREATE TABLE "QF_Winners" (
     "user_id" TEXT,
     "winner_date" TEXT NOT NULL,
     "winner_description" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "QF_Winners_pkey" PRIMARY KEY ("winner_id")
 );
 
 -- CreateTable
-CREATE TABLE "Homepage_Categories" (
+CREATE TABLE "QF_Homepage_Categories" (
     "home_cat_id" TEXT NOT NULL,
     "home_cats" TEXT[],
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Homepage_Categories_pkey" PRIMARY KEY ("home_cat_id")
+    CONSTRAINT "QF_Homepage_Categories_pkey" PRIMARY KEY ("home_cat_id")
 );
 
 -- CreateTable
-CREATE TABLE "Aggrigate_Scores" (
+CREATE TABLE "QF_Aggrigate_Scores" (
     "ags_id" TEXT NOT NULL,
     "aggregate_score" INTEGER NOT NULL,
     "record_date" TEXT NOT NULL,
     "record_time" TEXT NOT NULL,
     "user_id" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Aggrigate_Scores_pkey" PRIMARY KEY ("ags_id")
+    CONSTRAINT "QF_Aggrigate_Scores_pkey" PRIMARY KEY ("ags_id")
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_user_email_key" ON "User"("user_email");
+CREATE UNIQUE INDEX "QF_User_user_email_key" ON "QF_User"("user_email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Admin_User_admin_user_email_key" ON "Admin_User"("admin_user_email");
+CREATE UNIQUE INDEX "QF_Admin_User_admin_user_email_key" ON "QF_Admin_User"("admin_user_email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "QF_Quiz_Category_category_title_key" ON "QF_Quiz_Category"("category_title");
@@ -164,10 +174,10 @@ CREATE UNIQUE INDEX "QF_Winners_winner_type_key" ON "QF_Winners"("winner_type");
 CREATE UNIQUE INDEX "QF_Winners_user_id_key" ON "QF_Winners"("user_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Aggrigate_Scores_user_id_key" ON "Aggrigate_Scores"("user_id");
+CREATE UNIQUE INDEX "QF_Aggrigate_Scores_user_id_key" ON "QF_Aggrigate_Scores"("user_id");
 
 -- AddForeignKey
-ALTER TABLE "User_Participation" ADD CONSTRAINT "User_Participation_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("user_id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "QF_User_Participation" ADD CONSTRAINT "QF_User_Participation_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "QF_User"("user_id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "QF_Question" ADD CONSTRAINT "QF_Question_quizid_fkey" FOREIGN KEY ("quizid") REFERENCES "QF_Quiz"("quiz_id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -176,7 +186,7 @@ ALTER TABLE "QF_Question" ADD CONSTRAINT "QF_Question_quizid_fkey" FOREIGN KEY (
 ALTER TABLE "QF_Option" ADD CONSTRAINT "QF_Option_questionid_fkey" FOREIGN KEY ("questionid") REFERENCES "QF_Question"("question_id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "QF_Winners" ADD CONSTRAINT "QF_Winners_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("user_id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "QF_Winners" ADD CONSTRAINT "QF_Winners_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "QF_User"("user_id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Aggrigate_Scores" ADD CONSTRAINT "Aggrigate_Scores_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("user_id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "QF_Aggrigate_Scores" ADD CONSTRAINT "QF_Aggrigate_Scores_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "QF_User"("user_id") ON DELETE CASCADE ON UPDATE CASCADE;

@@ -21,7 +21,7 @@ export async function POST(req: Request) {
             if(password === confirm_password) {
                 
                 // Find existing user by email
-                const existinUserByEmail = await prisma.user.findUnique({
+                const existinUserByEmail = await prisma.qF_User.findUnique({
                     where: {
                         user_email: email
                     }
@@ -35,7 +35,7 @@ export async function POST(req: Request) {
                     }
                 } else {
                     const hashPassword = await hash(password, 10);
-                    await prisma.user.create({
+                    await prisma.qF_User.create({
                         data: {
                             user_full_name: full_name,
                             user_photo: '',

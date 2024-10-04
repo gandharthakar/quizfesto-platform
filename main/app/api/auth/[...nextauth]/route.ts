@@ -18,13 +18,13 @@ const handler = NextAuth({
         async signIn({ user }) {
             // console.log(user);
             let { name, email, image } = user;
-            let fuser = await prisma.user.findUnique({
+            let fuser = await prisma.qF_User.findUnique({
                 where: {
                     user_email: email ?? ""
                 }
             });
             if(!fuser) {
-                let user = await prisma.user.create({
+                let user = await prisma.qF_User.create({
                     data: {
                         user_full_name: name ?? "",
                         user_photo: image,

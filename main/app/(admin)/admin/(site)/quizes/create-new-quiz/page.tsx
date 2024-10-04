@@ -35,6 +35,20 @@ function Page() {
     const [fileDimensions, setFileDimensions] = useState<boolean>(false);
     const [options, setOptions] = useState<TwSelInt[]>();
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [negMarks, setNegMarks] = useState<string>('');
+    const [negMErr, setNegMErr] = useState<string>('');
+
+    const handleNegMarksInputChange = (e: any) => {
+        let { value } = e.target;
+        setNegMarks(value);
+        if(value !== '') {
+            if(!isNaN(Number(value))) {
+                setNegMErr("");
+            } else {
+                setNegMErr("Value must contains only numerics.");
+            }
+        }
+    }
 
     const handleChangeSelect = (value:any) => {
         setQuizCats(value);
@@ -122,11 +136,6 @@ function Page() {
 			invalid_type_error: "Quiz total questions be in integer (number) format."
         }),
 
-        quiz_neg_marks: z.number({
-            required_error: "Please enter negative marking score",
-			invalid_type_error: "Negative marking score be in integer (number) format."
-        }),
-
         quiz_sts: z.string({
 			required_error: "Please select quiz status",
 			invalid_type_error: "Quiz status must be in string format."
@@ -207,7 +216,15 @@ function Page() {
                 return [];
             }
         });
-        
+
+        if(negMarks !== '') {
+            if(!isNaN(Number(negMarks))) {
+                setNegMErr("");
+            } else {
+                setNegMErr("Value must contains only numerics.");
+            }
+        }
+
         const prepData = {
             quiz_title: formdata.quiz_main_title,
             quiz_summary: formdata.quiz_summ,
@@ -220,7 +237,7 @@ function Page() {
             quiz_status: formdata.quiz_sts,
             quiz_about_text: quizAboutContent,
             quiz_terms: terms,
-            negative_marking_score: formdata.quiz_neg_marks
+            negative_marking_score: Number(negMarks)
         }
         setIsLoading(true);
         let baseURI = window.location.origin;
@@ -402,9 +419,10 @@ function Page() {
                                                 id="cq-qnms" 
                                                 className="ws-input-pwd-m1-v1" 
                                                 autoComplete="off" 
-                                                {...register("quiz_neg_marks", {valueAsNumber: true})} 
+                                                value={negMarks} 
+                                                onChange={handleNegMarksInputChange}
                                             />
-                                            {errors.quiz_neg_marks && (<div className="ws-input-error mt-[2px]">{errors.quiz_neg_marks.message}</div>)}
+                                            {negMErr && (<div className="ws-input-error mt-[2px]">{negMErr}</div>)}
                                         </div>
                                         <div>
                                             <label 

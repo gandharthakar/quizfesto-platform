@@ -23,6 +23,8 @@ export default function QuizPrizes() {
         let baseURI = window.location.origin;
         const resp = await fetch(`${baseURI}/api/site/get-prizes`, {
             method: "GET",
+            cache: 'no-store',
+            next: { revalidate: 60 }
         });
         const body = await resp.json();
         if(body.message == "No Prizes Found!") {

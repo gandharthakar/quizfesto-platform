@@ -70,12 +70,12 @@ export async function DELETE(req: Request) {
                 }
 
                 // Remove 'Same' Category From Home Top Categories List. 
-                let hcats = await prisma.homepage_Categories.findFirst();
+                let hcats = await prisma.qF_Homepage_Categories.findFirst();
                 if(hcats !== null) {
                     let commonIDs = findCommonItems([category_id], hcats.home_cats);
                     if(commonIDs.length > 0) {
                         let updated = removeItemsFromArray(hcats.home_cats, [category_id]);
-                        await prisma.homepage_Categories.update({
+                        await prisma.qF_Homepage_Categories.update({
                             where: {
                                 home_cat_id: hcats.home_cat_id
                             },

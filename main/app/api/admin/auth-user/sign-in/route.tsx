@@ -27,12 +27,12 @@ export async function POST(req: Request) {
         let { admin_user_email, admin_user_password } = body;
 
         if(admin_user_email && admin_user_password) {
-            let usr_a = await prisma.admin_User.findFirst({
+            let usr_a = await prisma.qF_Admin_User.findFirst({
                 where: {
                     admin_user_email
                 }
             });
-            let usr_b = await prisma.user.findFirst({
+            let usr_b = await prisma.qF_User.findFirst({
                 where: {
                     AND: [
                         {

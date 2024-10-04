@@ -75,7 +75,9 @@ function Page() {
             method: "POST",
             body: JSON.stringify({
                 option_id
-            })
+            }),
+            cache: 'no-store',
+            next: { revalidate: 60 }
         });
         const body = await resp.json();
         if(body.success) {

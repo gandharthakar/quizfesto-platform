@@ -25,10 +25,10 @@ export default function Page() {
     const params = useParams();
     const user_id = params.user_id[0];
 
-    let gau = getCookie('is_auth_user');
+    const gau = getCookie('is_auth_user');
     if(gau) {
-        let user_id_ck: JWTDec = jwtDecode(gau);
-        let fin_uid = user_id_ck.is_auth_user;
+        const user_id_ck: JWTDec = jwtDecode(gau);
+        const fin_uid = user_id_ck.is_auth_user;
         if(user_id !== fin_uid) {
             router.push('/logout');
         }
@@ -61,12 +61,12 @@ export default function Page() {
 
     const handleFormSubmit: SubmitHandler<validationSchema> = async (formdata) => {
         setIsLoading(true);
-        let baseURI = window.location.origin;
+        const baseURI = window.location.origin;
         const resp = await fetch(`${baseURI}/api/site/auth-user/update-single-user/password`, {
             method: 'POST',
             body: JSON.stringify({ user_id: AuthUser, user_password: formdata.password, confirm_password: formdata.confirm_password })
         });
-        let body = await resp.json();
+        const body = await resp.json();
         if(body.success) {
             Swal.fire({
                 title: "Success!",
@@ -98,7 +98,7 @@ export default function Page() {
                                 htmlFor="uasp-gspwd" 
                                 className="block transition-all delay-75 font-ubuntu font-semibold text-[16px] md:text-[18px] text-zinc-800 dark:text-zinc-300 mb-[5px]"
                             >
-                                New Password
+                                New Password <span className="text-red-500">*</span>
                             </label>
                             <div className="relative">
                                 <input 
@@ -122,7 +122,7 @@ export default function Page() {
                                 htmlFor="uasp-gscnfpwd" 
                                 className="block transition-all delay-75 font-ubuntu font-semibold text-[16px] md:text-[18px] text-zinc-800 dark:text-zinc-300 mb-[5px]"
                             >
-                                Confirm New Password
+                                Confirm New Password <span className="text-red-500">*</span>
                             </label>
                             <div className="relative">
                                 <input 

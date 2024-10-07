@@ -20,7 +20,7 @@ export default function QuizPrizes() {
     const [loading3, setLoading3] = useState<boolean>(true);
 
     const getPrizes = async () => {
-        let baseURI = window.location.origin;
+        const baseURI = window.location.origin;
         const resp = await fetch(`${baseURI}/api/site/get-prizes`, {
             method: "GET",
             cache: 'no-store',
@@ -32,10 +32,13 @@ export default function QuizPrizes() {
             setLoading2(false);
             setLoading3(false);
         } else {
+            /* eslint-disable no-unused-vars */
             for(let i = 0; i < body.prizes.length; i++) {
                 if(body.prizes[i].prize_type === 1) {
                     setPrize1Photo(body.prizes[i].prize_cover_photo);
                     setPrize1Dscr(body.prizes[i].prize_description);
+                    setLoading1(false);
+                } else {
                     setLoading1(false);
                 }
 
@@ -43,11 +46,15 @@ export default function QuizPrizes() {
                     setPrize2Photo(body.prizes[i].prize_cover_photo);
                     setPrize2Dscr(body.prizes[i].prize_description);
                     setLoading2(false);
+                } else {
+                    setLoading2(false);
                 }
 
                 if(body.prizes[i].prize_type === 3) {
                     setPrize3Photo(body.prizes[i].prize_cover_photo);
                     setPrize3Dscr(body.prizes[i].prize_description);
+                    setLoading3(false);
+                } else {
                     setLoading3(false);
                 }
             }

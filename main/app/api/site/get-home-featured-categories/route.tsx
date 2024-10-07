@@ -17,7 +17,7 @@ interface Respo {
 }
 
 const getCatsLabel = async (id_list: string[]) => {
-    let data = await prisma.qF_Quiz_Category.findMany({
+    const data = await prisma.qF_Quiz_Category.findMany({
         where: {
             category_id: {
                 in: id_list
@@ -28,11 +28,14 @@ const getCatsLabel = async (id_list: string[]) => {
 }
 
 export async function GET() {
+    /* eslint-disable no-unused-vars */
     let resp: Respo = {
         success: false,
         message: '',
         home_cats: []
     }
+
+    /* eslint-disable no-unused-vars */
     let sts:number = 400;
 
     try {

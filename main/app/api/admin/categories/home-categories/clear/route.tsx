@@ -7,15 +7,18 @@ interface Respo {
 }
 
 export async function DELETE() {
+    /* eslint-disable no-unused-vars */
     let resp: Respo = {
         success: false,
         message: ''
     }
+
+    /* eslint-disable no-unused-vars */
     let sts:number = 400;
 
     try {
 
-        let data = await prisma.qF_Homepage_Categories.findFirst();
+        const data = await prisma.qF_Homepage_Categories.findFirst();
         if(data !== null) {
             await prisma.qF_Homepage_Categories.delete({
                 where: {

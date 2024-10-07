@@ -17,14 +17,14 @@ const handler = NextAuth({
     callbacks: {
         async signIn({ user }) {
             // console.log(user);
-            let { name, email, image } = user;
-            let fuser = await prisma.qF_User.findUnique({
+            const { name, email, image } = user;
+            const fuser = await prisma.qF_User.findUnique({
                 where: {
                     user_email: email ?? ""
                 }
             });
             if(!fuser) {
-                let user = await prisma.qF_User.create({
+                const user = await prisma.qF_User.create({
                     data: {
                         user_full_name: name ?? "",
                         user_photo: image,
@@ -39,7 +39,7 @@ const handler = NextAuth({
                     value: token
                 });
             } else {
-                let id = fuser.user_id;
+                const id = fuser.user_id;
                 const token = jwt.sign({is_auth_user: id}, process.env.JWT_SECRET ?? "", { expiresIn: '30d' });
                 cookies().set({
                     name: 'is_auth_user',

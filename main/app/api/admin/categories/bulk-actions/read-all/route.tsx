@@ -17,11 +17,14 @@ interface Respo {
 }
 
 export async function GET() {
+    /* eslint-disable no-unused-vars */
     let resp: Respo = {
         success: false,
         message: '',
         cat_data: []
     }
+
+    /* eslint-disable no-unused-vars */
     let sts:number = 400;
 
     try {

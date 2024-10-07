@@ -10,10 +10,13 @@ interface Respo {
 }
 
 export async function POST(req: Request) {
+    /* eslint-disable no-unused-vars */
     let resp: Respo = {
         success: false,
         message: ''
     }
+
+    /* eslint-disable no-unused-vars */
     let sts:number = 400;
 
     try {
@@ -21,7 +24,7 @@ export async function POST(req: Request) {
         const { email, password } = body;
 
         if(email && password) {
-            let fuser = await prisma.qF_User.findUnique({
+            const fuser = await prisma.qF_User.findUnique({
                 where: {
                     user_email: email
                 }

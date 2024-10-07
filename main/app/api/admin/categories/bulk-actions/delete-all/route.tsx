@@ -7,15 +7,18 @@ interface Respo {
 }
 
 export async function DELETE() {
+    /* eslint-disable no-unused-vars */
     let resp: Respo = {
         success: false,
         message: ''
     }
+
+    /* eslint-disable no-unused-vars */
     let sts:number = 400;
 
     try {
 
-        let data = await prisma.qF_Quiz_Category.findMany();
+        const data = await prisma.qF_Quiz_Category.findMany();
         if(data.length > 0) {
             await prisma.qF_Quiz_Category.deleteMany();
             sts = 200;
@@ -25,7 +28,7 @@ export async function DELETE() {
             }
 
             // Remove 'All' Categories From Home Top Categories List. 
-            let hcats = await prisma.qF_Homepage_Categories.findFirst();
+            const hcats = await prisma.qF_Homepage_Categories.findFirst();
             if(hcats !== null) {
                 await prisma.qF_Homepage_Categories.delete({
                     where: {

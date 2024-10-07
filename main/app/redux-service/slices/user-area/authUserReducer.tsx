@@ -7,7 +7,7 @@ interface AuthUserID {
     auth_user_id: string
 }
 
-let initialState: AuthUserID = {
+const initialState: AuthUserID = {
     auth_user_id: ''
 }
 

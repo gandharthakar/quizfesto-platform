@@ -13,6 +13,7 @@ interface Respo {
 }
 
 export async function POST(req: Request) {
+    /* eslint-disable no-unused-vars */
     let resp: Respo = {
         success: false,
         message: '',
@@ -20,12 +21,14 @@ export async function POST(req: Request) {
         prize_description: '',
         prize_cover_photo: ''
     }
+
+    /* eslint-disable no-unused-vars */
     let sts:number = 400;
 
     try {
 
         const body = await req.json();
-        let { prize_type } = body;
+        const { prize_type } = body;
         
         if(prize_type) {
             const getType = await prisma.qF_Winning_Prizes.findFirst({

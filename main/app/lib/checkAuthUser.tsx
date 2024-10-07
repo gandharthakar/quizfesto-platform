@@ -25,7 +25,8 @@ function CheckAuthUser({ children }:Props) {
     // const UserID = useSelector((state: RootState) => state.auth_user_id);
 
     useEffect(() => {
-        let authid = getCookie('is_auth_user');
+        const authid = getCookie('is_auth_user');
+        /* eslint-disable no-unused-vars */
         let user_id: JWTDec = {
             is_auth_user: '',
             exp: 0,

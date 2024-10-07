@@ -22,9 +22,10 @@ function Page() {
 
     const getSavedCats = async (cb_new?:any, cb_update?: any) => {
         setIsLoading(true);
+        /* eslint-disable no-unused-vars */
         let isCatsExist = false;
-        let baseURI = window.location.origin;
-        let resp = await fetch(`${baseURI}/api/admin/categories/home-categories/read`, {
+        const baseURI = window.location.origin;
+        const resp = await fetch(`${baseURI}/api/admin/categories/home-categories/read`, {
             method: "GET",
             cache: 'no-store',
             next: { revalidate: 60 }
@@ -47,10 +48,10 @@ function Page() {
     }
 
     const clearCats = async () => {
-        let conf = confirm("Are you sure want to clear home page top categories ?");
+        const conf = confirm("Are you sure want to clear home page top categories ?");
         if(conf) {
-            let baseURI = window.location.origin;
-            let resp = await fetch(`${baseURI}/api/admin/categories/home-categories/clear`, {
+            const baseURI = window.location.origin;
+            const resp = await fetch(`${baseURI}/api/admin/categories/home-categories/clear`, {
                 method: "DELETE",
             });
             const body = await resp.json();
@@ -61,7 +62,7 @@ function Page() {
                     icon: "success",
                     timer: 2000
                 });
-                let set = setTimeout(() => {
+                const set = setTimeout(() => {
                     window.location.reload();
                     clearTimeout(set);
                 }, 2000);
@@ -77,12 +78,13 @@ function Page() {
     }
 
     const setHomeCatsDB = async () => {
-        let cats:string[] = [];
+        const cats:string[] = [];
+        /* eslint-disable no-unused-vars */
         for(let i = 0; i < homeCats.length; i++) {
             cats.push(homeCats[i].value);
         }
-        let baseURI = window.location.origin;
-        let resp = await fetch(`${baseURI}/api/admin/categories/home-categories/create-update`, {
+        const baseURI = window.location.origin;
+        const resp = await fetch(`${baseURI}/api/admin/categories/home-categories/create-update`, {
             method: "POST",
             body: JSON.stringify({home_cats: cats})
         });
@@ -94,7 +96,7 @@ function Page() {
                 icon: "success",
                 timer: 2000
             });
-            let set = setTimeout(() => {
+            const set = setTimeout(() => {
                 window.location.reload();
                 clearTimeout(set);
             }, 2000);
@@ -103,12 +105,13 @@ function Page() {
     }
 
     const updateHomeCatsDB = async () => {
-        let cats:string[] = [];
+        const cats:string[] = [];
+        /* eslint-disable no-unused-vars */
         for(let i = 0; i < homeCats.length; i++) {
             cats.push(homeCats[i].value);
         }
-        let baseURI = window.location.origin;
-        let resp = await fetch(`${baseURI}/api/admin/categories/home-categories/create-update`, {
+        const baseURI = window.location.origin;
+        const resp = await fetch(`${baseURI}/api/admin/categories/home-categories/create-update`, {
             method: "POST",
             body: JSON.stringify({home_cats: cats, home_cats_id: homeCatsId})
         });
@@ -120,7 +123,7 @@ function Page() {
                 icon: "success",
                 timer: 2000
             });
-            let set = setTimeout(() => {
+            const set = setTimeout(() => {
                 window.location.reload();
                 clearTimeout(set);
             }, 2000);
@@ -143,8 +146,8 @@ function Page() {
     }
 
     const getCats = async () => {
-        let baseURI = window.location.origin;
-        let resp = await fetch(`${baseURI}/api/admin/categories/bulk-actions/read-all`, {
+        const baseURI = window.location.origin;
+        const resp = await fetch(`${baseURI}/api/admin/categories/bulk-actions/read-all`, {
             method: "GET",
             cache: 'no-store',
             next: { revalidate: 60 }
@@ -152,9 +155,10 @@ function Page() {
         const body = await resp.json();
         if(body.success) {
             const cts = body.cat_data;
-            let opts: TwSelInt[] = [];
+            const opts: TwSelInt[] = [];
+            /* eslint-disable no-unused-vars */
             for(let i = 0; i < cts.length; i++) {
-                let obj = {
+                const obj = {
                     value: cts[i].category_id,
                     label: cts[i].category_title
                 }

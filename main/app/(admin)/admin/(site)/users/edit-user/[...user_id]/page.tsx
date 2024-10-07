@@ -11,12 +11,12 @@ import { FaRegTrashCan } from "react-icons/fa6";
 import { useParams } from "next/navigation";
 
 function validatePhone(phoneNumber: string){
-    let phoneNumberPattern = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
+    const phoneNumberPattern = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
     return phoneNumberPattern.test(phoneNumber); 
 }
 
 function validPassword(pwd: string) {
-    let pwdPattern = /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[@#$%^&*-+]).{8,16}$/;
+    const pwdPattern = /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[@#$%^&*-+]).{8,16}$/;
     return pwdPattern.test(pwd);
 }
 
@@ -37,12 +37,13 @@ function Page() {
     const [imageDimensions, setImageDimensions] = useState<boolean>(false);
     const [errorFileInput, setErrorFileInput] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [gender, setGender] = useState<string>('');
 
     const params = useParams();
     const user_id = params.user_id[0];
 
     const handleChangePhone = (e: any) => {
-        let value = e.target.value;
+        const value = e.target.value;
         setPhone(value);
         // Validate Phone Number.
         const validPhone = validatePhone(value);
@@ -56,7 +57,7 @@ function Page() {
     }
 
     const handlePwdChange = (e: any) => {
-        let value = e.target.value;
+        const value = e.target.value;
         setPassword(value);
         if(value !== '') {
             const valPwd = validPassword(value);
@@ -69,7 +70,7 @@ function Page() {
     }
 
     const handleConfPwdChange = (e: any) => {
-        let value = e.target.value;
+        const value = e.target.value;
         setConfirmPassword(value);
         if(value !== '') {
             if(password === '') {
@@ -94,13 +95,13 @@ function Page() {
     }
 
     const handleFileChange = async (e:any) => {
-        let file = e.target.files[0];
+        const file = e.target.files[0];
         if(!file) {
             setImageFile('');
             return;
         } else {
-            let gfnext = file.name;
-            let fext = gfnext.split('.').pop();
+            const gfnext = file.name;
+            const fext = gfnext.split('.').pop();
             setFileExt(fext);
             setProfileImage(URL.createObjectURL(file));
         
@@ -114,8 +115,8 @@ function Page() {
             const objectURL = URL.createObjectURL(file);
             img.src = objectURL;
             img.onload = function handleLoad() {
-                let {width, height} = img;
-                if(width == 1000 && height == 1000) {
+                const {width, height} = img;
+                if(width <= 1000 && height <= 1000) {
                     setImageDimensions(true);
                 } else {
                     setImageDimensions(false);
@@ -133,6 +134,7 @@ function Page() {
             const fileReader = new FileReader();
             fileReader.readAsDataURL(file)
             fileReader.onload = () => {
+                //eslint-disable-next-line
                 typeof fileReader.result === "string" ?
                 resolve(fileReader.result)
                 : reject("Unexpected type received from FileReader");
@@ -167,55 +169,12 @@ function Page() {
 		resolver: zodResolver(validationSchema),
 	});
 
-    const handleFormSubmit: SubmitHandler<validationSchema> = async (formdata) => {
-
-        // Validate Phone Number.
-        const validPhone = validatePhone(phone);
-        if(phone !== "") {
-            if(!validPhone) {
-                setPhoneError("Invalid phone number");
-            } else {
-                setPhoneError("");
-            }
-        }
-
-        // Get file extention.
-        const allowedFileTypes = ["jpg", "png", "jpeg"];
-
-        // console.log(imageFile);
-        if(imageFile !== '') {
-            setErrorFileInput("Please select a photo.");
-        
-            if(!allowedFileTypes.includes(fileExt)) {
-                setErrorFileInput("Only .jpg, .jpeg and .png files are allowed.");
-            } else {
-                if(!imageFileSize) {
-                    setErrorFileInput("Image file size is bigger than 500 kb.");
-                } else {
-                    if(!imageDimensions) {
-                        setErrorFileInput("Image dimensions is expected 1000px x 1000px. (square size)");
-                    } else {
-                        setErrorFileInput("");
-                    }
-                }
-            }
-        }
-
-        let prepData = {
-            user_id,
-            user_full_name: formdata.full_name,
-            user_email: formdata.email,
-            user_password: password,
-            user_conf_password: confirmPassword,
-            role: formdata.role,
-            user_phone: phone,
-            user_photo: imageFile
-        }
+    const submitData = async (data: any) => {
         setIsLoading(true);
-        let baseURI = window.location.origin;
-        let resp = await fetch(`${baseURI}/api/admin/users/crud/update`, {
+        const baseURI = window.location.origin;
+        const resp = await fetch(`${baseURI}/api/admin/users/crud/update`, {
             method: "POST",
-            body: JSON.stringify(prepData),
+            body: JSON.stringify(data),
         });
         const body = await resp.json();
         if(body.success) {
@@ -237,9 +196,69 @@ function Page() {
         }
     }
 
+    const handleFormSubmit: SubmitHandler<validationSchema> = async (formdata) => {
+
+        // Validate Phone Number.
+        const validPhone = validatePhone(phone);
+        if(phone !== "") {
+            if(!validPhone) {
+                setPhoneError("Invalid phone number");
+            } else {
+                setPhoneError("");
+            }
+        }
+
+        // Get file extention.
+        const allowedFileTypes = ["jpg", "png", "jpeg"];
+        /* eslint-disable no-unused-vars */
+        let validImage: boolean = false;
+        // console.log(imageFile);
+        if(imageFile !== '') {
+            setErrorFileInput("Please select a photo.");
+            validImage = false;
+            if(!allowedFileTypes.includes(fileExt)) {
+                setErrorFileInput("Only .jpg, .jpeg and .png files are allowed.");
+                validImage = false;
+            } else {
+                if(!imageFileSize) {
+                    setErrorFileInput("Image file size is bigger than 500 kb.");
+                    validImage = false;
+                } else {
+                    if(!imageDimensions) {
+                        setErrorFileInput("Image dimensions is expected 1000px x 1000px. (square size)");
+                        validImage = false;
+                    } else {
+                        setErrorFileInput("");
+                        validImage = true;
+                    }
+                }
+            }
+        }
+
+        const prepData = {
+            user_id,
+            user_full_name: formdata.full_name,
+            user_email: formdata.email,
+            user_password: password,
+            user_conf_password: confirmPassword,
+            role: formdata.role,
+            user_phone: phone,
+            user_photo: imageFile,
+            user_gender: gender
+        }
+        
+        if(imageFile == '') {
+            await submitData(prepData);
+        } else {
+            if(validImage) {
+                await submitData(prepData);
+            }
+        }
+    }
+
     const getUser = async () => {
-        let baseURI = window.location.origin;
-        let resp = await fetch(`${baseURI}/api/admin/users/crud/read`, {
+        const baseURI = window.location.origin;
+        const resp = await fetch(`${baseURI}/api/admin/users/crud/read`, {
             method: "POST",
             body: JSON.stringify({ user_id }),
             cache: 'no-store',
@@ -263,6 +282,9 @@ function Page() {
             setImageFileSize(true);
             setIsLoading(false);
             setFileExt("jpg");
+            if(body.user.user_gender !== null) {
+                setGender(body.user.user_gender);
+            }
         } else {
             Swal.fire({
                 title: "Error!",
@@ -275,10 +297,10 @@ function Page() {
     }
 
     const resetData = async () => {
-        let conf = confirm("Are you sure want reset participation data ?");
+        const conf = confirm("Are you sure want reset participation data ?");
         if(conf) {
-            let baseURI = window.location.origin;
-            let resp = await fetch(`${baseURI}/api/admin/users/participation-data/delete`, {
+            const baseURI = window.location.origin;
+            const resp = await fetch(`${baseURI}/api/admin/users/participation-data/delete`, {
                 method: "DELETE",
                 body: JSON.stringify({ user_id }),
             });
@@ -404,6 +426,26 @@ function Page() {
                                         <option value="Admin">Admin</option>
                                     </select>
                                     {errors.role && (<div className="ws-input-error mt-[2px]">{errors.role.message}</div>)}
+                                </div>
+                                <div className="pb-[20px]">
+                                    <label 
+                                        className="transition-all delay-75 block mb-[5px] font-noto_sans text-[16px] font-semibold text-zinc-900 dark:text-zinc-300" 
+                                        htmlFor="cq-gender"
+                                    >
+                                        Gender
+                                    </label>
+                                    <select 
+                                        name="user_gender" 
+                                        id="cq-gender" 
+                                        className="ws-input-pwd-m1-v1" 
+                                        value={gender} 
+                                        onChange={(e) => setGender(e.target.value)}
+                                    >
+                                        <option value="">-- Select --</option>
+                                        <option value="male">Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="other">Other</option>
+                                    </select>
                                 </div>
                                 <div className="pb-[20px]">
                                     <label 

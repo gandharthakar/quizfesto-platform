@@ -121,8 +121,8 @@ function Page() {
     };
 
     const getQuizes = async () => {
-        let baseURI = window.location.origin;
-        let resp = await fetch(`${baseURI}/api/site/get-quizes/bulk-list/category-wise`, {
+        const baseURI = window.location.origin;
+        const resp = await fetch(`${baseURI}/api/site/get-quizes/bulk-list/category-wise`, {
             method: "POST",
             body: JSON.stringify({ category_slug: cat_slug }),
             cache: 'no-store',

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { set_dark_mode, unset_dark_mode } from "@/app/redux-service/slices/theme-mode/themeSwitcherSlice";
 import Link from "next/link";
@@ -18,8 +18,8 @@ interface QuizGivenAns {
 export default function Page() {
 
     const params = useParams();
-    let quiz_id = params.quiz_id[0];
-    let user_id = params.quiz_id[1];
+    const quiz_id = params.quiz_id[0];
+    const user_id = params.quiz_id[1];
     const dispatch = useDispatch();
     const trqzdt = useSelector((state: RootState) => state.transfer_quiz_data);
 
@@ -42,10 +42,11 @@ export default function Page() {
     const [isSubmiting, setIsSubmiting] = useState<boolean>(false);
     const [isSubmited, setIsSubmited] = useState<boolean>(false);
     const [negScore, setNegScore] = useState<number>();
+    const buttonRef = useRef<HTMLButtonElement>(null);
 
     const handleScoreSubmissionClick = async () => {
         setIsSubmiting(true);
-        let prepData = {
+        const prepData = {
             quiz_id: qzId,
             quiz_title: qzTitla,
             quiz_cover_photo: qzCP,
@@ -62,7 +63,7 @@ export default function Page() {
         }
         if(trqzdt.attempted_data.length > 0) {
             
-            let baseURI = window.location.origin;
+            const baseURI = window.location.origin;
             const resp = await fetch(`${baseURI}/api/site/submit-score`, {
                 method: "POST",
                 body: JSON.stringify(prepData)
@@ -97,8 +98,13 @@ export default function Page() {
         }
     }
 
+    const fireEvent = (el: any, eventName: string) => {
+        const event = new Event(eventName, { bubbles: true });
+        el.dispatchEvent(event);
+    };
+
     const getScore = async (ugadtArr: QuizGivenAns[]) => {
-        let baseURI = window.location.origin;
+        const baseURI = window.location.origin;
         const resp = await fetch(`${baseURI}/api/site/get-score`, {
             method: "POST",
             body: JSON.stringify({ attempted_data: ugadtArr, quiz_id }),
@@ -108,30 +114,37 @@ export default function Page() {
         const body = await resp.json();
         if(body.success) {
             setCorectAnswers(body.quiz_coorect_answers_count);
+            console.log(negScore);
             if(timeTaken > estTime) {
+                console.log("Going in If Before.");
                 if(negScore) {
+                    console.log("Going in If After.");
                     setTotalScore(body.quiz_total_score - negScore);
+                    // handleScoreSubmissionClick();
+                    const st = setTimeout(() => {
+                        // handleScoreSubmissionClick();
+                        fireEvent(buttonRef.current, "click");
+                        clearTimeout(st);
+                    }, 500);
                 }
             } else {
+                console.log("Going in else.");
                 setTotalScore(body.quiz_total_score);
+                // handleScoreSubmissionClick();
+                const st = setTimeout(() => {
+                    // handleScoreSubmissionClick();
+                    fireEvent(buttonRef.current, "click");
+                    clearTimeout(st);
+                }, 500);
             }
             setIsLoading(false);
+            
         }
     }
 
     useEffect(() => {
-        if(trqzdt.attempted_data.length > 0) {
-            let st_22 = setTimeout(() => {
-                getScore(trqzdt.attempted_data);
-                clearTimeout(st_22);
-            }, 1000);
-        }
-    //eslint-disable-next-line
-    }, [qzTitla]);
 
-    useEffect(() => {
-
-        let glsi = localStorage.getItem('site-dark-mode');
+        const glsi = localStorage.getItem('site-dark-mode');
         const checkDM = glsi ? JSON.parse(glsi) : '';
         if(checkDM) {
             dispatch(set_dark_mode());
@@ -160,7 +173,6 @@ export default function Page() {
         //     // setTotalScore(countCorrectAnswers(corrQAArr, usrAnsw).total_mark);
         // }
 
-
         if(trqzdt.attempted_data.length > 0) {
             setQzId(trqzdt.quiz_id);
             setQzCP(trqzdt.quiz_cover_photo);
@@ -174,17 +186,30 @@ export default function Page() {
             setNegScore(trqzdt.negative_marking_score);
 
             setUserAnsw(trqzdt.attempted_data);
+            // getScore(trqzdt.attempted_data);
         }
 
         if(trqzdt.attempted_data.length === 0) {
-            let st = setTimeout(() => {
+            const st = setTimeout(() => {
+                
                 setIsLoading(false);
                 clearTimeout(st);
             }, 200);
         }
 
     //eslint-disable-next-line
-    }, [isLoading]);
+    }, []);
+
+    useEffect(() => {
+        if(trqzdt.attempted_data.length > 0) {
+            // let st_22 = setTimeout(() => {
+                getScore(trqzdt.attempted_data);
+                // clearTimeout(st_22);
+            // }, 1000);
+        }
+    // }, [qzTitla]);
+    //eslint-disable-next-line
+    }, []);
 
     return (
         <>
@@ -241,7 +266,7 @@ export default function Page() {
                         </div>
                         <div className="pb-[15px] text-center">
                             <h5 className="transition-all delay-75 font-ubuntu text-[12px] font-semibold md:text-[14px] text-zinc-500 dark:text-zinc-500">
-                                Your Score Will Be Saved Only After You clicked &quot;Submit Score&quot; Button.
+                                Your Score Will Be Saved Automatically.
                             </h5>
                         </div>
 
@@ -268,11 +293,12 @@ export default function Page() {
                                         {
                                             trqzdt.attempted_data.length > 0 && isLoading === false ? 
                                             (
-                                                <div>
+                                                <div className="hidden">
                                                     <button 
                                                         type="button" 
                                                         title="Submit Score" 
                                                         className="inline-block transition-all delay-75 border-[2px] border-solid border-theme-color-1 text-white bg-theme-color-1 py-[8px] md:py-[10px] px-[20px] md:px-[25px] rounded-full font-ubuntu font-semibold text-[16px] md:text-[18px] hover:bg-theme-color-1-hover-dark hover:text-white" 
+                                                        ref={buttonRef} 
                                                         onClick={handleScoreSubmissionClick}
                                                     >
                                                         Submit Score

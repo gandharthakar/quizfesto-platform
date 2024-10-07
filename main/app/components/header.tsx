@@ -15,8 +15,8 @@ interface CompProp {
 
 export default function Header(props: CompProp) {
 
-    let { isSticky=true } = props;
-    let pathname = usePathname();
+    const { isSticky=true } = props;
+    const pathname = usePathname();
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
     const menuRef = useRef<HTMLDivElement>(null);
 
@@ -26,7 +26,7 @@ export default function Header(props: CompProp) {
     
     useEffect(()=> {
 
-        let menuHandler = (e:any) => {
+        const menuHandler = (e:any) => {
             if(menuRef.current !== null) {
                 if(!menuRef.current.contains(e.target)) {
                     setIsMenuOpen(false);

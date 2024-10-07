@@ -19,6 +19,7 @@ interface Respo {
 }
 
 const getWinnerPosTxt = (winType: number) => {
+    /* eslint-disable no-unused-vars */
     let txt = '';
     switch (winType) {
         case 1:
@@ -52,10 +53,13 @@ const getUserDetails = async (user_id: string, onlyName: boolean) => {
 }
 
 export async function GET() {
+    /* eslint-disable no-unused-vars */
     let resp: Respo = {
         success: false,
         message: ''
     }
+
+    /* eslint-disable no-unused-vars */
     let sts:number = 400;
 
     try {
@@ -64,9 +68,11 @@ export async function GET() {
         
         if(data.length > 0) {
 
+            //eslint-disable-next-line
             let arr: WinUsrFrm[] = [];
+            /* eslint-disable no-unused-vars */
             for(let i = 0; i < data.length; i++) {
-                let obj = {
+                const obj = {
                     winner_id: data[i].winner_id,
                     winner_type: data[i].winner_type,
                     winning_position_text: getWinnerPosTxt(data[i].winner_type),

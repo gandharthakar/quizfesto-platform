@@ -17,20 +17,23 @@ interface Respo {
 }
 
 export async function POST(req: Request) {
+    /* eslint-disable no-unused-vars */
     let resp: Respo = {
         success: false,
         message: ''
     }
+
+    /* eslint-disable no-unused-vars */
     let sts:number = 400;
 
     try {
 
         const body = await req.json();
-        let { user_id } = body;
+        const { user_id } = body;
 
         if(user_id) {
 
-            let upd = await prisma.qF_User_Participation.findMany({
+            const upd = await prisma.qF_User_Participation.findMany({
                 where: {
                     user_id
                 },

@@ -21,16 +21,17 @@ export default function Page() {
     const params = useParams();
     const user_id = params.user_id[0];
 
-    let gau = getCookie('is_auth_user');
+    const gau = getCookie('is_auth_user');
     if(gau) {
-        let user_id_ck: JWTDec = jwtDecode(gau);
-        let fin_uid = user_id_ck.is_auth_user;
+        const user_id_ck: JWTDec = jwtDecode(gau);
+        const fin_uid = user_id_ck.is_auth_user;
         if(user_id !== fin_uid) {
             router.push('/logout');
         }
     }
 
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [gender, setGender] = useState<string>('');
 
     const validationSchema = z.object({
         full_name: z.string({
@@ -54,12 +55,12 @@ export default function Page() {
 
     const handleFormSubmit: SubmitHandler<validationSchema> = async (formdata) => {
         setIsLoading(true);
-        let baseURI = window.location.origin;
+        const baseURI = window.location.origin;
         const resp = await fetch(`${baseURI}/api/site/auth-user/update-single-user/general`, {
             method: 'POST',
-            body: JSON.stringify({ user_id, user_full_name: formdata.full_name, user_email: formdata.email })
+            body: JSON.stringify({ user_id, user_full_name: formdata.full_name, user_email: formdata.email, user_gender: gender })
         });
-        let body = await resp.json();
+        const body = await resp.json();
         if(body.success) {
             Swal.fire({
                 title: "Success!",
@@ -83,17 +84,20 @@ export default function Page() {
 
     //eslint-disable-next-line
     const getUser = async () => {
-        let baseURI = window.location.origin;
+        const baseURI = window.location.origin;
         const resp = await fetch(`${baseURI}/api/site/auth-user/get-single-user`, {
             method: 'POST',
             body: JSON.stringify({ user_id }),
             cache: 'no-store',
             next: { revalidate: 60 }
         });
-        let body = await resp.json();
+        const body = await resp.json();
         if(body.success) {
             setValue("full_name", body.user.user_full_name);
             setValue("email", body.user.user_email);
+            if(body.user.user_gender !== null) {
+                setGender(body.user.user_gender);
+            }
             setIsLoading(false);
         } else {
             Swal.fire({
@@ -127,7 +131,7 @@ export default function Page() {
                                 htmlFor="uasp-gsfn" 
                                 className="block transition-all delay-75 font-ubuntu font-semibold text-[16px] md:text-[18px] text-zinc-800 dark:text-zinc-300 mb-[5px]"
                             >
-                                Full Name
+                                Full Name <span className="text-red-500">*</span>
                             </label>
                             <input 
                                 type="text" 
@@ -138,22 +142,13 @@ export default function Page() {
                             />
                             {errors.full_name && (<div className="ws-input-error">{errors.full_name.message}</div>)}
                         </div>
-                        <div className="pb-[15px] hidden">
-                            <label 
-                                className="block transition-all delay-75 font-ubuntu font-semibold text-[16px] md:text-[18px] text-zinc-800 dark:text-zinc-300 mb-[5px]"
-                            >
-                                Username
-                            </label>
-                            <div className="block transition-all delay-75 px-[15px] py-[8px] text-[16px] md:text-[18px] font-noto_sans font-semibold border border-solid border-zinc-100 bg-zinc-100 dark:bg-zinc-800 dark:text-zinc-200 dark:border-zinc-800">
-                                amitthakur224
-                            </div>
-                        </div>
+                        
                         <div className="pb-[15px]">
                             <label 
                                 htmlFor="uasp-gseml" 
                                 className="block transition-all delay-75 font-ubuntu font-semibold text-[16px] md:text-[18px] text-zinc-800 dark:text-zinc-300 mb-[5px]"
                             >
-                                Email
+                                Email <span className="text-red-500">*</span>
                             </label>
                             <input 
                                 type="email" 
@@ -163,6 +158,26 @@ export default function Page() {
                                 {...register("email")}
                             />
                             {errors.email && (<div className="ws-input-error">{errors.email.message}</div>)}
+                        </div>
+                        <div className="pb-[15px]">
+                            <label 
+                                htmlFor="uasp-gender" 
+                                className="block transition-all delay-75 font-ubuntu font-semibold text-[16px] md:text-[18px] text-zinc-800 dark:text-zinc-300 mb-[5px]"
+                            >
+                                Gender
+                            </label>
+                            <select 
+                                name="user_gender" 
+                                id="uasp-gender" 
+                                className="ws-input-m1" 
+                                value={gender} 
+                                onChange={(e) => setGender(e.target.value)}
+                            >
+                                <option value="">-- Select --</option>
+                                <option value="male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
                         </div>
                         <div className="text-right pt-[15px]">
                             {

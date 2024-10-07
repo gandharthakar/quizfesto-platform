@@ -8,8 +8,10 @@ interface ShtResp {
 }
 
 export async function POST(req: Request) {
+    /* eslint-disable no-unused-vars */
     let sts:number = 400;
 
+    /* eslint-disable no-unused-vars */
     let short_resp: ShtResp = {
         success: false,
         message: '',
@@ -18,7 +20,7 @@ export async function POST(req: Request) {
     try {
 
         const body = await req.json();
-        let { user_id, user_password, confirm_password } = body;
+        const { user_id, user_password, confirm_password } = body;
 
         if(!user_id) {
             short_resp = {

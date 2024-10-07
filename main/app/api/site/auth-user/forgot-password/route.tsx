@@ -1,5 +1,6 @@
 import prisma from "@/app/lib/db";
 import { NextResponse } from "next/server";
+//eslint-disable-next-line
 const emailTransporter = require("@/app/nodemailer/emailConfig");
 import jwt from "jsonwebtoken";
 
@@ -12,10 +13,13 @@ interface Respo {
 }
 
 export async function POST(req: Request) {
+    /* eslint-disable no-unused-vars */
     let resp: Respo = {
         success: false,
         message: ''
     }
+
+    /* eslint-disable no-unused-vars */
     let sts:number = 400;
 
     try {

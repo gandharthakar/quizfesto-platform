@@ -18,7 +18,7 @@ export default function ThemeSwitchHeaderDesktop() {
         // const detectMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 
         // Manually Toggle and Save Dark Mode.
-        let glsi = localStorage.getItem('site-dark-mode');
+        const glsi = localStorage.getItem('site-dark-mode');
         const checkDM = glsi ? JSON.parse(glsi) : '';
         if(checkDM) {
             dispatch(set_dark_mode());

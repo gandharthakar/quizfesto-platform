@@ -30,8 +30,8 @@ function Page() {
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
     const getStats = async () => {
-        let baseURI = window.location.origin;
-        let resp = await fetch(`${baseURI}/api/admin/stats`, {
+        const baseURI = window.location.origin;
+        const resp = await fetch(`${baseURI}/api/admin/stats`, {
             method: "GET"
         });
         const body = await resp.json();

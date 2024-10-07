@@ -42,16 +42,19 @@ const getCats = async (ids: string[]) => {
 }
 
 export async function POST(req: Request) {
+    /* eslint-disable no-unused-vars */
     let resp: Respo = {
         success: false,
         message: '',
     }
+
+    /* eslint-disable no-unused-vars */
     let sts:number = 400;
 
     try {
 
         const body = await req.json();
-        let { quiz_id } = body;
+        const { quiz_id } = body;
 
         if(quiz_id) {
             const data = await prisma.qF_Quiz.findFirst({

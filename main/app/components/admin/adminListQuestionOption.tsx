@@ -41,7 +41,7 @@ function AdminListQuestionOption(props: AdmLstQuesOptsCd) {
         setIsMenuOpen(false);
         const conf = confirm("Are you sure want to delete this option ?");
         if(conf) {
-            let baseURI = window.location.origin;
+            const baseURI = window.location.origin;
             const resp = await fetch(`${baseURI}/api/admin/options/crud/delete`, {
                 method: "DELETE",
                 body: JSON.stringify({option_id})
@@ -54,7 +54,7 @@ function AdminListQuestionOption(props: AdmLstQuesOptsCd) {
                     icon: "success",
                     timer: 2000
                 });
-                let set = setTimeout(() => {
+                const set = setTimeout(() => {
                     window.location.reload();
                     clearTimeout(set);
                 }, 2000);
@@ -71,7 +71,7 @@ function AdminListQuestionOption(props: AdmLstQuesOptsCd) {
 
     useEffect(()=> {
 
-        let menuHandler = (e:any) => {
+        const menuHandler = (e:any) => {
             if(menuRef.current !== null) {
                 if(!menuRef.current.contains(e.target)) {
                     setIsMenuOpen(false);
@@ -147,7 +147,7 @@ function AdminListQuestionOption(props: AdmLstQuesOptsCd) {
                         >
                             <FaEllipsisVertical size={18} />
                         </button>
-                        <ul className={`absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-zinc-950 dark:ring-zinc-800 ${isMenuOpen ? 'block' : 'hidden'}`}>
+                        <ul className={`absolute right-0 z-10 mt-2 w-36 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-zinc-950 dark:ring-zinc-800 ${isMenuOpen ? 'block' : 'hidden'}`}>
                             {/* <li className="w-full">
                                 <button 
                                     type="button" 

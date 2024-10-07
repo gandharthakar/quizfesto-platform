@@ -40,7 +40,7 @@ function AdminListCategoryCard(props: AdmLstQzCd) {
         setIsMenuOpen(false);
         const conf = confirm("Are you sure want to delete this category ?");
         if(conf) {
-            let baseURI = window.location.origin;
+            const baseURI = window.location.origin;
             const resp = await fetch(`${baseURI}/api/admin/categories/crud/delete`, {
                 method: "DELETE",
                 body: JSON.stringify({category_id: cat_id})
@@ -53,7 +53,7 @@ function AdminListCategoryCard(props: AdmLstQzCd) {
                     icon: "success",
                     timer: 2000
                 });
-                let set = setTimeout(() => {
+                const set = setTimeout(() => {
                     window.location.reload();
                     clearTimeout(set);
                 }, 2000);
@@ -70,7 +70,7 @@ function AdminListCategoryCard(props: AdmLstQzCd) {
 
     useEffect(()=> {
 
-        let menuHandler = (e:any) => {
+        const menuHandler = (e:any) => {
             if(menuRef.current !== null) {
                 if(!menuRef.current.contains(e.target)) {
                     setIsMenuOpen(false);

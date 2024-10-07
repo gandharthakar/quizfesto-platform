@@ -20,15 +20,18 @@ interface Respo {
 }
 
 export async function GET() {
+    /* eslint-disable no-unused-vars */
     let resp: Respo = {
         success: false,
         message: ''
     }
+
+    /* eslint-disable no-unused-vars */
     let sts:number = 400;
 
     try {
 
-        let prepData = {
+        const prepData = {
             total_quizes: await prisma.qF_Quiz.count(),
             total_questions: await prisma.qF_Question.count(),
             total_options: await prisma.qF_Option.count(),

@@ -12,7 +12,7 @@ import { useParams } from "next/navigation";
 function Page() {
 
     const param = useParams();
-    let AuthUser = param?.userid[0];
+    const AuthUser = param?.userid[0];
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [showConfPassword, setShowConfPassword] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -38,12 +38,12 @@ function Page() {
 
     const handleFormSubmit: SubmitHandler<validationSchema> = async (formdata) => {
         setIsLoading(true);
-        let baseURI = window.location.origin;
+        const baseURI = window.location.origin;
         const resp = await fetch(`${baseURI}/api/admin/auth-user/settings/password`, {
             method: 'POST',
             body: JSON.stringify({ user_id: AuthUser, password: formdata.password, confirm_password: formdata.confirmPassword })
         });
-        let body = await resp.json();
+        const body = await resp.json();
         if(body.success) {
             Swal.fire({
                 title: "Success!",

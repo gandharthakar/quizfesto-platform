@@ -17,16 +17,17 @@ interface Respo {
 }
 
 const getCatsLabel = async (id_list: string[]) => {
-    let data = await prisma.qF_Quiz_Category.findMany({
+    const data = await prisma.qF_Quiz_Category.findMany({
         where: {
             category_id: {
                 in: id_list
             }
         }
     });
-    let cts: homeCats[] = [];
+    const cts: homeCats[] = [];
+    /* eslint-disable no-unused-vars */
     for(let i = 0; i < data.length; i++) {
-        let obj = {
+        const obj = {
             value: data[i].category_id,
             label: data[i].category_title
         }
@@ -36,12 +37,15 @@ const getCatsLabel = async (id_list: string[]) => {
 }
 
 export async function GET() {
+    /* eslint-disable no-unused-vars */
     let resp: Respo = {
         success: false,
         message: '',
         home_cats: [],
         home_cats_id: ''
     }
+
+    /* eslint-disable no-unused-vars */
     let sts:number = 400;
 
     try {

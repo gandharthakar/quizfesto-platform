@@ -9,31 +9,30 @@ interface QF_User {
     user_email: string,
     user_phone?: string,
     user_photo?: string,
-    role: string
+    user_gender?: string,
+    role: string,
 }
 
 interface Respo {
     success: boolean,
     message: string,
-    user: QF_User
+    user?: QF_User
 }
 
 export async function POST(req: Request) {
+    /* eslint-disable no-unused-vars */
     let resp: Respo = {
         success: false,
         message: '',
-        user: {
-            user_full_name: '',
-            role: '',
-            user_email: ''
-        }
     }
+
+    /* eslint-disable no-unused-vars */
     let sts:number = 400;
 
     try {
 
         const body = await req.json();
-        let { user_id } = body;
+        const { user_id } = body;
 
         if(user_id) {
             const DB_User = await prisma.qF_User.findFirst({
@@ -51,7 +50,8 @@ export async function POST(req: Request) {
                         user_email: DB_User.user_email,
                         role: DB_User.role??"",
                         user_phone: DB_User.user_phone??"",
-                        user_photo: DB_User.user_photo??""
+                        user_photo: DB_User.user_photo??"",
+                        user_gender: DB_User.user_gender??"",
                     }
                 }
             } else {
@@ -59,11 +59,6 @@ export async function POST(req: Request) {
                 resp = {
                     success: false,
                     message: "No User Found!",
-                    user: {
-                        user_full_name: '',
-                        role: '',
-                        user_email: ''
-                    }
                 }
             }
         } else {
@@ -71,11 +66,6 @@ export async function POST(req: Request) {
             resp = {
                 success: false,
                 message: "Missing Required Fields!",
-                user: {
-                    user_full_name: '',
-                    role: '',
-                    user_email: ''
-                }
             }
         }
 
@@ -85,11 +75,6 @@ export async function POST(req: Request) {
         resp = {
             success: false,
             message: error.message,
-            user: {
-                user_full_name: '',
-                role: '',
-                user_email: ''
-            }
         }
         return NextResponse.json(resp, {status: sts});
     }

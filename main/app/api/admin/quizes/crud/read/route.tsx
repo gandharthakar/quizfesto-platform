@@ -32,16 +32,19 @@ interface Respo {
 }
 
 const getCatsLabel = async (id_list: string[]) => {
-    let data = await prisma.qF_Quiz_Category.findMany({
+    const data = await prisma.qF_Quiz_Category.findMany({
         where: {
             category_id: {
                 in: id_list
             }
         }
     });
+    
+    //eslint-disable-next-line
     let cts: Cats[] = [];
+    /* eslint-disable no-unused-vars */
     for(let i = 0; i < data.length; i++) {
-        let obj = {
+        const obj = {
             value: data[i].category_id,
             label: data[i].category_title
         }
@@ -75,7 +78,7 @@ export async function POST(req: Request) {
     try {
 
         const body = await req.json();
-        let { quiz_id } = body;
+        const { quiz_id } = body;
         if(quiz_id) {
             const alreadQuizExited = await prisma.qF_Quiz.findFirst({
                 where: {

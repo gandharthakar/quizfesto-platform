@@ -42,16 +42,19 @@ const getOptions = async (qid: string) => {
 }
 
 export async function POST(req: Request) {
+    /* eslint-disable no-unused-vars */
     let resp: Respo = {
         success: false,
         message: ''
     }
+
+    /* eslint-disable no-unused-vars */
     let sts:number = 400;
 
     try {
 
         const body = await req.json();
-        let { quiz_id } = body;
+        const { quiz_id } = body;
 
         if(quiz_id) {
 
@@ -62,15 +65,17 @@ export async function POST(req: Request) {
             });
 
             if(data !== null) {
-                let ques_ids = await prisma.qF_Question.findMany({
+                const ques_ids = await prisma.qF_Question.findMany({
                     where: {
                         quizid: quiz_id
                     }
                 });
 
+                //eslint-disable-next-line
                 let qArrData: QF_Quiz_Pub_Quess[] = [];
+                /* eslint-disable no-unused-vars */
                 for(let i = 0; i < ques_ids.length; i++) {
-                    let obj = {
+                    const obj = {
                         question_id: ques_ids[i].question_id,
                         question_title: ques_ids[i].question_title,
                         question_marks: ques_ids[i].question_marks,

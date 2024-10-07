@@ -17,6 +17,7 @@ interface Respo {
 }
 
 export async function POST(req: Request) {
+    /* eslint-disable no-unused-vars */
     let resp: Respo = {
         success: false,
         message: '',
@@ -26,12 +27,14 @@ export async function POST(req: Request) {
             category_slug: ''
         }
     }
+
+    /* eslint-disable no-unused-vars */
     let sts:number = 400;
 
     try {
 
         const body = await req.json();
-        let { category_id } = body;
+        const { category_id } = body;
         if(category_id) {
             const existingCat = await prisma.qF_Quiz_Category.findFirst({
                 where: {

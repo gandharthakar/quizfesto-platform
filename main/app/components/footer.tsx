@@ -10,7 +10,7 @@ import { GrInstagram } from "react-icons/gr";
 
 export default function Footer() {
 
-    let pathname = usePathname();
+    const pathname = usePathname();
 
     return (
         <>

@@ -39,10 +39,10 @@ export default function Page() {
     const params = useParams();
     const user_id = params.user_id[0];
 
-    let gau = getCookie('is_auth_user');
+    const gau = getCookie('is_auth_user');
     if(gau) {
-        let user_id_ck: JWTDec = jwtDecode(gau);
-        let fin_uid = user_id_ck.is_auth_user;
+        const user_id_ck: JWTDec = jwtDecode(gau);
+        const fin_uid = user_id_ck.is_auth_user;
         if(user_id !== fin_uid) {
             router.push('/logout');
         }
@@ -61,7 +61,7 @@ export default function Page() {
     };
 
     const getParticipationData = async () => {
-        let baseURI = window.location.origin;
+        const baseURI = window.location.origin;
         const resp = await fetch(`${baseURI}/api/site/auth-user/get-my-participation`, {
             method: "POST",
             body: JSON.stringify({ user_id }),

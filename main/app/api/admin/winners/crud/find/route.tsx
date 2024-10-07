@@ -43,6 +43,7 @@ const getWinner = (data: any[], minScore: number, maxScore: number, onlyMaxScore
         });
 
         // Find the earliest date among filtered records
+        /* eslint-disable no-unused-vars */
         let earliestDate = filteredRecords[0].record_date;
         filteredRecords.forEach(record => {
             if (new Date(record.record_date) < new Date(earliestDate)) {
@@ -70,6 +71,7 @@ const getWinner = (data: any[], minScore: number, maxScore: number, onlyMaxScore
         });
 
         // Find the earliest time among filtered records
+        /* eslint-disable no-unused-vars */
         let earliestTime = filteredRecords[0].record_time;
         filteredRecords.forEach(record => {
             if (new Date(`2000-01-01 ${record.record_time}`) < new Date(`2000-01-01 ${earliestTime}`)) {
@@ -99,6 +101,7 @@ const getWinner = (data: any[], minScore: number, maxScore: number, onlyMaxScore
     }
 
     // Filter By Score.
+    /* eslint-disable no-unused-vars */
     let fs = [];
     if(onlyMaxScore) {
         fs = data.filter((item) => item.aggregate_score > maxScore);
@@ -106,12 +109,14 @@ const getWinner = (data: any[], minScore: number, maxScore: number, onlyMaxScore
         fs = data.filter((item) => (item.aggregate_score >= minScore && item.aggregate_score < maxScore));
     }
     // Filter By Date.
-    let fd = fs.filter((item) => (item.record_date <= endDate() && item.record_date >= startDate()));
+    const fd = fs.filter((item) => (item.record_date <= endDate() && item.record_date >= startDate()));
     // Check If found more than 1 Record only.
     if(fd.length > 1) {
         // Filter By Earliest date.
+        //eslint-disable-next-line
         let fde = findEarliestDateUsers(fd);
         // Filter By Earliest Time.
+        //eslint-disable-next-line
         let fte = findEarliestTimeUser(fde);
         return fte;
     } else {
@@ -124,9 +129,11 @@ const convertDigitIn = (str: string) => {
 }
 
 const prepScoreRecord = async (winData: any[], winType: number, WinTypeDscr: string) => {
+    /* eslint-disable no-unused-vars */
     let obj = {};
+    /* eslint-disable no-unused-vars */
     let c1: any = {};
-    let alreadyExist = await prisma.qF_Winners.findFirst({
+    const alreadyExist = await prisma.qF_Winners.findFirst({
         where: {
             winner_type: winType
         }
@@ -149,8 +156,8 @@ const prepScoreRecord = async (winData: any[], winType: number, WinTypeDscr: str
             }
         });
     }
-    let ufn = await prisma.qF_User.findFirst({ where: { user_id: c1.user_id }, select: { user_full_name: true } });
-    let upp = await prisma.qF_User.findFirst({ where: { user_id: c1.user_id }, select: { user_photo: true } });
+    const ufn = await prisma.qF_User.findFirst({ where: { user_id: c1.user_id }, select: { user_full_name: true } });
+    const upp = await prisma.qF_User.findFirst({ where: { user_id: c1.user_id }, select: { user_photo: true } });
     obj = {
         winner_id: c1.winner_id,
         winner_type: winType,
@@ -165,18 +172,21 @@ const prepScoreRecord = async (winData: any[], winType: number, WinTypeDscr: str
 }
 
 export async function GET() {
+    /* eslint-disable no-unused-vars */
     let resp: Respo = {
         success: false,
         message: '',
         winners: []
     }
+
+    /* eslint-disable no-unused-vars */
     let sts:number = 400;
 
     try {
 
         const data = await prisma.qF_Aggrigate_Scores.findMany();
         if(data.length > 0) {
-            let propData = data.map((item) => {
+            const propData = data.map((item) => {
                 return {
                     user_id: item.user_id??"",
                     aggregate_score: item.aggregate_score,
@@ -185,13 +195,17 @@ export async function GET() {
                 }
             });
 
-            let first_winner = getWinner(propData, 0, 20000, true);
-            let second_winner = getWinner(propData, 15000, 20000, false);
-            let third_winner = getWinner(propData, 10000, 15000, false);
+            const first_winner = getWinner(propData, 0, 20000, true);
+            const second_winner = getWinner(propData, 15000, 20000, false);
+            const third_winner = getWinner(propData, 10000, 15000, false);
             
+            /* eslint-disable no-unused-vars */
             let winner_1 = {};
+            /* eslint-disable no-unused-vars */
             let winner_2 = {};
+            /* eslint-disable no-unused-vars */
             let winner_3 = {};
+            //eslint-disable-next-line
             let arr: any = [];
 
             if(first_winner.length > 0) {

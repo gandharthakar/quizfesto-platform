@@ -14,7 +14,7 @@ interface WinPriFrm {
 
 function WinnerPrizeForm(props: WinPriFrm) {
 
-    let { prize_type_text, prize_possition_text } = props;
+    const { prize_type_text, prize_possition_text } = props;
 
     const defaultImage = "https://placehold.co/700x500/png";
 
@@ -30,13 +30,13 @@ function WinnerPrizeForm(props: WinPriFrm) {
     const [btnTxt, setBtnTxt] = useState<string>("Save");
 
     const handleImageFileInput = async (e: any) => {
-        let file = e.target.files[0];
+        const file = e.target.files[0];
         if(!file) {
             setImageFile('');
             return;
         } else {
-            let gfnext = file.name;
-            let fext = gfnext.split('.').pop();
+            const gfnext = file.name;
+            const fext = gfnext.split('.').pop();
             setFileExt(fext);
             setProfileImage(URL.createObjectURL(file));
         
@@ -50,7 +50,7 @@ function WinnerPrizeForm(props: WinPriFrm) {
             const objectURL = URL.createObjectURL(file);
             img.src = objectURL;
             img.onload = function handleLoad() {
-                let {width, height} = img;
+                const {width, height} = img;
                 if(width == 700 && height == 500) {
                     setImageDimensions(true);
                 } else {
@@ -73,10 +73,10 @@ function WinnerPrizeForm(props: WinPriFrm) {
     }
 
     const removePrize = async () => {
-        let conf = confirm("Are you sure you want to remove prize ?");
+        const conf = confirm("Are you sure you want to remove prize ?");
         if(conf) {
             setIsLoading(true);
-            let baseURI = window.location.origin;
+            const baseURI = window.location.origin;
             const resp = await fetch(`${baseURI}/api/admin/prizes/delete`, {
                 method: "POST",
                 body: JSON.stringify({prize_type: prize_type_text})
@@ -90,7 +90,7 @@ function WinnerPrizeForm(props: WinPriFrm) {
                     icon: "success",
                     timer: 1500
                 });
-                let s1 = setTimeout(() => {
+                const s1 = setTimeout(() => {
                     window.location.reload();
                     clearTimeout(s1);
                 }, 1500);
@@ -103,6 +103,7 @@ function WinnerPrizeForm(props: WinPriFrm) {
             const fileReader = new FileReader();
             fileReader.readAsDataURL(file)
             fileReader.onload = () => {
+                //eslint-disable-next-line
                 typeof fileReader.result === "string" ?
                 resolve(fileReader.result)
                 : reject("Unexpected type received from FileReader");
@@ -114,7 +115,7 @@ function WinnerPrizeForm(props: WinPriFrm) {
     }
 
     const handleChangeDscr = (e: any) => {
-        let value = e.target.value;
+        const value = e.target.value;
         setDescr(value);
         if(value == '') {
             setDescError("Please enter some value.");
@@ -126,6 +127,7 @@ function WinnerPrizeForm(props: WinPriFrm) {
     const handleSubmit = async (e: any) => {
         e.preventDefault();
 
+        /* eslint-disable no-unused-vars */
         let validPrizeCoverPhoto:boolean = false;
 
         if(descr == '') {
@@ -183,7 +185,7 @@ function WinnerPrizeForm(props: WinPriFrm) {
                 prize_description: descr,
             }
             setIsLoading(true);
-            let baseURI = window.location.origin;
+            const baseURI = window.location.origin;
             const resp = await fetch(`${baseURI}/api/admin/prizes/create-update`, {
                 method: "POST",
                 body: JSON.stringify(data)
@@ -215,7 +217,7 @@ function WinnerPrizeForm(props: WinPriFrm) {
 
     const getPrize = async () => {
         setIsLoading(true);
-        let baseURI = window.location.origin;
+        const baseURI = window.location.origin;
         const resp = await fetch(`${baseURI}/api/admin/prizes/read`, {
             method: "POST",
             body: JSON.stringify({ prize_type: prize_type_text }),

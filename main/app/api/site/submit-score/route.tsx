@@ -22,10 +22,13 @@ const getCurrentTime = () => {
 }
 
 export async function POST(req: Request) {
+    /* eslint-disable no-unused-vars */
     let resp: Respo = {
         success: false,
         message: ''
     }
+
+    /* eslint-disable no-unused-vars */
     let sts:number = 400;
 
     try {
@@ -46,9 +49,9 @@ export async function POST(req: Request) {
 
          } = body;
 
-         if(quiz_total_question && quiz_total_marks && quiz_total_score && quiz_estimated_time && quiz_display_time && quiz_time_taken && quiz_id && quiz_title && quiz_correct_answers_count && user_id) {
+         if(quiz_total_question && quiz_total_marks && quiz_estimated_time && quiz_display_time && quiz_time_taken && quiz_id && quiz_title && user_id) {
 
-            let ifAlready = await prisma.qF_User_Participation.findFirst({
+            const ifAlready = await prisma.qF_User_Participation.findFirst({
                 where: {
                     AND: [
                         {
@@ -84,13 +87,13 @@ export async function POST(req: Request) {
                     message: "Score Submited Successfully!"
                 }
 
-                let existASU = await prisma.qF_Aggrigate_Scores.findFirst({
+                const existASU = await prisma.qF_Aggrigate_Scores.findFirst({
                     where: {
                         user_id
                     }
                 });
                 if(existASU !== null) {
-                    let ags = existASU.aggregate_score + quiz_total_score;
+                    const ags = existASU.aggregate_score + quiz_total_score;
                     await prisma.qF_Aggrigate_Scores.update({
                         where: {
                             user_id

@@ -22,6 +22,7 @@ model QF_User {
   user_password       String
   user_phone          String?
   user_photo          String?
+  user_gender         String?
   role                Role?                   @default(User)
   user_participations QF_User_Participation[]
   Aggrigate_Scores    QF_Aggrigate_Scores[]
@@ -35,8 +36,9 @@ model QF_Admin_User {
   admin_user_name     String
   admin_user_email    String   @unique
   admin_user_password String
-  admin_user_photo    String
-  admin_user_phone    String
+  admin_user_photo    String?
+  admin_user_phone    String?
+  admin_user_gender   String?
   role                Role?    @default(Admin)
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt

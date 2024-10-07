@@ -38,10 +38,10 @@ function AdminListQuizCard(props: AdmLstQzCd) {
     }
     
     const handleDeleteQuiz = async () => {
-        let conf = confirm("Are you sure want to delete this quiz ?");
+        const conf = confirm("Are you sure want to delete this quiz ?");
         if(conf) {
-            let baseURI = window.location.origin;
-            let resp = await fetch(`${baseURI}/api/admin/quizes/crud/delete`, {
+            const baseURI = window.location.origin;
+            const resp = await fetch(`${baseURI}/api/admin/quizes/crud/delete`, {
                 method: "DELETE",
                 body: JSON.stringify({quiz_id: quizid}),
             });
@@ -53,7 +53,7 @@ function AdminListQuizCard(props: AdmLstQzCd) {
                     icon: "success",
                     timer: 3000
                 });
-                let set = setTimeout(() => {
+                const set = setTimeout(() => {
                     window.location.reload();
                     clearTimeout(set);
                 }, 3000);
@@ -82,7 +82,7 @@ function AdminListQuizCard(props: AdmLstQzCd) {
 
     useEffect(()=> {
 
-        let menuHandler = (e:any) => {
+        const menuHandler = (e:any) => {
             if(menuRef.current !== null) {
                 if(!menuRef.current.contains(e.target)) {
                     setIsMenuOpen(false);

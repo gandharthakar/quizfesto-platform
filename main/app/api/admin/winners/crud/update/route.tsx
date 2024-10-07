@@ -10,19 +10,22 @@ interface Respo {
 }
 
 export async function POST(req: Request) {
+    /* eslint-disable no-unused-vars */
     let resp: Respo = {
         success: false,
         message: ''
     }
+
+    /* eslint-disable no-unused-vars */
     let sts:number = 400;
 
     try {
 
         const body = await req.json();
-        let { winner_type, winner_description} = body;
+        const { winner_type, winner_description} = body;
 
         if(winner_type && winner_description) {
-            let alreadyExist = await prisma.qF_Winners.findFirst({
+            const alreadyExist = await prisma.qF_Winners.findFirst({
                 where: {
                     winner_type
                 }

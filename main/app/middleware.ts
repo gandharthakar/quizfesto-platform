@@ -4,7 +4,7 @@ import { config as adminConfig, middleware as adminMiddleware } from '@/app/(adm
 
 export default function middleware(req: NextRequest) {
 
-    let authUser = req.cookies.get('is_auth_user')?.value;
+    const authUser = req.cookies.get('is_auth_user')?.value;
 
     if (req.nextUrl.pathname.startsWith('/admin') && !req.nextUrl.pathname.startsWith('/admin/login')) {
         return adminMiddleware(req);

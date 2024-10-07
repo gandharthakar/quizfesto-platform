@@ -21,10 +21,10 @@ export default function Page() {
     const params = useParams();
     const user_id = params.user_id[0];
 
-    let gau = getCookie('is_auth_user');
+    const gau = getCookie('is_auth_user');
     if(gau) {
-        let user_id_ck: JWTDec = jwtDecode(gau);
-        let fin_uid = user_id_ck.is_auth_user;
+        const user_id_ck: JWTDec = jwtDecode(gau);
+        const fin_uid = user_id_ck.is_auth_user;
         if(user_id !== fin_uid) {
             router.push('/logout');
         }
@@ -50,12 +50,12 @@ export default function Page() {
 
     const handleFormSubmit: SubmitHandler<validationSchema> = async (formdata) => {
         setIsLoading(true);
-        let baseURI = window.location.origin;
+        const baseURI = window.location.origin;
         const resp = await fetch(`${baseURI}/api/site/auth-user/update-single-user/phone`, {
             method: 'POST',
             body: JSON.stringify({ user_id, user_phone: formdata.phone_number })
         });
-        let body = await resp.json();
+        const body = await resp.json();
         if(body.success) {
             Swal.fire({
                 title: "Success!",
@@ -79,14 +79,14 @@ export default function Page() {
 
     //eslint-disable-next-line
     const getUser = async () => {
-        let baseURI = window.location.origin;
+        const baseURI = window.location.origin;
         const resp = await fetch(`${baseURI}/api/site/auth-user/get-single-user`, {
             method: 'POST',
             body: JSON.stringify({ user_id }),
             cache: 'no-store',
             next: { revalidate: 60 }
         });
-        let body = await resp.json();
+        const body = await resp.json();
         if(body.success) {
             setValue("phone_number", body.user.user_phone);
             setIsLoading(false);

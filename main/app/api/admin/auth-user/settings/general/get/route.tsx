@@ -7,6 +7,7 @@ export const revalidate = 0;
 interface Respo {
     user_full_name: string,
     user_email: string,
+    user_gender: string,
     success?: boolean
 }
 
@@ -16,25 +17,30 @@ interface ShtResp {
 }
 
 export async function POST(req: Request) {
+    /* eslint-disable no-unused-vars */
     let resp_main: Respo = {
         user_full_name: '',
         user_email: '',
+        user_gender: '',
         success: false
     }
-
+    
+    /* eslint-disable no-unused-vars */
     let sts:number = 400;
 
+    /* eslint-disable no-unused-vars */
     let short_resp: ShtResp = {
         success: false,
         message: '',
     }
 
+    /* eslint-disable no-unused-vars */
     let MixResp: any = '';
 
     try {
 
         const body = await req.json();
-        let { user_id } = body;
+        const { user_id } = body;
 
         if(!user_id) {
             short_resp = {
@@ -44,6 +50,7 @@ export async function POST(req: Request) {
             MixResp = short_resp;
             sts = 400;
         } else {
+            /* eslint-disable no-unused-vars */
             let user:any = {};
             const fu__in__usrtblmdl = await prisma.qF_User.findFirst({
                 where: {
@@ -77,6 +84,7 @@ export async function POST(req: Request) {
                 resp_main = {
                     user_full_name: user.user_full_name,
                     user_email: user.user_email,
+                    user_gender: user.user_gender,
                     success: true
                 }
                 MixResp = resp_main;
@@ -86,6 +94,7 @@ export async function POST(req: Request) {
                     resp_main = {
                         user_full_name: user.admin_user_name,
                         user_email: user.admin_user_email,
+                        user_gender: user.admin_user_gender,
                         success: true
                     }
                     MixResp = resp_main;

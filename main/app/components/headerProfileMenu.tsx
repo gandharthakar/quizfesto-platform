@@ -27,17 +27,17 @@ export default function HeaderProfileMenu() {
 
     //eslint-disable-next-line
     const getUser = async () => {
-        let gau = getCookie('is_auth_user');
+        const gau = getCookie('is_auth_user');
         if(gau) {
-            let user_id: JWTDec = jwtDecode(gau);
-            let baseURI = window.location.origin;
+            const user_id: JWTDec = jwtDecode(gau);
+            const baseURI = window.location.origin;
             const resp = await fetch(`${baseURI}/api/site/auth-user/get-single-user`, {
                 method: 'POST',
                 body: JSON.stringify({ user_id: user_id.is_auth_user }),
                 cache: 'no-store',
                 next: { revalidate: 60 }
             });
-            let body = await resp.json();
+            const body = await resp.json();
             if(body.success) {
                 setNameLetter(body.user.user_full_name.charAt(0));
                 setProfilePict(body.user.user_photo);
@@ -47,7 +47,7 @@ export default function HeaderProfileMenu() {
 
     useEffect(()=> {
 
-        let menuHandler = (e:any) => {
+        const menuHandler = (e:any) => {
             if(menuRef.current !== null) {
                 if(!menuRef.current.contains(e.target)) {
                     setIsMenuOpen(false);

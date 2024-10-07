@@ -7,19 +7,22 @@ interface Respo {
 }
 
 export async function DELETE(req: Request) {
+    /* eslint-disable no-unused-vars */
     let resp: Respo = {
         success: false,
         message: ''
     }
+
+    /* eslint-disable no-unused-vars */
     let sts:number = 400;
 
     try {
 
         const body = await req.json();
-        let { winner_type } = body;
+        const { winner_type } = body;
 
         if(winner_type) {
-            let alreadyExist = await prisma.qF_Winners.findFirst({
+            const alreadyExist = await prisma.qF_Winners.findFirst({
                 where: {
                     winner_type
                 }

@@ -1,7 +1,7 @@
 import { NextResponse, NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
-    let auth = request.cookies.get('is_admin_user')?.value;
+    const auth = request.cookies.get('is_admin_user')?.value;
     
     if(auth == 'undefined' || auth == undefined) {
         // console.log('cookie is not set.');

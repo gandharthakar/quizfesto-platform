@@ -144,8 +144,8 @@ function Page() {
         if(selectedItems.length > 0) {
             const conf = confirm("Are you sure want to reset participation data for selected users ?");
             if(conf) {
-                let baseURI = window.location.origin;
-                let resp = await fetch(`${baseURI}/api/admin/users/participation-data/delete-selected`, {
+                const baseURI = window.location.origin;
+                const resp = await fetch(`${baseURI}/api/admin/users/participation-data/delete-selected`, {
                     method: "DELETE",
                     body: JSON.stringify({ user_id_list: selectedItems }),
                 });
@@ -180,8 +180,8 @@ function Page() {
     const handleRDAllBulkLogic = async () => {
         const conf = confirm("Are you sure want to reset participation data for all users ?");
         if(conf) {
-            let baseURI = window.location.origin;
-            let resp = await fetch(`${baseURI}/api/admin/users/participation-data/delete-all`, {
+            const baseURI = window.location.origin;
+            const resp = await fetch(`${baseURI}/api/admin/users/participation-data/delete-all`, {
                 method: "DELETE",
             });
             const body = await resp.json();
@@ -208,8 +208,8 @@ function Page() {
         if(selectedItems.length > 0) {
             const conf = confirm("Are you sure want to delete selected users ?");
             if(conf) {
-                let baseURI = window.location.origin;
-                let resp = await fetch(`${baseURI}/api/admin/users/bulk-actions/delete-selected`, {
+                const baseURI = window.location.origin;
+                const resp = await fetch(`${baseURI}/api/admin/users/bulk-actions/delete-selected`, {
                     method: "DELETE",
                     body: JSON.stringify({user_id_list: selectedItems})
                 });
@@ -221,7 +221,7 @@ function Page() {
                         icon: "success",
                         timer: 2000
                     });
-                    let set = setTimeout(() => {
+                    const set = setTimeout(() => {
                         window.location.reload();
                         clearTimeout(set);
                     }, 2000);
@@ -241,8 +241,8 @@ function Page() {
     const handleDeleteAllBulkLogic = async () => {
         const conf = confirm("Are you sure want to delete all users ?");
         if(conf) {
-            let baseURI = window.location.origin;
-            let resp = await fetch(`${baseURI}/api/admin/users/bulk-actions/delete-all`, {
+            const baseURI = window.location.origin;
+            const resp = await fetch(`${baseURI}/api/admin/users/bulk-actions/delete-all`, {
                 method: "DELETE",
             });
             const body = await resp.json();
@@ -253,7 +253,7 @@ function Page() {
                     icon: "success",
                     timer: 2000
                 });
-                let set = setTimeout(() => {
+                const set = setTimeout(() => {
                     window.location.reload();
                     clearTimeout(set);
                 }, 2000);
@@ -284,7 +284,7 @@ function Page() {
 
     useEffect(()=> {
 
-        let menuHandler = (e:any) => {
+        const menuHandler = (e:any) => {
             if(menuRef.current !== null) {
                 if(!menuRef.current.contains(e.target)) {
                     setIsMenuOpen(false);
@@ -297,8 +297,8 @@ function Page() {
     }, []);
 
     const getUserData = async () => {
-        let baseURI = window.location.origin;
-        let resp = await fetch(`${baseURI}/api/admin/users/bulk-actions/read-all`, {
+        const baseURI = window.location.origin;
+        const resp = await fetch(`${baseURI}/api/admin/users/bulk-actions/read-all`, {
             method: "GET",
             cache: 'no-store',
             next: { revalidate: 60 }

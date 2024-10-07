@@ -7,8 +7,10 @@ interface ShtResp {
 }
 
 export async function POST(req: Request) {
+    /* eslint-disable no-unused-vars */
     let sts:number = 400;
 
+    /* eslint-disable no-unused-vars */
     let short_resp: ShtResp = {
         success: false,
         message: '',
@@ -17,7 +19,7 @@ export async function POST(req: Request) {
     try {
         
         const body = await req.json();
-        let { user_id, user_full_name, user_email } = body;
+        const { user_id, user_full_name, user_email, user_gender } = body;
 
         if(!user_id) {
             short_resp = {
@@ -26,32 +28,41 @@ export async function POST(req: Request) {
             }
             sts = 400;
         } else {
-            const user = await prisma.qF_User.findFirst({
-                where: {
-                    user_id
-                }
-            });
-            if(user) {
-                await prisma.qF_User.update({
+            if(user_full_name && user_email) {
+                const user = await prisma.qF_User.findFirst({
                     where: {
                         user_id
-                    },
-                    data: {
-                        user_full_name,
-                        user_email
                     }
                 });
-                short_resp = {
-                    success: true,
-                    message: 'General Settings Updated.',
+                if(user) {
+                    await prisma.qF_User.update({
+                        where: {
+                            user_id
+                        },
+                        data: {
+                            user_full_name,
+                            user_email,
+                            user_gender
+                        }
+                    });
+                    short_resp = {
+                        success: true,
+                        message: 'General Settings Updated.',
+                    }
+                    sts = 200;
+                } else {
+                    short_resp = {
+                        success: false,
+                        message: 'User not found with this user id.',
+                    }
+                    sts = 200;
                 }
-                sts = 200;
             } else {
+                sts = 400;
                 short_resp = {
                     success: false,
-                    message: 'User not found with this user id.',
+                    message: "Missing Required Fields!"
                 }
-                sts = 200;
             }
         }
         return NextResponse.json(short_resp, {status: sts});

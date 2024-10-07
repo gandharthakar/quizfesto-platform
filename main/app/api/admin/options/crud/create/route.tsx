@@ -7,16 +7,19 @@ interface Respo {
 }
 
 export async function POST(req: Request) {
+    /* eslint-disable no-unused-vars */
     let resp: Respo = {
         success: false,
         message: ''
     }
+
+    /* eslint-disable no-unused-vars */
     let sts:number = 400;
 
     try {
 
         const body = await req.json();
-        let { question_id, options, correct_option } = body;
+        const { question_id, options, correct_option } = body;
 
         if( question_id && options && correct_option ) {
             await prisma.qF_Option.create({

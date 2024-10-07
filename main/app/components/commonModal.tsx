@@ -18,7 +18,7 @@ interface ComnModProp {
 
 function CommonModal(props: ComnModProp) {
 
-    let { open_modal_on_page_load=false, openState, setOpenState, modal_heading, backdrop=true, hide_modal_on_backdrop_click, modal_max_width=600, children, callBackAfterModalClose } = props;
+    const { open_modal_on_page_load=false, openState, setOpenState, modal_heading, backdrop=true, hide_modal_on_backdrop_click, modal_max_width=600, children, callBackAfterModalClose } = props;
 
     const handleBackDropClick = () => {
         if(hide_modal_on_backdrop_click) {
@@ -28,7 +28,7 @@ function CommonModal(props: ComnModProp) {
             }
         }
     }
-    let calcmaxw = `calc(100% - 30px)`;
+    const calcmaxw = `calc(100% - 30px)`;
 
     useEffect(() => {
         if(open_modal_on_page_load) {

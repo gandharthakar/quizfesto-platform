@@ -7,7 +7,7 @@ export const revalidate = 0;
 interface WinUsrFrm {
     winner_id: string, 
     winning_type: number,
-    winning_possition_text: string, 
+    winning_position_text: string, 
     winning_description: string,
     winning_date: string
 }
@@ -19,6 +19,7 @@ interface Respo {
 }
 
 const getWinnerPosTxt = (winType: number) => {
+    /* eslint-disable no-unused-vars */
     let txt = '';
     switch (winType) {
         case 1:
@@ -43,19 +44,22 @@ const convertDigitIn = (str: string) => {
 }
 
 export async function POST(req: Request) {
+    /* eslint-disable no-unused-vars */
     let resp: Respo = {
         success: false,
         message: ''
     }
+
+    /* eslint-disable no-unused-vars */
     let sts:number = 400;
 
     try {
 
         const body = await req.json();
-        let { user_id } = body;
+        const { user_id } = body;
 
         if(user_id) {
-            let checkExistWinner = await prisma.qF_Winners.findFirst({
+            const checkExistWinner = await prisma.qF_Winners.findFirst({
                 where: {
                     user_id: user_id
                 }
@@ -70,7 +74,7 @@ export async function POST(req: Request) {
                     winner: {
                         winner_id: checkExistWinner.winner_id,
                         winning_type: checkExistWinner.winner_type,
-                        winning_possition_text: getWinnerPosTxt(checkExistWinner.winner_type),
+                        winning_position_text: getWinnerPosTxt(checkExistWinner.winner_type),
                         winning_description: checkExistWinner.winner_description,
                         winning_date: convertDigitIn(checkExistWinner.winner_date),
                     }

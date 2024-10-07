@@ -7,15 +7,18 @@ interface Respo {
 }
 
 export async function DELETE() {
+    /* eslint-disable no-unused-vars */
     let resp: Respo = {
         success: false,
         message: ''
     }
+
+    /* eslint-disable no-unused-vars */
     let sts:number = 400;
 
     try {
 
-        let data = await prisma.qF_Question.findMany();
+        const data = await prisma.qF_Question.findMany();
         if(data.length > 0) {
             await prisma.qF_Question.deleteMany();
             sts = 200;

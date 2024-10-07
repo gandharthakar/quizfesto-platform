@@ -10,7 +10,7 @@ import { MdOutlineAddAPhoto } from "react-icons/md";
 import { FaRegTrashCan } from "react-icons/fa6";
 
 function validatePhone(phoneNumber: string){
-    var phoneNumberPattern = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;  
+    const phoneNumberPattern = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
     return phoneNumberPattern.test(phoneNumber); 
  }
 
@@ -25,9 +25,10 @@ function Page() {
     const [imageDimensions, setImageDimensions] = useState<boolean>(false);
     const [errorFileInput, setErrorFileInput] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [gender, setGender] = useState<string>('');
 
     const handleChangePhone = (e: any) => {
-        let value = e.target.value;
+        const value = e.target.value;
         setPhone(value);
         // Validate Phone Number.
         const validPhone = validatePhone(value);
@@ -50,13 +51,13 @@ function Page() {
     }
 
     const handleFileChange = async (e:any) => {
-        let file = e.target.files[0];
+        const file = e.target.files[0];
         if(!file) {
             setImageFile('');
             return;
         } else {
-            let gfnext = file.name;
-            let fext = gfnext.split('.').pop();
+            const gfnext = file.name;
+            const fext = gfnext.split('.').pop();
             setFileExt(fext);
             setProfileImage(URL.createObjectURL(file));
         
@@ -70,8 +71,8 @@ function Page() {
             const objectURL = URL.createObjectURL(file);
             img.src = objectURL;
             img.onload = function handleLoad() {
-                let {width, height} = img;
-                if(width == 1000 && height == 1000) {
+                const {width, height} = img;
+                if(width <= 1000 && height <= 1000) {
                     setImageDimensions(true);
                 } else {
                     setImageDimensions(false);
@@ -89,6 +90,7 @@ function Page() {
             const fileReader = new FileReader();
             fileReader.readAsDataURL(file)
             fileReader.onload = () => {
+                //eslint-disable-next-line
                 typeof fileReader.result === "string" ?
                 resolve(fileReader.result)
                 : reject("Unexpected type received from FileReader");
@@ -136,6 +138,37 @@ function Page() {
 		resolver: zodResolver(validationSchema),
 	});
 
+    const submitData = async (data: any) => {
+        setIsLoading(true);
+        const baseURI = window.location.origin;
+        const resp = await fetch(`${baseURI}/api/admin/users/crud/create`, {
+            method: "POST",
+            body: JSON.stringify(data),
+        });
+        const body = await resp.json();
+        if(body.success) {
+            Swal.fire({
+                title: "Success!",
+                text: body.message,
+                icon: "success",
+                timer: 3000
+            });
+            setIsLoading(false);
+            removeButtonClick();
+            setPhone('');
+            setGender("");
+            reset();
+        } else {
+            Swal.fire({
+                title: "Error!",
+                text: body.message,
+                icon: "error",
+                timer: 3000
+            });
+            setIsLoading(false);
+        }
+    }
+
     const handleFormSubmit: SubmitHandler<validationSchema> = async (formdata) => {
 
         // Validate Phone Number.
@@ -150,61 +183,48 @@ function Page() {
 
         // Get file extention.
         const allowedFileTypes = ["jpg", "png", "jpeg"];
-
+        /* eslint-disable no-unused-vars */
+        let validImage: boolean = false;
         // console.log(imageFile);
         if(imageFile !== '') {
             setErrorFileInput("Please select a photo.");
-        
+            validImage = false;
             if(!allowedFileTypes.includes(fileExt)) {
                 setErrorFileInput("Only .jpg, .jpeg and .png files are allowed.");
+                validImage = false;
             } else {
                 if(!imageFileSize) {
                     setErrorFileInput("Image file size is bigger than 500 kb.");
+                    validImage = false;
                 } else {
                     if(!imageDimensions) {
                         setErrorFileInput("Image dimensions is expected 1000px x 1000px. (square size)");
+                        validImage = false;
                     } else {
                         setErrorFileInput("");
+                        validImage = true;
                     }
                 }
             }
         }
 
-        let prepData = {
+        const prepData = {
             user_full_name: formdata.full_name,
             user_email: formdata.email,
             user_password: formdata.password,
             user_conf_password: formdata.confirmPassword,
             role: formdata.role,
             user_phone: phone,
-            user_photo: imageFile
+            user_photo: imageFile,
+            user_gender: gender
         }
-        setIsLoading(true);
-        let baseURI = window.location.origin;
-        let resp = await fetch(`${baseURI}/api/admin/users/crud/create`, {
-            method: "POST",
-            body: JSON.stringify(prepData),
-        });
-        const body = await resp.json();
-        if(body.success) {
-            Swal.fire({
-                title: "Success!",
-                text: body.message,
-                icon: "success",
-                timer: 3000
-            });
-            setIsLoading(false);
-            removeButtonClick();
-            setPhone('');
-            reset();
+        
+        if(imageFile == '') {
+            await submitData(prepData);
         } else {
-            Swal.fire({
-                title: "Error!",
-                text: body.message,
-                icon: "error",
-                timer: 3000
-            });
-            setIsLoading(false);
+            if(validImage) {
+                await submitData(prepData);
+            }
         }
     }
 
@@ -296,6 +316,26 @@ function Page() {
                                         <option value="Admin">Admin</option>
                                     </select>
                                     {errors.role && (<div className="ws-input-error mt-[2px]">{errors.role.message}</div>)}
+                                </div>
+                                <div className="pb-[20px]">
+                                    <label 
+                                        className="transition-all delay-75 block mb-[5px] font-noto_sans text-[16px] font-semibold text-zinc-900 dark:text-zinc-300" 
+                                        htmlFor="cq-gender"
+                                    >
+                                        Gender
+                                    </label>
+                                    <select 
+                                        name="user_gender" 
+                                        id="cq-gender" 
+                                        className="ws-input-pwd-m1-v1" 
+                                        value={gender} 
+                                        onChange={(e) => setGender(e.target.value)}
+                                    >
+                                        <option value="">-- Select --</option>
+                                        <option value="male">Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="other">Other</option>
+                                    </select>
                                 </div>
                                 <div className="pb-[20px]">
                                     <label 

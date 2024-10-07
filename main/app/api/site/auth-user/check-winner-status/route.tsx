@@ -17,6 +17,7 @@ interface Respo {
 }
 
 const getWinnerPosTxt = (winType: number) => {
+    /* eslint-disable no-unused-vars */
     let txt = '';
     switch (winType) {
         case 1:
@@ -37,19 +38,22 @@ const getWinnerPosTxt = (winType: number) => {
 }
 
 export async function POST(req: Request) {
+    /* eslint-disable no-unused-vars */
     let resp: Respo = {
         success: false,
         message: ''
     }
+
+    /* eslint-disable no-unused-vars */
     let sts:number = 400;
 
     try {
 
         const body = await req.json();
-        let {user_id } = body;
+        const {user_id } = body;
         
         if(user_id) {
-            let ifWinner = await prisma.qF_Winners.findFirst({
+            const ifWinner = await prisma.qF_Winners.findFirst({
                 where: {
                     user_id
                 }

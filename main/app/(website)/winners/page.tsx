@@ -22,7 +22,7 @@ export default function Page() {
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
     const getWinners = async () => {
-        let baseURI = window.location.origin;
+        const baseURI = window.location.origin;
         const resp = await fetch(`${baseURI}/api/site/get-winners`, {
             method: "GET",
             cache: 'no-store',
@@ -32,6 +32,7 @@ export default function Page() {
         if(body.success) {
             if(body.winners.length > 0) {
                 setHaveWinners(true);
+                /* eslint-disable no-unused-vars */
                 for(let i = 0; i < body.winners.length; i++) {
                     if(body.winners[i].winner_type === 1) {
                         setWin1Data(body.winners[i]);

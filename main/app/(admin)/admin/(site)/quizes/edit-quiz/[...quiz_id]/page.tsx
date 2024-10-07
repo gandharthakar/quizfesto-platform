@@ -43,7 +43,7 @@ function Page() {
     const [negMErr, setNegMErr] = useState<string>('');
 
     const handleNegMarksInputChange = (e: any) => {
-        let { value } = e.target;
+        const { value } = e.target;
         setNegMarks(value);
         if(value !== '') {
             if(!isNaN(Number(value))) {
@@ -157,6 +157,7 @@ function Page() {
             const fileReader = new FileReader();
             fileReader.readAsDataURL(file)
             fileReader.onload = () => {
+                //eslint-disable-next-line
                 typeof fileReader.result === "string" ?
                 resolve(fileReader.result)
                 : reject("Unexpected type received from FileReader");
@@ -181,6 +182,7 @@ function Page() {
 
         // Get file extention.
         const allowedFileTypes = ["jpg", "png"];
+        /* eslint-disable no-unused-vars */
         let isValidImg = false;
 
         if(fileInput !== '') {
@@ -247,8 +249,8 @@ function Page() {
             negative_marking_score: Number(negMarks)
         }
         setIsLoading(true);
-        let baseURI = window.location.origin;
-        let resp = await fetch(`${baseURI}/api/admin/quizes/crud/update`, {
+        const baseURI = window.location.origin;
+        const resp = await fetch(`${baseURI}/api/admin/quizes/crud/update`, {
             method: "POST",
             body: JSON.stringify(prepData),
         });
@@ -273,16 +275,17 @@ function Page() {
     }
 
     const getCats = async () => {
-        let baseURI = window.location.origin;
-        let resp = await fetch(`${baseURI}/api/admin/categories/bulk-actions/read-all`, {
+        const baseURI = window.location.origin;
+        const resp = await fetch(`${baseURI}/api/admin/categories/bulk-actions/read-all`, {
             method: "GET"
         });
         const body = await resp.json();
         if(body.success) {
             const cts = body.cat_data;
+            //eslint-disable-next-line
             let opts: TwSelInt[] = [];
             for(let i = 0; i < cts.length; i++) {
-                let obj = {
+                const obj = {
                     value: cts[i].category_id,
                     label: cts[i].category_title
                 }
@@ -300,8 +303,8 @@ function Page() {
     }
 
     const getQuiz = async () => {
-        let baseURI = window.location.origin;
-        let resp = await fetch(`${baseURI}/api/admin/quizes/crud/read`, {
+        const baseURI = window.location.origin;
+        const resp = await fetch(`${baseURI}/api/admin/quizes/crud/read`, {
             method: "POST",
             body: JSON.stringify({quiz_id})
         });
@@ -326,7 +329,7 @@ function Page() {
             }
 
             if(body.quiz.quiz_terms.length > 0) {
-                let terms = body.quiz.quiz_terms.map((itm: quizTrms) => {
+                const terms = body.quiz.quiz_terms.map((itm: quizTrms) => {
                     return {
                         quiz_terms: itm
                     }

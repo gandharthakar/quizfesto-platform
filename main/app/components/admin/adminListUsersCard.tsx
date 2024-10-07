@@ -38,9 +38,9 @@ function AdminListUsersCard(props: AdmLstQzCd) {
     
     const handleDeleteUser = async () => {
         setIsMenuOpen(false);
-        let conf = confirm("Are you sure want to delete this user ?");
+        const conf = confirm("Are you sure want to delete this user ?");
         if(conf) {
-            let baseURI = window.location.origin;
+            const baseURI = window.location.origin;
             const resp = await fetch(`${baseURI}/api/admin/users/crud/delete`, {
                 method: "DELETE",
                 body: JSON.stringify({user_id})
@@ -53,7 +53,7 @@ function AdminListUsersCard(props: AdmLstQzCd) {
                     icon: "success",
                     timer: 2000
                 });
-                let set = setTimeout(() => {
+                const set = setTimeout(() => {
                     window.location.reload();
                     clearTimeout(set);
                 }, 2000);
@@ -70,7 +70,7 @@ function AdminListUsersCard(props: AdmLstQzCd) {
 
     useEffect(()=> {
 
-        let menuHandler = (e:any) => {
+        const menuHandler = (e:any) => {
             if(menuRef.current !== null) {
                 if(!menuRef.current.contains(e.target)) {
                     setIsMenuOpen(false);

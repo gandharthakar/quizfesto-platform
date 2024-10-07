@@ -25,8 +25,11 @@ interface QuizQues {
 
 function countCorrectAnswers(questions: QuizQues[], answers: QuizGivenAns[]) {
     // Initialize a counter for correct answers
+    /* eslint-disable no-unused-vars */
     let correctCount = 0;
+    /* eslint-disable no-unused-vars */
     let totalMarks = 0;
+    //eslint-disable-next-line
     let arr = [];
 
     // Loop through each user answer
@@ -67,37 +70,42 @@ const getCorrectOption = async (qid: string) => {
 }
 
 export async function POST(req: Request) {
+    /* eslint-disable no-unused-vars */
     let resp: Respo = {
         success: false,
         message: '',
         quiz_coorect_answers_count: 0,
         quiz_total_score: 0
     }
+
+    /* eslint-disable no-unused-vars */
     let sts:number = 400;
 
     try {
 
         const body = await req.json();
-        let { attempted_data, quiz_id } = body;
+        const { attempted_data, quiz_id } = body;
 
         if(attempted_data.length > 0 && quiz_id) {
 
-            let qdata = await prisma.qF_Question.findMany({
+            const qdata = await prisma.qF_Question.findMany({
                 where: {
                     quizid: quiz_id
                 }
             });
 
+            //eslint-disable-next-line
             let qArrData: QuizQues[] = [];
+            /* eslint-disable no-unused-vars */
             for(let i = 0; i < qdata.length; i++) {
-                let obj = {
+                const obj = {
                     question_id: qdata[i].question_id,
                     correct_option: await getCorrectOption(qdata[i].question_id)??""
                 }
                 qArrData.push(obj);
             }
 
-            let data = countCorrectAnswers(qArrData, attempted_data);
+            const data = countCorrectAnswers(qArrData, attempted_data);
             sts = 200;
             resp = {
                 success: true,

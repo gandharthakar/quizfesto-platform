@@ -7,18 +7,21 @@ interface Respo {
 }
 
 export async function DELETE(req: Request) {
+    /* eslint-disable no-unused-vars */
     let resp: Respo = {
         success: false,
         message: ''
     }
+
+    /* eslint-disable no-unused-vars */
     let sts:number = 400;
 
     try {
 
         const body = await req.json();
-        let { options_id_list } = body;
+        const { options_id_list } = body;
 
-        let data = await prisma.qF_Option.findMany({
+        const data = await prisma.qF_Option.findMany({
             where: {
                 option_id: {
                     in: options_id_list

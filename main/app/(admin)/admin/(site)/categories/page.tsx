@@ -142,8 +142,8 @@ function Page() {
     const handleDeleteAllBulkLogic = async () => {
         const conf = confirm("Are you sure want to delete all Categories ?");
         if(conf) {
-            let baseURI = window.location.origin;
-            let resp = await fetch(`${baseURI}/api/admin/categories/bulk-actions/delete-all`, {
+            const baseURI = window.location.origin;
+            const resp = await fetch(`${baseURI}/api/admin/categories/bulk-actions/delete-all`, {
                 method: "DELETE",
             });
             const body = await resp.json();
@@ -154,7 +154,7 @@ function Page() {
                     icon: "success",
                     timer: 2000
                 });
-                let set = setTimeout(() => {
+                const set = setTimeout(() => {
                     window.location.reload();
                     clearTimeout(set);
                 }, 2000);
@@ -174,8 +174,8 @@ function Page() {
         if(selectedItems.length > 0) {
             const conf = confirm("Are you sure want to delete selected Categories ?");
             if(conf) {
-                let baseURI = window.location.origin;
-                let resp = await fetch(`${baseURI}/api/admin/categories/bulk-actions/delete-selected`, {
+                const baseURI = window.location.origin;
+                const resp = await fetch(`${baseURI}/api/admin/categories/bulk-actions/delete-selected`, {
                     method: "DELETE",
                     body: JSON.stringify({category_id_list: selectedItems})
                 });
@@ -187,7 +187,7 @@ function Page() {
                         icon: "success",
                         timer: 2000
                     });
-                    let set = setTimeout(() => {
+                    const set = setTimeout(() => {
                         window.location.reload();
                         clearTimeout(set);
                     }, 2000);
@@ -211,7 +211,7 @@ function Page() {
 
     useEffect(()=> {
 
-        let menuHandler = (e:any) => {
+        const menuHandler = (e:any) => {
             if(menuRef.current !== null) {
                 if(!menuRef.current.contains(e.target)) {
                     setIsMenuOpen(false);
@@ -233,8 +233,8 @@ function Page() {
     }, [selectedItems, quizListCats]);
 
     const getCatData = async () => {
-        let baseURI = window.location.origin;
-        let resp = await fetch(`${baseURI}/api/admin/categories/bulk-actions/read-all`, {
+        const baseURI = window.location.origin;
+        const resp = await fetch(`${baseURI}/api/admin/categories/bulk-actions/read-all`, {
             method: "GET",
             cache: 'no-store',
             next: { revalidate: 60 }

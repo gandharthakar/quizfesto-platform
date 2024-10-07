@@ -42,7 +42,7 @@ function AdminListQuestionCard(props: AdmLstQuesCd) {
         setIsMenuOpen(false);
         const conf = confirm("Are you sure want to delete this question ?");
         if(conf) {
-            let baseURI = window.location.origin;
+            const baseURI = window.location.origin;
             const resp = await fetch(`${baseURI}/api/admin/questions/crud/delete`, {
                 method: "DELETE",
                 body: JSON.stringify({question_id: qestion_id})
@@ -55,7 +55,7 @@ function AdminListQuestionCard(props: AdmLstQuesCd) {
                     icon: "success",
                     timer: 2000
                 });
-                let set = setTimeout(() => {
+                const set = setTimeout(() => {
                     window.location.reload();
                     clearTimeout(set);
                 }, 2000);
@@ -83,7 +83,7 @@ function AdminListQuestionCard(props: AdmLstQuesCd) {
 
     useEffect(()=> {
 
-        let menuHandler = (e:any) => {
+        const menuHandler = (e:any) => {
             if(menuRef.current !== null) {
                 if(!menuRef.current.contains(e.target)) {
                     setIsMenuOpen(false);

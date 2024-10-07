@@ -23,8 +23,8 @@ function Page() {
     const getWinners = async () => {
         setIsLoading(true);
         setWinnersData([]);
-        let baseURI = window.location.origin;
-        let resp = await fetch(`${baseURI}/api/admin/winners/crud/find`, {
+        const baseURI = window.location.origin;
+        const resp = await fetch(`${baseURI}/api/admin/winners/crud/find`, {
             method: "GET",
             cache: 'no-store',
             next: { revalidate: 60 }
@@ -39,8 +39,8 @@ function Page() {
     }
 
     const readWinners = async () => {
-        let baseURI = window.location.origin;
-        let resp = await fetch(`${baseURI}/api/admin/winners/bulk-actions/read-all`, {
+        const baseURI = window.location.origin;
+        const resp = await fetch(`${baseURI}/api/admin/winners/bulk-actions/read-all`, {
             method: "GET",
             cache: 'no-store',
             next: { revalidate: 60 }
@@ -55,10 +55,10 @@ function Page() {
     }
 
     const deleteWinners = async () => {
-        let conf = confirm("Are you sure want to remove all winners ?");
+        const conf = confirm("Are you sure want to remove all winners ?");
         if(conf) {
-            let baseURI = window.location.origin;
-            let resp = await fetch(`${baseURI}/api/admin/winners/bulk-actions/remove-all`, {
+            const baseURI = window.location.origin;
+            const resp = await fetch(`${baseURI}/api/admin/winners/bulk-actions/remove-all`, {
                 method: "DELETE"
             });
             const body = await resp.json();
@@ -69,7 +69,7 @@ function Page() {
                     icon: "success",
                     timer: 3000
                 });
-                let set = setTimeout(() => {
+                const set = setTimeout(() => {
                     window.location.reload();
                     clearTimeout(set);
                 }, 3000);

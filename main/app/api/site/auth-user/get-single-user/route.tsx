@@ -10,6 +10,7 @@ interface QF_User {
     user_email: string,
     user_phone: string,
     user_photo: string,
+    user_gender: string
 }
 
 interface Respo {
@@ -19,22 +20,23 @@ interface Respo {
 }
 
 export async function POST(req: Request) {
-    
+    /* eslint-disable no-unused-vars */
     let resp: Respo = {
         success: false,
         message: '',
     }
 
+    /* eslint-disable no-unused-vars */
     let sts:number = 400;
 
     try {
 
         const body = await req.json();
-        let { user_id } = body;
+        const { user_id } = body;
 
         if(user_id) {
 
-            let alrreadyExistUser = await prisma.qF_User.findFirst({
+            const alrreadyExistUser = await prisma.qF_User.findFirst({
                 where: {
                     user_id
                 }
@@ -50,7 +52,8 @@ export async function POST(req: Request) {
                         user_full_name: alrreadyExistUser.user_full_name,
                         user_email: alrreadyExistUser.user_email,
                         user_phone: alrreadyExistUser.user_phone??"",
-                        user_photo: alrreadyExistUser.user_photo??""
+                        user_photo: alrreadyExistUser.user_photo??"",
+                        user_gender: alrreadyExistUser.user_gender??"",
                     }
                 }
             } else {

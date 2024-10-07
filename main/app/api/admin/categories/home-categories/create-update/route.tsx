@@ -19,7 +19,7 @@ export async function POST(req: Request) {
         const { home_cats, home_cats_id } = body;
 
         if(home_cats || home_cats_id) {
-            let existingCat = await prisma.qF_Homepage_Categories.findFirst();
+            const existingCat = await prisma.qF_Homepage_Categories.findFirst();
             if(existingCat === null) {
                 await prisma.qF_Homepage_Categories.create({
                     data: {

@@ -8,19 +8,22 @@ interface ShtResp {
 
 export async function POST(req: Request) {
 
+    /* eslint-disable no-unused-vars */
     let sts:number = 400;
 
+    /* eslint-disable no-unused-vars */
     let resp: ShtResp = {
         success: false,
         message: '',
     }
 
+    /* eslint-disable no-unused-vars */
     let isTrueAdminUser:boolean = false;
 
     try {
 
         const body = await req.json();
-        let { user_id, user_full_name, user_email } = body;
+        const { user_id, user_full_name, user_email, user_gender } = body;
 
         if(user_id && user_full_name && user_email) {
             
@@ -61,7 +64,8 @@ export async function POST(req: Request) {
                         },
                         data: {
                             user_full_name,
-                            user_email
+                            user_email,
+                            user_gender
                         }
                     });
                 } else {
@@ -72,7 +76,8 @@ export async function POST(req: Request) {
                             },
                             data: {
                                 admin_user_name: user_full_name,
-                                admin_user_email: user_email
+                                admin_user_email: user_email,
+                                admin_user_gender: user_gender
                             }
                         });
                     }

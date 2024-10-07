@@ -35,12 +35,12 @@ function Page() {
 
     const handleFormSubmit: SubmitHandler<validationSchema> = async (formdata) => {
         setIsLoading(true);
-        let prepData = {
+        const prepData = {
             quiz_id: formdata.quiz_id,
             question_title: formdata.question_text,
             question_marks: formdata.question_marks
         }
-        let baseURI = window.location.origin;
+        const baseURI = window.location.origin;
         const resp = await fetch(`${baseURI}/api/admin/questions/crud/create`, {
             method: "POST",
             body: JSON.stringify(prepData)

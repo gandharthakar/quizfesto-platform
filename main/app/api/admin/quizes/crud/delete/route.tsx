@@ -7,16 +7,19 @@ interface Respo {
 }
 
 export async function DELETE(req: Request) {
+    /* eslint-disable no-unused-vars */
     let resp: Respo = {
         success: false,
         message: ''
     }
+
+    /* eslint-disable no-unused-vars */
     let sts:number = 400;
 
     try {
 
         const body = await req.json();
-        let { quiz_id } = body;
+        const { quiz_id } = body;
 
         if(quiz_id) {
             const alreadQuizExited = await prisma.qF_Quiz.findFirst({

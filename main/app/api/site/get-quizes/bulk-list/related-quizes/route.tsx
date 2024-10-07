@@ -42,16 +42,19 @@ const getCats = async (ids: string[]) => {
 }
 
 export async function POST(req: Request) {
+    /* eslint-disable no-unused-vars */
     let resp: Respo = {
         success: false,
         message: '',
     }
+
+    /* eslint-disable no-unused-vars */
     let sts:number = 400;
 
     try {
 
         const body = await req.json();
-        let { quiz_id } = body;
+        const { quiz_id } = body;
 
         if(quiz_id) {
             
@@ -63,9 +66,11 @@ export async function POST(req: Request) {
             `;
 
             if(data.length > 0) {
+                //eslint-disable-next-line
                 let arr: QF_Quiz_Pub[] = [];
+                /* eslint-disable no-unused-vars */
                 for(let i = 0; i < data.length; i++) {
-                    let obj = {
+                    const obj = {
                         quiz_id: data[i].quiz_id,
                         quiz_title: data[i].quiz_title,
                         quiz_summary: data[i].quiz_summary,

@@ -10,29 +10,36 @@ interface Resp {
 }
 
 export async function POST(req: Request) {
+    /* eslint-disable no-unused-vars */
     let resp: Resp = {
         success: false,
         message: ''
     }
+
+    /* eslint-disable no-unused-vars */
     let sts:number = 400;
 
     try {
 
+        /* eslint-disable no-unused-vars */
         let isAdminSide:boolean = false;
+        /* eslint-disable no-unused-vars */
         let isUserSide:boolean = false;
+        /* eslint-disable no-unused-vars */
         let finalSide:boolean = false;
+        /* eslint-disable no-unused-vars */
         let finalUser:any = {};
 
         const body = await req.json();
-        let { admin_user_email, admin_user_password } = body;
+        const { admin_user_email, admin_user_password } = body;
 
         if(admin_user_email && admin_user_password) {
-            let usr_a = await prisma.qF_Admin_User.findFirst({
+            const usr_a = await prisma.qF_Admin_User.findFirst({
                 where: {
                     admin_user_email
                 }
             });
-            let usr_b = await prisma.qF_User.findFirst({
+            const usr_b = await prisma.qF_User.findFirst({
                 where: {
                     AND: [
                         {
@@ -57,13 +64,14 @@ export async function POST(req: Request) {
                 } else {
                     finalUser = {};
                 }
-            }            
+            }          
 
             if(usr_a || usr_b) {
                 finalSide = true;
             }
 
             if(finalSide) {
+                /* eslint-disable no-unused-vars */
                 let isMatch:boolean = false;
                 if(isAdminSide) {
                     isMatch = await compare(admin_user_password, finalUser.admin_user_password);
@@ -73,6 +81,7 @@ export async function POST(req: Request) {
                     }
                 }
 
+                /* eslint-disable no-unused-vars */
                 let token:string = '';
                 if(isMatch) {
                     if(isAdminSide) {

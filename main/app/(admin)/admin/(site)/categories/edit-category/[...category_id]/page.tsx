@@ -57,12 +57,12 @@ function Page() {
         } else {
             setCatError("");
             setIsLoading(true);
-            let prepData = {
+            const prepData = {
                 category_id: cat_id,
                 category_title: catTitle,
                 category_slug: catSlug
             }
-            let baseURI = window.location.origin;
+            const baseURI = window.location.origin;
             const resp = await fetch(`${baseURI}/api/admin/categories/crud/update`, {
                 method: "POST",
                 body: JSON.stringify(prepData)
@@ -89,7 +89,7 @@ function Page() {
     }
 
     const getCategoryDetails = async () => {
-        let baseURI = window.location.origin;
+        const baseURI = window.location.origin;
         const resp = await fetch(`${baseURI}/api/admin/categories/crud/read`, {
             method: "POST",
             body: JSON.stringify({category_id: cat_id}),

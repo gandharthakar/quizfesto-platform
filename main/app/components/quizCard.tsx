@@ -45,16 +45,16 @@ export default function QuizCard(props: QuizCardPropsTypes) {
     const defaultImage = "https://placehold.co/1000x700/png";
     // const user_id = "1";`/play-quiz/${quiz_id}/${userID}`
     const AuthUser = useSelector((state: RootState) => state.auth_user_id.auth_user_id);
-    let userID = AuthUser !== '' ? AuthUser : '1';
-    let prtLink = userID !== '1' ? `/play-quiz/${quiz_id}/${userID}` : '/sign-in';
+    const userID = AuthUser !== '' ? AuthUser : '1';
+    const prtLink = userID !== '1' ? `/play-quiz/${quiz_id}/${userID}` : '/sign-in';
 
     const [haveTerms, setHaveTerms] = useState<boolean>(quiz_terms && quiz_terms.length ? true : false);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [qapbu, setQapbu]  = useState<boolean>(false);
 
     const checkQuiz = async () => {
-        let baseURI = window.location.origin;
-        let resp = await fetch(`${baseURI}/api/site/check-quiz`, {
+        const baseURI = window.location.origin;
+        const resp = await fetch(`${baseURI}/api/site/check-quiz`, {
             method: "POST",
             body: JSON.stringify({ quiz_id, user_id: AuthUser }),
             cache: 'no-store',

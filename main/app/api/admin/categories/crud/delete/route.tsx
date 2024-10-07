@@ -40,16 +40,19 @@ const removeCategoryFromQuizes = async (categoryId: string) => {
 }
 
 export async function DELETE(req: Request) {
+    /* eslint-disable no-unused-vars */
     let resp: Respo = {
         success: false,
         message: ''
     }
+
+    /* eslint-disable no-unused-vars */
     let sts:number = 400;
 
     try {
 
         const body = await req.json();
-        let { category_id } = body;
+        const { category_id } = body;
 
         if(category_id) {
             const existingCat = await prisma.qF_Quiz_Category.findFirst({
@@ -70,11 +73,11 @@ export async function DELETE(req: Request) {
                 }
 
                 // Remove 'Same' Category From Home Top Categories List. 
-                let hcats = await prisma.qF_Homepage_Categories.findFirst();
+                const hcats = await prisma.qF_Homepage_Categories.findFirst();
                 if(hcats !== null) {
-                    let commonIDs = findCommonItems([category_id], hcats.home_cats);
+                    const commonIDs = findCommonItems([category_id], hcats.home_cats);
                     if(commonIDs.length > 0) {
-                        let updated = removeItemsFromArray(hcats.home_cats, [category_id]);
+                        const updated = removeItemsFromArray(hcats.home_cats, [category_id]);
                         await prisma.qF_Homepage_Categories.update({
                             where: {
                                 home_cat_id: hcats.home_cat_id

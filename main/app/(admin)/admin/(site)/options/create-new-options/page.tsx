@@ -35,7 +35,7 @@ function Page() {
 
     const handleFormSubmit: SubmitHandler<validationSchema> = async (formdata) => {
         setIsLoading(true);
-        let baseURI = window.location.origin;
+        const baseURI = window.location.origin;
         const resp = await fetch(`${baseURI}/api/admin/options/crud/create`, {
             method: "POST",
             body: JSON.stringify({

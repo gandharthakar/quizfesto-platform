@@ -11,10 +11,13 @@ interface Respo {
 
 export async function GET() {
 
+    /* eslint-disable no-unused-vars */
     let resp: Respo = {
         success: false,
         message: ''
     }
+
+    /* eslint-disable no-unused-vars */
     let sts:number = 400;
 
     try {
@@ -25,7 +28,7 @@ export async function GET() {
                 success: true,
                 message: "Prizes Found!",
             }
-            let db_data = {
+            const db_data = {
                 prizes: data,
                 ...resp
             };

@@ -2,7 +2,7 @@
 
 import { createSlice } from "@reduxjs/toolkit";
 
-let initialState = {
+const initialState = {
     admin_dark_theme_mode: false
 }
 

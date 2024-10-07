@@ -1,3 +1,4 @@
+//eslint-disable-next-line
 const nodemailer = require("nodemailer");
 
 const emailTransporter = nodemailer.createTransport({

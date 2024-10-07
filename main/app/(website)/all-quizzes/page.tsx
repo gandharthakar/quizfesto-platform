@@ -116,8 +116,8 @@ export default function Page() {
     };
 
     const getQuizes = async () => {
-        let baseURI = window.location.origin;
-        let resp = await fetch(`${baseURI}/api/site/get-quizes/bulk-list/only-info`, {
+        const baseURI = window.location.origin;
+        const resp = await fetch(`${baseURI}/api/site/get-quizes/bulk-list/only-info`, {
             method: "GET",
             cache: 'no-store',
             next: { revalidate: 60 }

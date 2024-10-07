@@ -17,7 +17,7 @@ interface Respo {
 }
 
 const getQT = async (qid: string) => {
-    let ques = await prisma.qF_Question.findFirst({
+    const ques = await prisma.qF_Question.findFirst({
         where: {
             question_id: qid
         }
@@ -27,14 +27,17 @@ const getQT = async (qid: string) => {
 }
 
 const getOpts = async () => {
-    let data = await prisma.qF_Option.findMany({
+    const data = await prisma.qF_Option.findMany({
         orderBy: {
             createdAt: 'desc'
         }
     });
+    
+    //eslint-disable-next-line
     let opts: QF_Opt[] = [];
+    /* eslint-disable no-unused-vars */
     for(let i = 0; i < data.length; i++) {
-        let obj = {
+        const obj = {
             option_id: data[i].option_id,
             options: data[i].options,
             question_text: await await getQT(data[i].questionid) ?? ""
@@ -45,16 +48,19 @@ const getOpts = async () => {
 }
 
 export async function GET() {
+    /* eslint-disable no-unused-vars */
     let resp: Respo = {
         success: false,
         message: '',
         options_list: []
     }
+
+    /* eslint-disable no-unused-vars */
     let sts:number = 400;
 
     try {
 
-        let data = await prisma.qF_Option.findMany();
+        const data = await prisma.qF_Option.findMany();
         if(data.length > 0) {
             sts = 200;
             resp = {

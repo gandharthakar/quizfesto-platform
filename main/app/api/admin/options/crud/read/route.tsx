@@ -18,6 +18,7 @@ interface Respo {
 }
 
 export async function POST(req: Request) {
+    /* eslint-disable no-unused-vars */
     let resp: Respo = {
         success: false,
         message: '',
@@ -28,15 +29,17 @@ export async function POST(req: Request) {
             questionid: ''
         }
     }
+
+    /* eslint-disable no-unused-vars */
     let sts:number = 400;
 
     try {
 
         const body = await req.json();
-        let { option_id } = body;
+        const { option_id } = body;
 
         if(option_id) {
-            let existingOptions = await prisma.qF_Option.findFirst({
+            const existingOptions = await prisma.qF_Option.findFirst({
                 where: {
                     option_id
                 }

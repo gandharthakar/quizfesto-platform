@@ -21,7 +21,7 @@ interface AnswObj {
     negative_marking_score: number
 }
 
-let initialState:AnswObj = {
+const initialState:AnswObj = {
     quiz_id: '',
     quiz_title: '',
     quiz_cover_photo: '',
@@ -43,7 +43,9 @@ const transferQuizDataReducer = createSlice({
             return state;
         },
         clear_tqd: (state) => {
+            //eslint-disable-next-line
             let arr:QuizAns[] = [];
+            
             state = {
                 quiz_id: '',
                 quiz_title: '',

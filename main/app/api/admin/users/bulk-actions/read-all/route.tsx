@@ -17,11 +17,14 @@ interface Respo {
 }
 
 export async function GET() {
+    /* eslint-disable no-unused-vars */
     let resp: Respo = {
         success: false,
         message: '',
         users: []
     }
+
+    /* eslint-disable no-unused-vars */
     let sts:number = 400;
 
     try {
@@ -32,8 +35,8 @@ export async function GET() {
             }
         });
         if(data.length > 0) {
-            let user = data.map((item) => {
-                let obj = { 
+            const user = data.map((item) => {
+                const obj = { 
                     user_id: item.user_id, 
                     user_name: item.user_full_name, 
                     user_role: item.role??""

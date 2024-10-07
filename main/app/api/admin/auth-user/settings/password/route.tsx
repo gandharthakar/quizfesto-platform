@@ -9,19 +9,22 @@ interface ShtResp {
 
 export async function POST(req: Request) {
 
+    /* eslint-disable no-unused-vars */
     let sts:number = 400;
 
+    /* eslint-disable no-unused-vars */
     let resp: ShtResp = {
         success: false,
         message: '',
     }
 
+    /* eslint-disable no-unused-vars */
     let isTrueAdminUser:boolean = false;
 
     try {
 
         const body = await req.json();
-        let { user_id, password, confirm_password } = body;
+        const { user_id, password, confirm_password } = body;
 
         if(user_id && password && confirm_password) {
             

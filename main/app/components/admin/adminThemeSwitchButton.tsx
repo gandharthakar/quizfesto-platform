@@ -13,7 +13,7 @@ function AdminThemeSwitchButton() {
     const ThemeMode = useSelector((state: RootState) => state.admin_theme_mode.admin_dark_theme_mode);
 
     useEffect(() => {
-        let glsi = localStorage.getItem('admin-dark-mode');
+        const glsi = localStorage.getItem('admin-dark-mode');
         const checkDM = glsi ? JSON.parse(glsi) : '';
         if(checkDM) {
             dispatch(set_admin_dark_mode());

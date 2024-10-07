@@ -40,16 +40,19 @@ const removeCategoryFromQuizes = async (categoryId: string) => {
 }
 
 export async function DELETE(req: Request) {
+    /* eslint-disable no-unused-vars */
     let resp: Respo = {
         success: false,
         message: ''
     }
+
+    /* eslint-disable no-unused-vars */
     let sts:number = 400;
 
     try {
 
         const body = await req.json();
-        let { category_id_list } = body;
+        const { category_id_list } = body;
 
         if(category_id_list) {
 
@@ -76,11 +79,11 @@ export async function DELETE(req: Request) {
                 }
 
                 // Remove 'Selected' Categories From Home Top Categories List. 
-                let hcats = await prisma.qF_Homepage_Categories.findFirst();
+                const hcats = await prisma.qF_Homepage_Categories.findFirst();
                 if(hcats !== null) {
-                    let commonIDs = findCommonItems(category_id_list, hcats.home_cats);
+                    const commonIDs = findCommonItems(category_id_list, hcats.home_cats);
                     if(commonIDs.length > 0) {
-                        let updated = removeItemsFromArray(hcats.home_cats, category_id_list);
+                        const updated = removeItemsFromArray(hcats.home_cats, category_id_list);
                         await prisma.qF_Homepage_Categories.update({
                             where: {
                                 home_cat_id: hcats.home_cat_id
@@ -93,6 +96,7 @@ export async function DELETE(req: Request) {
                 }
 
                 // Remove 'Selected' Categories From List Of Associative Quizes. 
+                /* eslint-disable no-unused-vars */
                 for(let i = 0; i < category_id_list.length; i++) {
                     await removeCategoryFromQuizes(category_id_list[i]);
                 }

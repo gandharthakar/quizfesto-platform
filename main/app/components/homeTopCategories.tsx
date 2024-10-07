@@ -15,7 +15,7 @@ function HomeTopCategories() {
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
     const getTopCats = async () => {
-        let baseURI = window.location.origin;
+        const baseURI = window.location.origin;
         const resp = await fetch(`${baseURI}/api/site/get-home-featured-categories`, {
             method: "GET",
             cache: 'no-store',

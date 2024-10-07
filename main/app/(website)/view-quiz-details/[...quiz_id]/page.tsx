@@ -40,7 +40,7 @@ export default function Page() {
     const params = useParams();
     const qz_id = params.quiz_id[0];
     
-    let defaultImage = "https://placehold.co/1000x700/png";
+    const defaultImage = "https://placehold.co/1000x700/png";
 
     const [win, setWin] = useState<string>('');
     const [quizCats, setQuizCats] = useState<quizCategoriesType[]>([]);
@@ -57,17 +57,17 @@ export default function Page() {
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
     const AuthUser = useSelector((state: RootState) => state.auth_user_id);
-    let userID = AuthUser.auth_user_id ? AuthUser.auth_user_id : '1';
-    let prtLink = userID !== '1' ? `/play-quiz/${qz_id}/${userID}` : '/sign-in';
+    const userID = AuthUser.auth_user_id ? AuthUser.auth_user_id : '1';
+    const prtLink = userID !== '1' ? `/play-quiz/${qz_id}/${userID}` : '/sign-in';
 
     useEffect(() => {
-        let win = typeof window !== 'undefined' && window.location.origin
+        const win = typeof window !== 'undefined' && window.location.origin
         ? window.location.origin
         : '';
         setWin(win);
     }, [setWin]);
 
-    let share_uri =  `${win}/view-quiz-details/${qz_id}`;
+    const share_uri =  `${win}/view-quiz-details/${qz_id}`;
     const copyURI = () => {
         copy(share_uri);
         Swal.fire({
@@ -79,8 +79,8 @@ export default function Page() {
     }
 
     const getQuizes = async () => {
-        let baseURI = window.location.origin;
-        let resp = await fetch(`${baseURI}/api/site/get-quizes/single/only-info`, {
+        const baseURI = window.location.origin;
+        const resp = await fetch(`${baseURI}/api/site/get-quizes/single/only-info`, {
             method: "POST",
             body: JSON.stringify({ quiz_id: qz_id }),
             cache: 'no-store',
@@ -108,8 +108,8 @@ export default function Page() {
     }
 
     const getRelatedQuizes = async () => {
-        let baseURI = window.location.origin;
-        let resp = await fetch(`${baseURI}/api/site/get-quizes/bulk-list/related-quizes`, {
+        const baseURI = window.location.origin;
+        const resp = await fetch(`${baseURI}/api/site/get-quizes/bulk-list/related-quizes`, {
             method: "POST",
             body: JSON.stringify({ quiz_id: qz_id }),
             cache: 'no-store',
@@ -125,8 +125,8 @@ export default function Page() {
     }
 
     const checkQuiz = async () => {
-        let baseURI = window.location.origin;
-        let resp = await fetch(`${baseURI}/api/site/check-quiz`, {
+        const baseURI = window.location.origin;
+        const resp = await fetch(`${baseURI}/api/site/check-quiz`, {
             method: "POST",
             body: JSON.stringify({ quiz_id: qz_id, user_id: userID }),
             cache: 'no-store',
@@ -289,7 +289,7 @@ export default function Page() {
                                 </ul>
                             </div>
                             <div className="pb-[25px]">
-                                <Image src={quizCover ? quizCover : defaultImage} width={1000} height={700} className="w-full h-auto" alt="photo" />
+                                <Image src={quizCover ? quizCover : defaultImage} width={1000} height={700} className="w-full h-auto" alt="photo" priority={true} />
                             </div>
                             <div className="pb-[25px]">
                                 <div className="pb-[3px] md:pb-[5px]">

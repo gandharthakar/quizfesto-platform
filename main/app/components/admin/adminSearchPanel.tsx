@@ -22,7 +22,7 @@ function AdminSearchPanel(props: admnSrchPnl) {
 
     useEffect(()=> {
 
-        let menuHandler = (e:any) => {
+        const menuHandler = (e:any) => {
             if(spRef.current !== null) {
                 if(!spRef.current.contains(e.target)) {
                     setSearchPanelOpen(false);

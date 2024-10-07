@@ -8,6 +8,7 @@ import { useEffect, useRef, useState } from "react";
 import { deleteCookie, getCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
+import Swal from "sweetalert2";
 
 interface JWTDec {
     is_admin_user: string,
@@ -17,10 +18,14 @@ interface JWTDec {
 
 function AdminHeaderProfileMenu() {
 
+    const defaultImage = "https://placehold.co/1000x1000/png";
+
     const router = useRouter();
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
     const menuRef = useRef<HTMLDivElement>(null);
     const [auid, setAuid] = useState<string>("");
+    const [profilePhoto, setProfilePhoto] = useState<string>('');
+    const [userName, setUserName] = useState('A');
 
     const handleClick = () => {
         setIsMenuOpen(false);
@@ -32,9 +37,24 @@ function AdminHeaderProfileMenu() {
         router.push("/admin/login");
     }
 
+    const getUser = async () => {
+        const baseURI = window.location.origin;
+        const resp = await fetch(`${baseURI}/api/admin/auth-user/get-user`, {
+            method: 'POST',
+            body: JSON.stringify({ user_id: auid }),
+            cache: 'no-store',
+            next: { revalidate: 60 }
+        });
+        const body = await resp.json();
+        if(body.success) {
+            setProfilePhoto(body.user_photo);
+            setUserName(body.user_full_name.charAt(0));
+        }
+    }
+
     useEffect(()=> {
 
-        let menuHandler = (e:any) => {
+        const menuHandler = (e:any) => {
             if(menuRef.current !== null) {
                 if(!menuRef.current.contains(e.target)) {
                     setIsMenuOpen(false);
@@ -45,6 +65,8 @@ function AdminHeaderProfileMenu() {
         document.addEventListener('mousedown', menuHandler);
 
         const gtco = getCookie("is_admin_user");
+        
+        /* eslint-disable no-unused-vars */
         let admin_id: JWTDec = {
             is_admin_user: '',
             exp: 0,
@@ -54,17 +76,21 @@ function AdminHeaderProfileMenu() {
             admin_id = jwtDecode(gtco);
             setAuid(admin_id.is_admin_user);
         }
+        
+        if(auid !== '') {
+            getUser();
+        }
 
     //eslint-disable-next-line
-    }, []);
+    }, [auid]);
 
     return (
         <>
             <div ref={menuRef} className="relative">
                 <button title="Profile" type="button" className="" onClick={() => setIsMenuOpen(!isMenuOpen)}>
                     <div className="flex justify-center items-center w-[40px] h-[40px] relative rounded-full bg-zinc-100">
-                        <span className="uppercase font-noto_sans text-[16px] text-zinc-900">qa</span>
-                        <Image src="/images/testimonials/michael-davis.jpg" width={40} height={40} className="absolute left-0 top-0 w-full h-full z-[2] rounded-full" alt="Photo" />
+                        <span className="uppercase font-noto_sans text-[16px] text-zinc-900">{userName}</span>
+                        <Image src={profilePhoto ? profilePhoto : defaultImage} width={40} height={40} className="absolute left-0 top-0 w-full h-full z-[2] rounded-full" alt="Photo" />
                     </div>
                 </button>
                 <ul className={`absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-zinc-950 dark:ring-zinc-800 ${isMenuOpen ? 'block' : 'hidden'}`}>

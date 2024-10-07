@@ -2,7 +2,7 @@
 
 import { createSlice } from "@reduxjs/toolkit";
 
-let initialState = {
+const initialState = {
     is_admin_area_menu_open: false
 }
 

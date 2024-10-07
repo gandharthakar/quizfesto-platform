@@ -8,16 +8,19 @@ interface Respo {
 }
 
 export async function POST(req: Request) {
+    /* eslint-disable no-unused-vars */
     let resp: Respo = {
         success: false,
         message: ''
     }
+
+    /* eslint-disable no-unused-vars */
     let sts:number = 400;
 
     try {
 
         const body = await req.json();
-        let { user_id, user_full_name, user_email, user_password, user_conf_password, role, user_phone, user_photo } = body;
+        const { user_id, user_full_name, user_email, user_password, user_conf_password, role, user_phone, user_photo, user_gender } = body;
         
         if(user_id && user_full_name && user_email && role) {
             
@@ -41,7 +44,8 @@ export async function POST(req: Request) {
                                 user_phone,
                                 user_email,
                                 role, 
-                                user_password: hashPassword
+                                user_password: hashPassword,
+                                user_gender
                             }
                         });
                         sts = 200;
@@ -67,6 +71,7 @@ export async function POST(req: Request) {
                             user_phone,
                             user_email,
                             role,
+                            user_gender
                         }
                     });
                     sts = 200;

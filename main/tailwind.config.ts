@@ -1,15 +1,15 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-	darkMode: 'class',
-	content: [
-		"./pages/**/*.{js,ts,jsx,tsx,mdx}",
+  darkMode: 'class',
+  content: [
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
 		"./components/**/*.{js,ts,jsx,tsx,mdx}",
 		"./app/**/*.{js,ts,jsx,tsx,mdx}",
 		"./app/**/layout.{js,ts,jsx,tsx,mdx}",
 		"./node_modules/react-tailwindcss-select/dist/index.esm.js",
-	],
-	theme: {
+  ],
+  theme: {
 		screens: {
 			'sm': '640px',
 			// => @media (min-width: 640px) { ... }
@@ -51,7 +51,6 @@ const config: Config = {
 			}
 		},
 	},
-	plugins: [],
+  plugins: [],
 };
-
 export default config;

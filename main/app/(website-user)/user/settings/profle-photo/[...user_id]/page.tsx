@@ -17,16 +17,16 @@ interface JWTDec {
 
 export default function Page() {
 
-    let defaultImage = "https://placehold.co/1000x1000/png";
+    const defaultImage = "https://placehold.co/1000x1000/png";
 
     const router = useRouter();
     const params = useParams();
     const user_id = params.user_id[0];
 
-    let gau = getCookie('is_auth_user');
+    const gau = getCookie('is_auth_user');
     if(gau) {
-        let user_id_ck: JWTDec = jwtDecode(gau);
-        let fin_uid = user_id_ck.is_auth_user;
+        const user_id_ck: JWTDec = jwtDecode(gau);
+        const fin_uid = user_id_ck.is_auth_user;
         if(user_id !== fin_uid) {
             router.push('/logout');
         }
@@ -44,13 +44,13 @@ export default function Page() {
     const [isLoadRmv, setIsLoadRmv] = useState<boolean>(false);
 
     const handleFileChange = async (e:any) => {
-        let file = e.target.files[0];
+        const file = e.target.files[0];
         if(!file) {
             setImageFile('');
             return;
         } else {
-            let gfnext = file.name;
-            let fext = gfnext.split('.').pop();
+            const gfnext = file.name;
+            const fext = gfnext.split('.').pop();
             setFileExt(fext);
             setPrevImageURI(URL.createObjectURL(file));
         
@@ -64,8 +64,8 @@ export default function Page() {
             const objectURL = URL.createObjectURL(file);
             img.src = objectURL;
             img.onload = function handleLoad() {
-                let {width, height} = img;
-                if(width == 1000 && height == 1000) {
+                const {width, height} = img;
+                if(width <= 1000 && height <= 1000) {
                     setImageDimensions(true);
                 } else {
                     setImageDimensions(false);
@@ -83,6 +83,7 @@ export default function Page() {
             const fileReader = new FileReader();
             fileReader.readAsDataURL(file)
             fileReader.onload = () => {
+                //eslint-disable-next-line
                 typeof fileReader.result === "string" ?
                 resolve(fileReader.result)
                 : reject("Unexpected type received from FileReader");
@@ -95,12 +96,12 @@ export default function Page() {
 
     const removeImageButtonClick = async () => {
         setIsLoadRmv(true);
-        let baseURI = window.location.origin;
+        const baseURI = window.location.origin;
         const resp = await fetch(`${baseURI}/api/site/auth-user/update-single-user/profile-photo`, {
             method: 'POST',
             body: JSON.stringify({ user_id, user_photo: '' })
         });
-        let body = await resp.json();
+        const body = await resp.json();
         if(body.success) {
             Swal.fire({
                 title: "Success!",
@@ -117,14 +118,14 @@ export default function Page() {
 
     //eslint-disable-next-line
     const getUser = async () => {
-        let baseURI = window.location.origin;
+        const baseURI = window.location.origin;
         const resp = await fetch(`${baseURI}/api/site/auth-user/get-single-user`, {
             method: 'POST',
             body: JSON.stringify({ user_id }),
             cache: 'no-store',
             next: { revalidate: 60 }
         });
-        let body = await resp.json();
+        const body = await resp.json();
         if(body.success) {
             setUserImage(body.user.user_photo);
             if(body.user.user_photo == '') {
@@ -147,6 +148,7 @@ export default function Page() {
     const handleSubmit = async (e:any) => {
         e.preventDefault();
 
+        /* eslint-disable no-unused-vars */
         let isValidImage:boolean = false;
 
         // Get file extention.
@@ -173,12 +175,12 @@ export default function Page() {
 
         if(isValidImage) {
             setIsLoading(true);
-            let baseURI = window.location.origin;
+            const baseURI = window.location.origin;
             const resp = await fetch(`${baseURI}/api/site/auth-user/update-single-user/profile-photo`, {
                 method: 'POST',
                 body: JSON.stringify({ user_id, user_photo: imageFile })
             });
-            let body = await resp.json();
+            const body = await resp.json();
             if(body.success) {
                 Swal.fire({
                     title: "Success!",
@@ -188,6 +190,7 @@ export default function Page() {
                 });
                 //this will reload the page without doing SSR
                 router.refresh();
+                setUserImage(imageFile);
                 setIsLoading(false);
                 setAlreadyHaveImage(true);
             } else {

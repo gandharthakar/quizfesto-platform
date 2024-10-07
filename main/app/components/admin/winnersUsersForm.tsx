@@ -29,10 +29,10 @@ function WinnersUsersForm(props: WinUsrFrm) {
     const [input, setInput] = useState<string>(winner_description ? winner_description : '');
     const [inputError, setInputError] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    let buttonText = winning_position_text ? "Update" : "Save";
+    const buttonText = winning_position_text ? "Update" : "Save";
 
     const InputChange = (e: any) => {
-        let value = e.target.value;
+        const value = e.target.value;
         setInput(value);
 
         if(value == '') {
@@ -48,10 +48,10 @@ function WinnersUsersForm(props: WinUsrFrm) {
     }
 
     const removeWinner = async () => {
-        let conf = confirm("Are you sure want to remove this winner ?");
+        const conf = confirm("Are you sure want to remove this winner ?");
         if(conf) {
-            let baseURI = window.location.origin;
-            let resp = await fetch(`${baseURI}/api/admin/winners/crud/remove`, {
+            const baseURI = window.location.origin;
+            const resp = await fetch(`${baseURI}/api/admin/winners/crud/remove`, {
                 method: "DELETE",
                 body: JSON.stringify({ winner_type }),
             });
@@ -63,7 +63,7 @@ function WinnersUsersForm(props: WinUsrFrm) {
                     icon: "success",
                     timer: 3000
                 });
-                let set = setTimeout(() => {
+                const set = setTimeout(() => {
                     window.location.reload();
                     clearTimeout(set);
                 }, 3000);
@@ -81,6 +81,7 @@ function WinnersUsersForm(props: WinUsrFrm) {
     const handleSubmitForm = async (e: any) => {
         e.preventDefault();
 
+        /* eslint-disable no-unused-vars */
         let isValidForm = false;
         if(input == '') {
             isValidForm = false;
@@ -98,8 +99,8 @@ function WinnersUsersForm(props: WinUsrFrm) {
 
         if(isValidForm) {
             setIsLoading(true);
-            let baseURI = window.location.origin;
-            let resp = await fetch(`${baseURI}/api/admin/winners/crud/update`, {
+            const baseURI = window.location.origin;
+            const resp = await fetch(`${baseURI}/api/admin/winners/crud/update`, {
                 method: "POST",
                 body: JSON.stringify({ winner_type, winner_description: input }),
             });

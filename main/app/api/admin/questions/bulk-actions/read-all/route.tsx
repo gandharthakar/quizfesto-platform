@@ -17,16 +17,19 @@ interface Respo {
 }
 
 export async function GET() {
+    /* eslint-disable no-unused-vars */
     let resp: Respo = {
         success: false,
         message: '',
         questions: []
     }
+
+    /* eslint-disable no-unused-vars */
     let sts:number = 400;
 
     try {
 
-        let data = await prisma.qF_Question.findMany({
+        const data = await prisma.qF_Question.findMany({
             orderBy: {
                 createdAt: 'desc'
             }

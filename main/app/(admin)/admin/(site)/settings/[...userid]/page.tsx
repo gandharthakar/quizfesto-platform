@@ -11,10 +11,9 @@ import Swal from "sweetalert2";
 function Page() {
 
     const param = useParams();
-    let AuthUser = param?.userid[0];
-    const [usrName, setUsrName] = useState<string>('');
-    const [usrEmail, setUsrEmail] = useState<string>('');
+    const AuthUser = param?.userid[0];
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [gender, setGender] = useState<string>("");
 
     const validationSchema = z.object({
         full_name: z.string({
@@ -34,20 +33,16 @@ function Page() {
 
     const { register, handleSubmit, setValue, formState: { errors }} = useForm<validationSchema>({
 		resolver: zodResolver(validationSchema),
-        defaultValues: {
-            full_name: 'Amit Thakur',
-            email: 'amitthakur2214@example.com'
-        }
 	});
 
     const handleFormSubmit: SubmitHandler<validationSchema> = async (formdata) => {
         setIsLoading(true);
-        let baseURI = window.location.origin;
+        const baseURI = window.location.origin;
         const resp = await fetch(`${baseURI}/api/admin/auth-user/settings/general/set`, {
             method: 'POST',
-            body: JSON.stringify({ user_id: AuthUser, user_full_name: formdata.full_name, user_email: formdata.email })
+            body: JSON.stringify({ user_id: AuthUser, user_full_name: formdata.full_name, user_email: formdata.email, user_gender: gender })
         });
-        let body = await resp.json();
+        const body = await resp.json();
         if(body.success) {
             Swal.fire({
                 title: "Success!",
@@ -72,31 +67,30 @@ function Page() {
     //eslint-disable-next-line
     const getUser = async () => {
         setIsLoading(true);
-        let baseURI = window.location.origin;
+        const baseURI = window.location.origin;
         const resp = await fetch(`${baseURI}/api/admin/auth-user/settings/general/get`, {
             method: 'POST',
             body: JSON.stringify({ user_id: AuthUser }),
             cache: 'no-store',
             next: { revalidate: 60 }
         });
-        let body = await resp.json();
+        const body = await resp.json();
         if(body.success) {
-            setUsrName(body.user_full_name);
-            setUsrEmail(body.user_email);
+            setValue("full_name", body.user_full_name);
+            setValue("email", body.user_email);
+            if(body.user_gender !== null) {
+                setGender(body.user_gender);    
+            }
+            setIsLoading(false);
+        } else {
+            setIsLoading(false);
         }
     }
 
     useEffect(() => {
         getUser();
-        setIsLoading(false);
         //eslint-disable-next-line
-    }, [getUser]);
-
-    useEffect(() => {
-        setValue("full_name", usrName??"");
-        setValue("email", usrEmail??"");
-        //eslint-disable-next-line
-    }, [usrName]);
+    }, []);
 
     return (
         <div className="pt-[15px] pb-[25px]">
@@ -127,6 +121,20 @@ function Page() {
                             {...register("email")}
                         />
                         {errors.email && (<div className="ws-input-error">{errors.email.message}</div>)}
+                    </div>
+                    <div className="pb-[20px]">
+                        <select 
+                            name="user_gender" 
+                            id="cq-gender" 
+                            className="ws-input-m1" 
+                            value={gender} 
+                            onChange={(e) => setGender(e.target.value)}
+                        >
+                            <option value="">-- Select --</option>
+                            <option value="male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
                     </div>
                     <div className="text-right">
                         {

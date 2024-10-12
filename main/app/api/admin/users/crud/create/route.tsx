@@ -15,15 +15,25 @@ export async function POST(req: Request) {
     }
 
     /* eslint-disable no-unused-vars */
-    let sts:number = 400;
+    let sts: number = 400;
 
     try {
 
         const body = await req.json();
-        const { user_full_name, user_email, user_password, user_conf_password, role, user_phone, user_photo, user_gender } = body;
-        
-        if(user_full_name && user_email && user_password && user_conf_password && role) {
-            if(user_password === user_conf_password) {
+        const {
+            user_full_name,
+            user_email,
+            user_password,
+            user_conf_password,
+            role,
+            user_phone,
+            user_photo,
+            user_gender,
+            block_user
+        } = body;
+
+        if (user_full_name && user_email && user_password && user_conf_password && role) {
+            if (user_password === user_conf_password) {
 
                 // Find existing user by email
                 const existinUserByEmail = await prisma.qF_User.findUnique({
@@ -31,7 +41,7 @@ export async function POST(req: Request) {
                         user_email
                     }
                 });
-                if(existinUserByEmail) {
+                if (existinUserByEmail) {
                     sts = 200;
                     resp = {
                         success: false,
@@ -47,7 +57,8 @@ export async function POST(req: Request) {
                             user_email,
                             role,
                             user_password: hashPassword,
-                            user_gender
+                            user_gender,
+                            isBlockedByAdmin: block_user
                         }
                     });
                     sts = 201;
@@ -71,13 +82,13 @@ export async function POST(req: Request) {
             }
         }
 
-        return NextResponse.json(resp, {status: sts});
+        return NextResponse.json(resp, { status: sts });
     } catch (error: any) {
         sts = 500;
         resp = {
             success: false,
             message: error.message
         }
-        return NextResponse.json(resp, {status: sts});
+        return NextResponse.json(resp, { status: sts });
     }
 }

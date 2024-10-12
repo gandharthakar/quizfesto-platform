@@ -8,6 +8,7 @@ interface qF_Quiz {
     quiz_id: string,
     quiz_title: string,
     quiz_status: string,
+    total_questions: number,
 }
 
 interface Respo {
@@ -25,7 +26,7 @@ export async function GET() {
     }
 
     /* eslint-disable no-unused-vars */
-    let sts:number = 400;
+    let sts: number = 400;
 
     try {
 
@@ -34,7 +35,7 @@ export async function GET() {
                 createdAt: 'desc'
             }
         });
-        if(data.length > 0) {
+        if (data.length > 0) {
             sts = 200;
             resp = {
                 success: true,
@@ -43,7 +44,8 @@ export async function GET() {
                     return {
                         quiz_id: item.quiz_id,
                         quiz_title: item.quiz_title,
-                        quiz_status: item.quiz_status
+                        quiz_status: item.quiz_status,
+                        total_questions: item.quiz_total_question
                     }
                 })
             }
@@ -55,8 +57,8 @@ export async function GET() {
                 quizes: []
             }
         }
-        
-        return NextResponse.json(resp, {status: sts});
+
+        return NextResponse.json(resp, { status: sts });
     } catch (error: any) {
         sts = 500;
         resp = {
@@ -64,6 +66,6 @@ export async function GET() {
             message: error.message,
             quizes: []
         }
-        return NextResponse.json(resp, {status: sts});
+        return NextResponse.json(resp, { status: sts });
     }
 }

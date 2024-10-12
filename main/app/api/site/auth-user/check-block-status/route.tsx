@@ -1,30 +1,17 @@
 import prisma from "@/app/lib/db";
 import { NextResponse } from "next/server";
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
-
-interface QF_User {
-    user_full_name: string,
-    user_email: string,
-    user_phone?: string,
-    user_photo?: string,
-    user_gender?: string,
-    role: string,
-    block_user: string,
-}
-
 interface Respo {
     success: boolean,
-    message: string,
-    user?: QF_User
+    message: string
+    user_block_status?: string
 }
 
 export async function POST(req: Request) {
     /* eslint-disable no-unused-vars */
     let resp: Respo = {
         success: false,
-        message: '',
+        message: ''
     }
 
     /* eslint-disable no-unused-vars */
@@ -36,38 +23,30 @@ export async function POST(req: Request) {
         const { user_id } = body;
 
         if (user_id) {
-            const DB_User = await prisma.qF_User.findFirst({
+            const existingUser = await prisma.qF_User.findFirst({
                 where: {
                     user_id
                 }
             });
-            if (DB_User !== null) {
+            if (existingUser !== null) {
                 sts = 200;
                 resp = {
                     success: true,
                     message: "User Found!",
-                    user: {
-                        user_full_name: DB_User.user_full_name,
-                        user_email: DB_User.user_email,
-                        role: DB_User.role ?? "",
-                        user_phone: DB_User.user_phone ?? "",
-                        user_photo: DB_User.user_photo ?? "",
-                        user_gender: DB_User.user_gender ?? "",
-                        block_user: DB_User.isBlockedByAdmin ?? ""
-                    }
+                    user_block_status: existingUser.isBlockedByAdmin ?? ""
                 }
             } else {
                 sts = 200;
                 resp = {
                     success: false,
-                    message: "No User Found!",
+                    message: "User Not Found!"
                 }
             }
         } else {
             sts = 400;
             resp = {
                 success: false,
-                message: "Missing Required Fields!",
+                message: "Missing Required Fields!"
             }
         }
 
@@ -76,7 +55,7 @@ export async function POST(req: Request) {
         sts = 500;
         resp = {
             success: false,
-            message: error.message,
+            message: error.message
         }
         return NextResponse.json(resp, { status: sts });
     }

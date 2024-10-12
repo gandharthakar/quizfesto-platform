@@ -15,24 +15,35 @@ export async function POST(req: Request) {
     }
 
     /* eslint-disable no-unused-vars */
-    let sts:number = 400;
+    let sts: number = 400;
 
     try {
 
         const body = await req.json();
-        const { user_id, user_full_name, user_email, user_password, user_conf_password, role, user_phone, user_photo, user_gender } = body;
-        
-        if(user_id && user_full_name && user_email && role) {
-            
+        const {
+            user_id,
+            user_full_name,
+            user_email,
+            user_password,
+            user_conf_password,
+            role,
+            user_phone,
+            user_photo,
+            user_gender,
+            block_user
+        } = body;
+
+        if (user_id && user_full_name && user_email && role) {
+
             // Find existing user by email
             const existinUserByEmail = await prisma.qF_User.findUnique({
                 where: {
                     user_email
                 }
             });
-            if(existinUserByEmail) {
-                if(user_password) {
-                    if(user_password === user_conf_password) {
+            if (existinUserByEmail) {
+                if (user_password) {
+                    if (user_password === user_conf_password) {
                         const hashPassword = await hash(user_password, 10);
                         await prisma.qF_User.update({
                             where: {
@@ -43,9 +54,10 @@ export async function POST(req: Request) {
                                 user_photo,
                                 user_phone,
                                 user_email,
-                                role, 
+                                role,
                                 user_password: hashPassword,
-                                user_gender
+                                user_gender,
+                                isBlockedByAdmin: block_user
                             }
                         });
                         sts = 200;
@@ -71,7 +83,8 @@ export async function POST(req: Request) {
                             user_phone,
                             user_email,
                             role,
-                            user_gender
+                            user_gender,
+                            isBlockedByAdmin: block_user
                         }
                     });
                     sts = 200;
@@ -95,13 +108,13 @@ export async function POST(req: Request) {
             }
         }
 
-        return NextResponse.json(resp, {status: sts});
+        return NextResponse.json(resp, { status: sts });
     } catch (error: any) {
         sts = 500;
         resp = {
             success: false,
             message: error.message
         }
-        return NextResponse.json(resp, {status: sts});
+        return NextResponse.json(resp, { status: sts });
     }
 }

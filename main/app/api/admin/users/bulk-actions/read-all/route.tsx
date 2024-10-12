@@ -7,7 +7,8 @@ export const revalidate = 0;
 interface QF_User {
     user_id: string,
     user_name: string,
-    user_role: string
+    user_role: string,
+    user_block_status: string
 }
 
 interface Respo {
@@ -25,7 +26,7 @@ export async function GET() {
     }
 
     /* eslint-disable no-unused-vars */
-    let sts:number = 400;
+    let sts: number = 400;
 
     try {
 
@@ -34,12 +35,13 @@ export async function GET() {
                 createdAt: 'desc'
             }
         });
-        if(data.length > 0) {
+        if (data.length > 0) {
             const user = data.map((item) => {
-                const obj = { 
-                    user_id: item.user_id, 
-                    user_name: item.user_full_name, 
-                    user_role: item.role??""
+                const obj = {
+                    user_id: item.user_id,
+                    user_name: item.user_full_name,
+                    user_role: item.role ?? "",
+                    user_block_status: item.isBlockedByAdmin ?? ""
                 }
                 return obj;
             });
@@ -57,8 +59,8 @@ export async function GET() {
                 users: []
             }
         }
-        
-        return NextResponse.json(resp, {status: sts});
+
+        return NextResponse.json(resp, { status: sts });
     } catch (error: any) {
         sts = 500;
         resp = {
@@ -66,6 +68,6 @@ export async function GET() {
             message: error.message,
             users: []
         }
-        return NextResponse.json(resp, {status: sts});
+        return NextResponse.json(resp, { status: sts });
     }
 }

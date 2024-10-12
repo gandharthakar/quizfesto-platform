@@ -28,7 +28,7 @@ function Page() {
 
     const dataPerPage = 10;
     const [srchInp, setSrchInp] = useState<string>("");
-    
+
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [quizData, setQuizData] = useState<qF_Quiz[]>([]);
     const [totalPages, setTotalPages] = useState<number>(Math.ceil(quizData.length / dataPerPage));
@@ -38,22 +38,22 @@ function Page() {
     const [selectAll, setSelectAll] = useState(false);
     const [selectedItems, setSelectedItems] = useState<string[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    
+
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
     const menuRef = useRef<HTMLDivElement>(null);
 
-    const handleSearchInputChange = (e:any) => {
+    const handleSearchInputChange = (e: any) => {
         setSrchInp(e.target.value);
-        if(srchInp.length === 1) {
+        if (srchInp.length === 1) {
             setCurrentPage(1);
             setQuizListData(GFG(quizData, currentPage, dataPerPage));
             setTotalPages(Math.ceil(quizData.length / dataPerPage));
         }
     }
 
-    const handleSearchInputKeyDown = (e:any) => {
+    const handleSearchInputKeyDown = (e: any) => {
         setSrchInp(e.target.value);
-        if(e.key === "Backspace") {
+        if (e.key === "Backspace") {
             setCurrentPage(1);
             setQuizListData(GFG(quizData, currentPage, dataPerPage));
             setTotalPages(Math.ceil(quizData.length / dataPerPage));
@@ -62,7 +62,7 @@ function Page() {
 
     const handleSearchLogic = (e: any) => {
         e.preventDefault();
-        if(srchInp == '') {
+        if (srchInp == '') {
             Swal.fire({
                 title: "Error!",
                 text: "Please enter search term first.",
@@ -71,24 +71,24 @@ function Page() {
             });
         } else {
 
-            if(quizListData.length > 0) {
+            if (quizListData.length > 0) {
 
                 const res = quizData.filter((item) => {
                     const srch_res = item.quiz_title.toLowerCase().includes(srchInp.toLowerCase()) || item.quiz_status.toLowerCase().includes(srchInp.toLowerCase());
                     return srch_res;
                 });
 
-                if(res.length > 0) {
+                if (res.length > 0) {
                     setCurrentPage(1);
                     setTotalPages(Math.ceil(res.length / dataPerPage));
                     setQuizListData(GFG(res, currentPage, dataPerPage));
-                    if(srchInp == "") {
+                    if (srchInp == "") {
                         setCurrentPage(1);
                         setTotalPages(Math.ceil(quizData.length / dataPerPage));
                         setQuizListData([]);
                     }
                 } else {
-                    if(srchInp == "") {
+                    if (srchInp == "") {
                         setCurrentPage(1);
                         setTotalPages(Math.ceil(quizData.length / dataPerPage));
                         setQuizListData([]);
@@ -129,22 +129,22 @@ function Page() {
             setSelectedItems(selectedItems.filter(id => id !== itemId));
         }
     };
-    
+
     const handleCheckboxChange = (itemId: string) => {
         toggleItem(itemId);
     };
 
     const handleDeleteSelectedBulkLogic = async () => {
-        if(selectedItems.length > 0) {
+        if (selectedItems.length > 0) {
             const conf = confirm("Are you sure want to delete selected Quizes ?");
-            if(conf) {
+            if (conf) {
                 const baseURI = window.location.origin;
                 const resp = await fetch(`${baseURI}/api/admin/quizes/bulk-actions/delete-selected`, {
                     method: "DELETE",
-                    body: JSON.stringify({quiz_id_list: selectedItems})
+                    body: JSON.stringify({ quiz_id_list: selectedItems })
                 });
                 const body = await resp.json();
-                if(body.success) {
+                if (body.success) {
                     Swal.fire({
                         title: "Success!",
                         text: body.message,
@@ -169,13 +169,13 @@ function Page() {
 
     const handleDeleteAllBulkLogic = async () => {
         const conf = confirm("Are you sure want to delete all quizes ?");
-        if(conf) {
+        if (conf) {
             const baseURI = window.location.origin;
             const resp = await fetch(`${baseURI}/api/admin/quizes/bulk-actions/delete-all`, {
                 method: "DELETE",
             });
             const body = await resp.json();
-            if(body.success) {
+            if (body.success) {
                 Swal.fire({
                     title: "Success!",
                     text: body.message,
@@ -206,7 +206,7 @@ function Page() {
             next: { revalidate: 60 }
         });
         const body = await resp.json();
-        if(body.success) {
+        if (body.success) {
             setIsLoading(false);
             setQuizListData(GFG(body.quizes, currentPage, dataPerPage));
             setQuizData(body.quizes);
@@ -219,9 +219,9 @@ function Page() {
     useEffect(() => {
         // setQuizListData(GFG(dump_list_of_quizes, currentPage, dataPerPage));
         getQuizes();
-    //eslint-disable-next-line
+        //eslint-disable-next-line
     }, []);
-        
+
     useEffect(() => {
         if (selectedItems.length === quizListData.length) {
             setSelectAll(true);
@@ -230,18 +230,18 @@ function Page() {
         }
     }, [selectedItems, quizListData]);
 
-    useEffect(()=> {
+    useEffect(() => {
 
-        const menuHandler = (e:any) => {
-            if(menuRef.current !== null) {
-                if(!menuRef.current.contains(e.target)) {
+        const menuHandler = (e: any) => {
+            if (menuRef.current !== null) {
+                if (!menuRef.current.contains(e.target)) {
                     setIsMenuOpen(false);
                 }
             }
         };
 
         document.addEventListener('mousedown', menuHandler);
-    //eslint-disable-next-line
+        //eslint-disable-next-line
     }, []);
 
     return (
@@ -250,9 +250,9 @@ function Page() {
                 <div className="pb-[25px]">
                     <div className="flex gap-x-[15px] gap-y-[10px] flex-wrap items-center">
                         <div className="mr-auto">
-                            <Link 
-                                href="/admin/quizes/create-new-quiz" 
-                                title="Add New" 
+                            <Link
+                                href="/admin/quizes/create-new-quiz"
+                                title="Add New"
                                 className="transition-all delay-75 inline-block font-noto_sans font-semibold text-[14px] md:text-[16px] py-[8px] md:py-[10px] px-[10px] md:px-[15px] bg-theme-color-2 text-zinc-100 hover:bg-theme-color-2-hover-dark"
                             >
                                 <div className="flex gap-x-[5px] items-center">
@@ -263,19 +263,19 @@ function Page() {
                         </div>
                         <div className="pr-[5px]">
                             <form onSubmit={handleSearchLogic}>
-                                <AdminSearchPanel 
-                                    sarchInputVal={srchInp} 
-                                    searchInputChange={handleSearchInputChange} 
-                                    searchInputKeyDown={handleSearchInputKeyDown} 
+                                <AdminSearchPanel
+                                    sarchInputVal={srchInp}
+                                    searchInputChange={handleSearchInputChange}
+                                    searchInputKeyDown={handleSearchInputKeyDown}
                                 />
                             </form>
                         </div>
                         <div className="alqc-chrb">
-                            <input 
-                                type="checkbox" 
-                                id="selall" 
+                            <input
+                                type="checkbox"
+                                id="selall"
                                 // name="all_quiz" 
-                                className="input-chrb"  
+                                className="input-chrb"
                                 checked={selectAll} onChange={toggleSelectAll}
                             />
                             <label htmlFor="selall" className="label">
@@ -301,21 +301,21 @@ function Page() {
                             </div>
                         </button> */}
                         <div ref={menuRef} className="relative h-[18px]">
-                            <button 
+                            <button
                                 type="button"
-                                title="Actions"  
-                                className="transition-all delay-75 text-zinc-800 dark:text-zinc-200" 
+                                title="Actions"
+                                className="transition-all delay-75 text-zinc-800 dark:text-zinc-200"
                                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                             >
                                 <FaEllipsisVertical size={18} />
                             </button>
                             <ul className={`absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-zinc-950 dark:ring-zinc-800 ${isMenuOpen ? 'block' : 'hidden'}`}>
                                 <li className="w-full">
-                                    <button 
-                                        type="button" 
-                                        title="Delete Selected" 
-                                        className="transition-all delay-75 block w-full py-[10px] px-[15px] font-ubuntu text-[16px] text-red-500 hover:bg-zinc-100 dark:text-red-500 dark:hover:bg-zinc-800" 
-                                        onClick={handleDeleteSelectedBulkLogic} 
+                                    <button
+                                        type="button"
+                                        title="Delete Selected"
+                                        className="transition-all delay-75 block w-full py-[10px] px-[15px] font-ubuntu text-[16px] text-red-500 hover:bg-zinc-100 dark:text-red-500 dark:hover:bg-zinc-800"
+                                        onClick={handleDeleteSelectedBulkLogic}
                                     >
                                         <div className="flex gap-x-[5px] items-center">
                                             <RiDeleteBin6Line size={20} />
@@ -326,11 +326,11 @@ function Page() {
                                     </button>
                                 </li>
                                 <li className="w-full">
-                                    <button 
-                                        type="button" 
-                                        title="Delete All" 
-                                        className="transition-all delay-75 block w-full py-[10px] px-[15px] font-ubuntu text-[16px] text-red-500 hover:bg-zinc-100 dark:text-red-500 dark:hover:bg-zinc-800" 
-                                        onClick={handleDeleteAllBulkLogic} 
+                                    <button
+                                        type="button"
+                                        title="Delete All"
+                                        className="transition-all delay-75 block w-full py-[10px] px-[15px] font-ubuntu text-[16px] text-red-500 hover:bg-zinc-100 dark:text-red-500 dark:hover:bg-zinc-800"
+                                        onClick={handleDeleteAllBulkLogic}
                                     >
                                         <div className="flex gap-x-[5px] items-center">
                                             <RiDeleteBin6Line size={20} />
@@ -347,51 +347,54 @@ function Page() {
 
                 <div>
                     {
-                        quizListData?.length ? 
-                        (
-                            <>
-                                {
-                                    quizListData.map((itm: any) => (
-                                        <div key={itm.quiz_id} className="pb-[20px] last:pb-0">
-                                            <AdminListQuizCard 
-                                                quizid={itm.quiz_id} 
-                                                quiz_title={itm.quiz_title} 
-                                                quiz_publish_status={itm.quiz_status} 
-                                                checkboxName={"quiz_list"} 
-                                                checkboxValue={itm.quiz_id} 
-                                                checkboxChecked={selectedItems.includes(itm.quiz_id)} 
-                                                onCheckboxChange={handleCheckboxChange} 
-                                            />
-                                        </div>
-                                    ))
-                                }
-                            </>
-                        ) 
-                        : 
-                        (
-                            <>
-                                {
-                                    isLoading ? 
-                                    (<div className="spinner size-1"></div>) 
-                                    : 
-                                    (
-                                        <h1 className="transition-all delay-75 text-[16px] md:text-[18px] font-semibold text-zinc-800 dark:text-zinc-300">
-                                            No Quizes Found.
-                                        </h1>
-                                    )
-                                }
-                            </>
-                        )
+                        quizListData?.length ?
+                            (
+                                <>
+                                    {
+                                        quizListData.map((itm: any) => (
+                                            <div key={itm.quiz_id} className="pb-[20px] last:pb-0">
+                                                <AdminListQuizCard
+                                                    quizid={itm.quiz_id}
+                                                    quiz_title={itm.quiz_title}
+                                                    quiz_publish_status={itm.quiz_status}
+                                                    total_questions={itm.total_questions}
+                                                    checkboxName={"quiz_list"}
+                                                    checkboxValue={itm.quiz_id}
+                                                    checkboxChecked={selectedItems.includes(itm.quiz_id)}
+                                                    onCheckboxChange={handleCheckboxChange}
+                                                />
+                                            </div>
+                                        ))
+                                    }
+                                </>
+                            )
+                            :
+                            (
+                                <>
+                                    {
+                                        isLoading ?
+                                            (<div className="spinner size-1"></div>)
+                                            :
+                                            (
+                                                <h1 className="transition-all delay-75 text-[16px] md:text-[18px] font-semibold text-zinc-800 dark:text-zinc-300">
+                                                    No Quizes Found.
+                                                </h1>
+                                            )
+                                    }
+                                </>
+                            )
                     }
                 </div>
 
-                <SitePagination 
-                    totalPages={totalPages} 
-                    dataPerPage={dataPerPage} 
-                    currentPage={currentPage} 
-                    parentClassList="pt-[50px]" 
-                    onPageChange={handlePageChange} 
-                />
+                <div className="pb-[70px]">
+                    <SitePagination
+                        totalPages={totalPages}
+                        dataPerPage={dataPerPage}
+                        currentPage={currentPage}
+                        parentClassList="pt-[50px]"
+                        onPageChange={handlePageChange}
+                    />
+                </div>
             </div>
         </>
     )

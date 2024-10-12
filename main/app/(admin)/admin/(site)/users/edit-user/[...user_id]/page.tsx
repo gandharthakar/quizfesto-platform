@@ -10,9 +10,9 @@ import { MdOutlineAddAPhoto } from "react-icons/md";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { useParams } from "next/navigation";
 
-function validatePhone(phoneNumber: string){
+function validatePhone(phoneNumber: string) {
     const phoneNumberPattern = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
-    return phoneNumberPattern.test(phoneNumber); 
+    return phoneNumberPattern.test(phoneNumber);
 }
 
 function validPassword(pwd: string) {
@@ -38,6 +38,7 @@ function Page() {
     const [errorFileInput, setErrorFileInput] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [gender, setGender] = useState<string>('');
+    const [blockUser, setBlockUser] = useState<string>('false');
 
     const params = useParams();
     const user_id = params.user_id[0];
@@ -47,8 +48,8 @@ function Page() {
         setPhone(value);
         // Validate Phone Number.
         const validPhone = validatePhone(value);
-        if(value !== "") {
-            if(!validPhone) {
+        if (value !== "") {
+            if (!validPhone) {
                 setPhoneError("Invalid phone number");
             } else {
                 setPhoneError("");
@@ -59,9 +60,9 @@ function Page() {
     const handlePwdChange = (e: any) => {
         const value = e.target.value;
         setPassword(value);
-        if(value !== '') {
+        if (value !== '') {
             const valPwd = validPassword(value);
-            if(!valPwd) {
+            if (!valPwd) {
                 setPwdError("Password contains minimum 8 characters and maximum 16 characters.");
             } else {
                 setPwdError("");
@@ -72,11 +73,11 @@ function Page() {
     const handleConfPwdChange = (e: any) => {
         const value = e.target.value;
         setConfirmPassword(value);
-        if(value !== '') {
-            if(password === '') {
+        if (value !== '') {
+            if (password === '') {
                 setConfPwdError("Password Field is blank");
             } else {
-                if(value !== password) {
+                if (value !== password) {
                     setConfPwdError("Password is missmatched.");
                 } else {
                     setConfPwdError("");
@@ -94,9 +95,9 @@ function Page() {
         setErrorFileInput("");
     }
 
-    const handleFileChange = async (e:any) => {
+    const handleFileChange = async (e: any) => {
         const file = e.target.files[0];
-        if(!file) {
+        if (!file) {
             setImageFile('');
             return;
         } else {
@@ -104,7 +105,7 @@ function Page() {
             const fext = gfnext.split('.').pop();
             setFileExt(fext);
             setProfileImage(URL.createObjectURL(file));
-        
+
             if (file.size > 500 * 1024) {
                 setImageFileSize(false);
             } else {
@@ -115,8 +116,8 @@ function Page() {
             const objectURL = URL.createObjectURL(file);
             img.src = objectURL;
             img.onload = function handleLoad() {
-                const {width, height} = img;
-                if(width <= 1000 && height <= 1000) {
+                const { width, height } = img;
+                if (width <= 1000 && height <= 1000) {
                     setImageDimensions(true);
                 } else {
                     setImageDimensions(false);
@@ -129,15 +130,15 @@ function Page() {
         setImageFile(base64);
     }
 
-    const convertBase64 = (file:any) => {
+    const convertBase64 = (file: any) => {
         return new Promise<string>((resolve, reject) => {
             const fileReader = new FileReader();
             fileReader.readAsDataURL(file)
             fileReader.onload = () => {
                 //eslint-disable-next-line
                 typeof fileReader.result === "string" ?
-                resolve(fileReader.result)
-                : reject("Unexpected type received from FileReader");
+                    resolve(fileReader.result)
+                    : reject("Unexpected type received from FileReader");
             }
             fileReader.onerror = (error) => {
                 reject(error);
@@ -147,27 +148,27 @@ function Page() {
 
     const validationSchema = z.object({
         full_name: z.string({
-			required_error: "Please enter Full Name",
-			invalid_type_error: "Full Name must be in string format."
-		}).min(1, {message: "Full name must be contains at least 1 characters."}),
+            required_error: "Please enter Full Name",
+            invalid_type_error: "Full Name must be in string format."
+        }).min(1, { message: "Full name must be contains at least 1 characters." }),
 
         email: z.string({
-			required_error: "Please enter email address.",
-			invalid_type_error: "Email must be in string format."
-		}).email({
-			message: "Please enter valid email address."
-		}).min(1),
+            required_error: "Please enter email address.",
+            invalid_type_error: "Email must be in string format."
+        }).email({
+            message: "Please enter valid email address."
+        }).min(1),
 
-        role:z.string({
+        role: z.string({
             required_error: "Please select a role."
-        }).min(1, {message: "Please select a role."}),
+        }).min(1, { message: "Please select a role." }),
     });
 
     type validationSchema = z.infer<typeof validationSchema>;
 
-    const { register, handleSubmit, setValue, formState: { errors }} = useForm<validationSchema>({
-		resolver: zodResolver(validationSchema),
-	});
+    const { register, handleSubmit, setValue, formState: { errors } } = useForm<validationSchema>({
+        resolver: zodResolver(validationSchema),
+    });
 
     const submitData = async (data: any) => {
         setIsLoading(true);
@@ -177,7 +178,7 @@ function Page() {
             body: JSON.stringify(data),
         });
         const body = await resp.json();
-        if(body.success) {
+        if (body.success) {
             Swal.fire({
                 title: "Success!",
                 text: body.message,
@@ -200,8 +201,8 @@ function Page() {
 
         // Validate Phone Number.
         const validPhone = validatePhone(phone);
-        if(phone !== "") {
-            if(!validPhone) {
+        if (phone !== "") {
+            if (!validPhone) {
                 setPhoneError("Invalid phone number");
             } else {
                 setPhoneError("");
@@ -213,18 +214,18 @@ function Page() {
         /* eslint-disable no-unused-vars */
         let validImage: boolean = false;
         // console.log(imageFile);
-        if(imageFile !== '') {
+        if (imageFile !== '') {
             setErrorFileInput("Please select a photo.");
             validImage = false;
-            if(!allowedFileTypes.includes(fileExt)) {
+            if (!allowedFileTypes.includes(fileExt)) {
                 setErrorFileInput("Only .jpg, .jpeg and .png files are allowed.");
                 validImage = false;
             } else {
-                if(!imageFileSize) {
+                if (!imageFileSize) {
                     setErrorFileInput("Image file size is bigger than 500 kb.");
                     validImage = false;
                 } else {
-                    if(!imageDimensions) {
+                    if (!imageDimensions) {
                         setErrorFileInput("Image dimensions is expected 1000px x 1000px. (square size)");
                         validImage = false;
                     } else {
@@ -244,13 +245,14 @@ function Page() {
             role: formdata.role,
             user_phone: phone,
             user_photo: imageFile,
-            user_gender: gender
+            user_gender: gender,
+            block_user: blockUser
         }
-        
-        if(imageFile == '') {
+
+        if (imageFile == '') {
             await submitData(prepData);
         } else {
-            if(validImage) {
+            if (validImage) {
                 await submitData(prepData);
             }
         }
@@ -265,7 +267,7 @@ function Page() {
             next: { revalidate: 60 }
         });
         const body = await resp.json();
-        if(body.success) {
+        if (body.success) {
             Swal.fire({
                 title: "Success!",
                 text: body.message,
@@ -278,11 +280,12 @@ function Page() {
             setImageFile(body.user.user_photo);
             setProfileImage(body.user.user_photo);
             setPhone(body.user.user_phone);
+            setBlockUser(body.user.block_user);
             setImageDimensions(true);
             setImageFileSize(true);
             setIsLoading(false);
             setFileExt("jpg");
-            if(body.user.user_gender !== null) {
+            if (body.user.user_gender !== null) {
                 setGender(body.user.user_gender);
             }
         } else {
@@ -298,14 +301,14 @@ function Page() {
 
     const resetData = async () => {
         const conf = confirm("Are you sure want reset participation data ?");
-        if(conf) {
+        if (conf) {
             const baseURI = window.location.origin;
             const resp = await fetch(`${baseURI}/api/admin/users/participation-data/delete`, {
                 method: "DELETE",
                 body: JSON.stringify({ user_id }),
             });
             const body = await resp.json();
-            if(body.success) {
+            if (body.success) {
                 Swal.fire({
                     title: "Success!",
                     text: body.message,
@@ -333,7 +336,7 @@ function Page() {
         // setImageFileSize(true);
         // setFileExt("jpg");
         getUser();
-    //eslint-disable-next-line
+        //eslint-disable-next-line
     }, []);
 
     return (
@@ -344,82 +347,82 @@ function Page() {
                         <div className="w-full xl-s2:flex-1 xl-s2:w-auto">
                             <div className="transition-all sticky top-[0px] delay-75 border-[2px] border-solid p-[15px] md:p-[25px] border-zinc-300 bg-white dark:bg-zinc-800 dark:border-zinc-600">
                                 <div className="pb-[20px]">
-                                    <label 
-                                        className="transition-all delay-75 block mb-[5px] font-noto_sans text-[16px] font-semibold text-zinc-900 dark:text-zinc-300" 
+                                    <label
+                                        className="transition-all delay-75 block mb-[5px] font-noto_sans text-[16px] font-semibold text-zinc-900 dark:text-zinc-300"
                                         htmlFor="cq-qflnm"
                                     >
                                         Full Name <span className="text-red-500">*</span>
                                     </label>
-                                    <input 
-                                        type="text" 
-                                        id="cq-qflnm" 
-                                        className="ws-input-pwd-m1-v1" 
-                                        autoComplete="off" 
-                                        {...register("full_name")} 
+                                    <input
+                                        type="text"
+                                        id="cq-qflnm"
+                                        className="ws-input-pwd-m1-v1"
+                                        autoComplete="off"
+                                        {...register("full_name")}
                                     />
                                     {errors.full_name && (<div className="ws-input-error mt-[2px]">{errors.full_name.message}</div>)}
                                 </div>
                                 <div className="pb-[20px]">
-                                    <label 
-                                        className="transition-all delay-75 block mb-[5px] font-noto_sans text-[16px] font-semibold text-zinc-900 dark:text-zinc-300" 
+                                    <label
+                                        className="transition-all delay-75 block mb-[5px] font-noto_sans text-[16px] font-semibold text-zinc-900 dark:text-zinc-300"
                                         htmlFor="cq-qflnm"
                                     >
                                         Email <span className="text-red-500">*</span>
                                     </label>
-                                    <input 
-                                        type="email" 
-                                        id="cq-qeml" 
-                                        className="ws-input-pwd-m1-v1" 
-                                        autoComplete="off" 
-                                        {...register("email")} 
+                                    <input
+                                        type="email"
+                                        id="cq-qeml"
+                                        className="ws-input-pwd-m1-v1"
+                                        autoComplete="off"
+                                        {...register("email")}
                                     />
                                     {errors.email && (<div className="ws-input-error mt-[2px]">{errors.email.message}</div>)}
                                 </div>
                                 <div className="pb-[20px]">
-                                    <label 
-                                        className="transition-all delay-75 block mb-[5px] font-noto_sans text-[16px] font-semibold text-zinc-900 dark:text-zinc-300" 
+                                    <label
+                                        className="transition-all delay-75 block mb-[5px] font-noto_sans text-[16px] font-semibold text-zinc-900 dark:text-zinc-300"
                                         htmlFor="cq-qpwd"
                                     >
                                         Password
                                     </label>
-                                    <input 
-                                        type="password" 
-                                        id="cq-qpwd" 
-                                        className="ws-input-pwd-m1-v1" 
-                                        autoComplete="off" 
-                                        value={password} 
-                                        onChange={handlePwdChange} 
+                                    <input
+                                        type="password"
+                                        id="cq-qpwd"
+                                        className="ws-input-pwd-m1-v1"
+                                        autoComplete="off"
+                                        value={password}
+                                        onChange={handlePwdChange}
                                     />
                                     {pwdError && (<div className="ws-input-error mt-[2px]">{pwdError}</div>)}
                                 </div>
                                 <div className="pb-[20px]">
-                                    <label 
-                                        className="transition-all delay-75 block mb-[5px] font-noto_sans text-[16px] font-semibold text-zinc-900 dark:text-zinc-300" 
+                                    <label
+                                        className="transition-all delay-75 block mb-[5px] font-noto_sans text-[16px] font-semibold text-zinc-900 dark:text-zinc-300"
                                         htmlFor="cq-qcnfpwd"
                                     >
                                         Confirm Password
                                     </label>
-                                    <input 
-                                        type="password" 
-                                        id="cq-qcnfpwd" 
-                                        className="ws-input-pwd-m1-v1" 
-                                        autoComplete="off" 
-                                        value={confirmPassword} 
-                                        onChange={handleConfPwdChange} 
+                                    <input
+                                        type="password"
+                                        id="cq-qcnfpwd"
+                                        className="ws-input-pwd-m1-v1"
+                                        autoComplete="off"
+                                        value={confirmPassword}
+                                        onChange={handleConfPwdChange}
                                     />
                                     {confPwdError && (<div className="ws-input-error mt-[2px]">{confPwdError}</div>)}
                                 </div>
                                 <div className="pb-[20px]">
-                                    <label 
-                                        className="transition-all delay-75 block mb-[5px] font-noto_sans text-[16px] font-semibold text-zinc-900 dark:text-zinc-300" 
+                                    <label
+                                        className="transition-all delay-75 block mb-[5px] font-noto_sans text-[16px] font-semibold text-zinc-900 dark:text-zinc-300"
                                         htmlFor="cq-qrole"
                                     >
                                         Role <span className="text-red-500">*</span>
                                     </label>
                                     <select
-                                        id="cq-qrole" 
-                                        className="ws-input-pwd-m1-v1" 
-                                        {...register("role")} 
+                                        id="cq-qrole"
+                                        className="ws-input-pwd-m1-v1"
+                                        {...register("role")}
                                     >
                                         <option value="">- Select -</option>
                                         <option value="User">User</option>
@@ -428,17 +431,17 @@ function Page() {
                                     {errors.role && (<div className="ws-input-error mt-[2px]">{errors.role.message}</div>)}
                                 </div>
                                 <div className="pb-[20px]">
-                                    <label 
-                                        className="transition-all delay-75 block mb-[5px] font-noto_sans text-[16px] font-semibold text-zinc-900 dark:text-zinc-300" 
+                                    <label
+                                        className="transition-all delay-75 block mb-[5px] font-noto_sans text-[16px] font-semibold text-zinc-900 dark:text-zinc-300"
                                         htmlFor="cq-gender"
                                     >
                                         Gender
                                     </label>
-                                    <select 
-                                        name="user_gender" 
-                                        id="cq-gender" 
-                                        className="ws-input-pwd-m1-v1" 
-                                        value={gender} 
+                                    <select
+                                        name="user_gender"
+                                        id="cq-gender"
+                                        className="ws-input-pwd-m1-v1"
+                                        value={gender}
                                         onChange={(e) => setGender(e.target.value)}
                                     >
                                         <option value="">-- Select --</option>
@@ -448,19 +451,19 @@ function Page() {
                                     </select>
                                 </div>
                                 <div className="pb-[20px]">
-                                    <label 
-                                        className="transition-all delay-75 block mb-[5px] font-noto_sans text-[16px] font-semibold text-zinc-900 dark:text-zinc-300" 
+                                    <label
+                                        className="transition-all delay-75 block mb-[5px] font-noto_sans text-[16px] font-semibold text-zinc-900 dark:text-zinc-300"
                                         htmlFor="cq-qphn"
                                     >
                                         Phone
                                     </label>
-                                    <input 
-                                        type="tel" 
-                                        id="cq-qphn" 
-                                        className="ws-input-pwd-m1-v1" 
-                                        autoComplete="off" 
-                                        value={phone} 
-                                        onChange={handleChangePhone} 
+                                    <input
+                                        type="tel"
+                                        id="cq-qphn"
+                                        className="ws-input-pwd-m1-v1"
+                                        autoComplete="off"
+                                        value={phone}
+                                        onChange={handleChangePhone}
                                     />
                                     {
                                         phoneError && (<div className="ws-input-error mt-[2px]">{phoneError}</div>)
@@ -471,7 +474,7 @@ function Page() {
                         <div className="w-full xl-s2:min-w-[400px] xl-s2:max-w-[400px] xl-1:min-w-[450px] xl-1:max-w-[450px]">
                             <div className="transition-all sticky top-[0px] delay-75 border-[2px] border-solid p-[15px] md:p-[25px] border-zinc-300 bg-white dark:bg-zinc-800 dark:border-zinc-600">
                                 <div className="pb-[20px] text-center">
-                                    <label 
+                                    <label
                                         className="transition-all delay-75 block mb-[5px] font-noto_sans text-[16px] font-semibold text-zinc-900 dark:text-zinc-300"
                                     >
                                         Profile Photo
@@ -487,11 +490,11 @@ function Page() {
                                         </div>
                                     </div>
                                     <div className="pt-[5px] text-center">
-                                        <button 
-                                            type="button" 
-                                            title="Remove" 
-                                            className="transition-all delay-75 inline-block font-noto_sans text-red-500 text-[14px]" 
-                                            onClick={removeButtonClick} 
+                                        <button
+                                            type="button"
+                                            title="Remove"
+                                            className="transition-all delay-75 inline-block font-noto_sans text-red-500 text-[14px]"
+                                            onClick={removeButtonClick}
                                         >
                                             <div className="flex gap-x-[5px] items-center">
                                                 <FaRegTrashCan size={18} />
@@ -502,17 +505,35 @@ function Page() {
                                     {errorFileInput && (<div className="ws-input-error mt-[5px]">{errorFileInput}</div>)}
                                 </div>
                                 <div className="pb-[20px]">
-                                    <label 
+                                    <label
+                                        className="transition-all delay-75 block mb-[5px] font-noto_sans text-[16px] font-semibold text-red-600 dark:text-zinc-300"
+                                        htmlFor="cq-block"
+                                    >
+                                        Block User
+                                    </label>
+                                    <select
+                                        name="user_block_status"
+                                        id="cq-block"
+                                        className="ws-input-pwd-m1-v1"
+                                        value={blockUser}
+                                        onChange={(e) => setBlockUser(e.target.value)}
+                                    >
+                                        <option value="false">No</option>
+                                        <option value="true">Yes</option>
+                                    </select>
+                                </div>
+                                <div className="pb-[20px]">
+                                    <label
                                         className="transition-all delay-75 block mb-[5px] font-noto_sans text-[16px] font-semibold text-zinc-900 dark:text-zinc-300"
                                     >
                                         Reset Participation Data
                                     </label>
                                     <div>
                                         <div className="pb-[5px]">
-                                            <button 
-                                                type="button" 
-                                                title="Reset Data" 
-                                                className="transition-all delay-75 inline-block py-[8px] md:py-[10px] px-[15px] md:px-[20px] font-noto_sans text-[14px] md:text-[16px] bg-red-600 hover:bg-red-700 text-zinc-100" 
+                                            <button
+                                                type="button"
+                                                title="Reset Data"
+                                                className="transition-all delay-75 inline-block py-[8px] md:py-[10px] px-[15px] md:px-[20px] font-noto_sans text-[14px] md:text-[16px] bg-red-600 hover:bg-red-700 text-zinc-100"
                                                 onClick={resetData}
                                             >
                                                 <div className="flex gap-x-[5px] items-center">
@@ -525,14 +546,14 @@ function Page() {
                                 </div>
                                 <div className="text-right">
                                     {
-                                        isLoading ? 
-                                        (<div className="spinner size-1"></div>) 
-                                        : 
-                                        (
-                                            <button type="submit" title="Update User" className="transition-all delay-75 inline-block concard px-[20px] md:px-[25px] py-[10px] md:py-[12px] text-center text-white font-noto_sans font-semibold text-[16px] md:text-[18px] hover:shadow-lg">
-                                                Update User
-                                            </button>
-                                        )
+                                        isLoading ?
+                                            (<div className="spinner size-1"></div>)
+                                            :
+                                            (
+                                                <button type="submit" title="Update User" className="transition-all delay-75 inline-block concard px-[20px] md:px-[25px] py-[10px] md:py-[12px] text-center text-white font-noto_sans font-semibold text-[16px] md:text-[18px] hover:shadow-lg">
+                                                    Update User
+                                                </button>
+                                            )
                                     }
                                 </div>
                             </div>

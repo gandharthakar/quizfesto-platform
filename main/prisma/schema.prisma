@@ -24,6 +24,7 @@ model QF_User {
   user_photo          String?
   user_gender         String?
   role                Role?                   @default(User)
+  isBlockedByAdmin    String?
   user_participations QF_User_Participation[]
   Aggrigate_Scores    QF_Aggrigate_Scores[]
   QF_Winners          QF_Winners[]

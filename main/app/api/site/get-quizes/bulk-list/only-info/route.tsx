@@ -20,7 +20,7 @@ interface QF_Quiz_Pub {
     quiz_about_text: string,
     quiz_terms: string[],
     quiz_categories: QF_Cats_Pub[],
-    quiz_cover_photo?: string, 
+    quiz_cover_photo?: string,
 }
 
 interface Respo {
@@ -50,31 +50,34 @@ export async function GET() {
     }
 
     /* eslint-disable no-unused-vars */
-    let sts:number = 400;
+    let sts: number = 400;
 
     try {
 
         const data = await prisma.qF_Quiz.findMany({
             where: {
                 quiz_status: "published"
+            },
+            orderBy: {
+                createdAt: 'desc'
             }
         });
 
         //eslint-disable-next-line
         let arr: QF_Quiz_Pub[] = [];
         /* eslint-disable no-unused-vars */
-        for(let i = 0; i < data.length; i++) {
+        for (let i = 0; i < data.length; i++) {
             const obj = {
                 quiz_id: data[i].quiz_id,
                 quiz_title: data[i].quiz_title,
                 quiz_summary: data[i].quiz_summary,
-                quiz_about_text: data[i].quiz_about_text??"",
+                quiz_about_text: data[i].quiz_about_text ?? "",
                 quiz_display_time: data[i].quiz_display_time,
                 quiz_terms: data[i].quiz_terms,
                 quiz_total_marks: data[i].quiz_total_marks,
-                quiz_total_question: data[i].quiz_total_question, 
+                quiz_total_question: data[i].quiz_total_question,
                 quiz_categories: await getCats(data[i].quiz_categories),
-                quiz_cover_photo: data[i].quiz_cover_photo??"", 
+                quiz_cover_photo: data[i].quiz_cover_photo ?? "",
             }
             arr.push(obj);
         }
@@ -84,8 +87,8 @@ export async function GET() {
             message: "Quizes Found!",
             quizes: arr
         }
-        
-        return NextResponse.json(resp, {status: sts});
+
+        return NextResponse.json(resp, { status: sts });
     } catch (error: any) {
         sts = 500;
         resp = {
@@ -93,6 +96,6 @@ export async function GET() {
             message: error.message,
             quizes: []
         }
-        return NextResponse.json(resp, {status: sts});
+        return NextResponse.json(resp, { status: sts });
     }
 }

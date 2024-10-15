@@ -45,8 +45,8 @@ function Page() {
         setSrchInp(e.target.value);
         if (srchInp.length === 1) {
             setCurrentPage(1);
-            setQestionListData(GFG(dump_list_of_questions, currentPage, dataPerPage));
-            setTotalPages(Math.ceil(dump_list_of_questions.length / dataPerPage));
+            setQestionListData(GFG(questionData, currentPage, dataPerPage));
+            setTotalPages(Math.ceil(questionData.length / dataPerPage));
         }
     }
 
@@ -54,8 +54,8 @@ function Page() {
         setSrchInp(e.target.value);
         if (e.key === "Backspace") {
             setCurrentPage(1);
-            setQestionListData(GFG(dump_list_of_questions, currentPage, dataPerPage));
-            setTotalPages(Math.ceil(dump_list_of_questions.length / dataPerPage));
+            setQestionListData(GFG(questionData, currentPage, dataPerPage));
+            setTotalPages(Math.ceil(questionData.length / dataPerPage));
         }
     }
 
@@ -72,8 +72,8 @@ function Page() {
 
             if (qestionListData.length > 0) {
 
-                const res = dump_list_of_questions.filter((item) => {
-                    const srch_res = item.question_title.toLowerCase().includes(srchInp.toLowerCase());
+                const res = questionData.filter((item) => {
+                    const srch_res = item.question_title.toLowerCase().includes(srchInp.toLowerCase()) || item.question_marks.toString().toLowerCase().includes(srchInp.toLowerCase());
                     return srch_res;
                 });
 
@@ -83,13 +83,13 @@ function Page() {
                     setQestionListData(GFG(res, currentPage, dataPerPage));
                     if (srchInp == "") {
                         setCurrentPage(1);
-                        setTotalPages(Math.ceil(dump_list_of_questions.length / dataPerPage));
+                        setTotalPages(Math.ceil(questionData.length / dataPerPage));
                         setQestionListData([]);
                     }
                 } else {
                     if (srchInp == "") {
                         setCurrentPage(1);
-                        setTotalPages(Math.ceil(dump_list_of_questions.length / dataPerPage));
+                        setTotalPages(Math.ceil(questionData.length / dataPerPage));
                         setQestionListData([]);
                     }
                     setCurrentPage(1);
@@ -109,7 +109,7 @@ function Page() {
 
     const handlePageChange = (newPage: number) => {
         setCurrentPage(newPage);
-        setQestionListData(GFG(dump_list_of_questions, newPage, dataPerPage));
+        setQestionListData(GFG(questionData, newPage, dataPerPage));
         setSelectAll(false);
         setSelectedItems([]);
     };

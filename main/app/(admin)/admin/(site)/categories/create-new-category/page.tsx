@@ -2,20 +2,20 @@
 
 import { useState } from "react";
 import Swal from "sweetalert2";
+import AdminBreadcrumbs from "@/app/components/admin/adminBreadcrumbs";
 
 /* Encode string to slug */
-function convertToSlug( str:string ) {
-    
+function convertToSlug(str: string) {
+
     //replace all special characters | symbols with a space
     //eslint-disable-next-line
-    str = str.replace(/[`~!@#$%^&*()_\-+=\[\]{};:'"\\|\/,.<>?\s]/g, ' ')
-             .toLowerCase();
-      
+    str = str.replace(/[`~!@#$%^&*()_\-+=\[\]{};:'"\\|\/,.<>?\s]/g, ' ').toLowerCase();
+
     // trim spaces at start and end of string
-    str = str.replace(/^\s+|\s+$/gm,'');
-      
+    str = str.replace(/^\s+|\s+$/gm, '');
+
     // replace space with dash/hyphen
-    str = str.replace(/\s+/g, '-');   
+    str = str.replace(/\s+/g, '-');
     return str;
 }
 
@@ -26,17 +26,17 @@ function Page() {
     const [catError, setCatError] = useState<string>("");
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    const handleInputChange = (e:any) => {
+    const handleInputChange = (e: any) => {
         const value = e.target.value;
-        if(catTitle == "") {
+        if (catTitle == "") {
             setCatError("Please enter category title.");
-            if(catTitle.length < 2) {
+            if (catTitle.length < 2) {
                 setCatError("Category title must be contains at least 2 characters.");
             } else {
-                setCatError("");   
+                setCatError("");
             }
         } else {
-            setCatError("");   
+            setCatError("");
         }
         setCatTitle(value);
         setCatSlug(convertToSlug(value));
@@ -44,9 +44,9 @@ function Page() {
 
     const handleFormSubmit = async (e: any) => {
         e.preventDefault();
-        if(catTitle == "") {
+        if (catTitle == "") {
             setCatError("Please enter category title.");
-            if(catTitle.length < 2) {
+            if (catTitle.length < 2) {
                 setCatError("Category title must be contains at least 2 characters.");
             } else {
                 setCatError("");
@@ -64,7 +64,7 @@ function Page() {
                 body: JSON.stringify(prepData)
             });
             const body = await resp.json();
-            if(body.success) {
+            if (body.success) {
                 setIsLoading(false);
                 Swal.fire({
                     title: "Success!",
@@ -86,59 +86,81 @@ function Page() {
         }
     }
 
+    const breadcrumbsMenu = [
+        {
+            menu_item_id: 1,
+            menu_title: "Categories",
+            menu_slug: "/admin/categories",
+            clickable: true
+        },
+        {
+            menu_item_id: 2,
+            menu_title: "Create New Category",
+            menu_slug: "",
+            clickable: false
+        }
+    ];
+
     return (
         <>
             <div className="py-[25px]">
+                <div className="pb-[25px]">
+                    <AdminBreadcrumbs
+                        home_slug="/admin"
+                        home_title="Admin Dashboard Home"
+                        menuItems={breadcrumbsMenu}
+                    />
+                </div>
                 <form onSubmit={handleFormSubmit}>
                     <div className="flex gap-[20px] items-start flex-col xl-s2:flex-row-reverse">
                         <div className="w-full xl-s2:flex-1 xl-s2:w-auto">
                             <div className="transition-all delay-75 border-[2px] border-solid p-[15px] md:p-[25px] border-zinc-300 bg-white dark:bg-zinc-800 dark:border-zinc-600">
                                 <div className="pb-[20px]">
-                                    <label 
-                                        htmlFor="cq-catttl" 
+                                    <label
+                                        htmlFor="cq-catttl"
                                         className="transition-all delay-75 block mb-[5px] font-noto_sans text-[16px] font-semibold text-zinc-900 dark:text-zinc-300"
                                     >
                                         Category Title <span className="text-red-500">*</span>
                                     </label>
-                                    <input 
-                                        type="text" 
-                                        id="cq-catttl" 
-                                        className="ws-input-pwd-m1-v1" 
-                                        autoComplete="off" 
-                                        value={catTitle} 
-                                        onChange={handleInputChange} 
+                                    <input
+                                        type="text"
+                                        id="cq-catttl"
+                                        className="ws-input-pwd-m1-v1"
+                                        autoComplete="off"
+                                        value={catTitle}
+                                        onChange={handleInputChange}
                                     />
                                     {
                                         catError && (<div className="ws-input-error mt-[2px]">{catError}</div>)
                                     }
                                 </div>
                                 <div className="pb-[20px]">
-                                    <label 
-                                        htmlFor="cq-catslug" 
+                                    <label
+                                        htmlFor="cq-catslug"
                                         className="transition-all delay-75 block mb-[5px] font-noto_sans text-[16px] font-semibold text-zinc-900 dark:text-zinc-300"
                                     >
                                         Category Slug
                                     </label>
-                                    <input 
-                                        type="text" 
-                                        id="cq-catslug" 
-                                        className="ws-input-pwd-m1-v1" 
-                                        autoComplete="off" 
+                                    <input
+                                        type="text"
+                                        id="cq-catslug"
+                                        className="ws-input-pwd-m1-v1"
+                                        autoComplete="off"
                                         readOnly={true}
                                         value={catSlug}
                                     />
                                 </div>
-                                
+
                                 <div className="text-right">
                                     {
-                                        isLoading ? 
-                                        (<div className="spinner size-1"></div>) 
-                                        : 
-                                        (
-                                            <button type="submit" title="Add Category" className="transition-all delay-75 inline-block concard px-[20px] md:px-[25px] py-[10px] md:py-[12px] text-center text-white font-noto_sans font-semibold text-[16px] md:text-[18px] hover:shadow-lg">
-                                                Add Category
-                                            </button>
-                                        )
+                                        isLoading ?
+                                            (<div className="spinner size-1"></div>)
+                                            :
+                                            (
+                                                <button type="submit" title="Add Category" className="transition-all delay-75 inline-block concard px-[20px] md:px-[25px] py-[10px] md:py-[12px] text-center text-white font-noto_sans font-semibold text-[16px] md:text-[18px] hover:shadow-lg">
+                                                    Add Category
+                                                </button>
+                                            )
                                     }
                                 </div>
                             </div>

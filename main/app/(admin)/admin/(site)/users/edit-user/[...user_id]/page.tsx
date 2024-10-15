@@ -9,6 +9,7 @@ import Image from "next/image";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { useParams } from "next/navigation";
+import AdminBreadcrumbs from "@/app/components/admin/adminBreadcrumbs";
 
 function validatePhone(phoneNumber: string) {
     const phoneNumberPattern = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
@@ -268,12 +269,12 @@ function Page() {
         });
         const body = await resp.json();
         if (body.success) {
-            Swal.fire({
-                title: "Success!",
-                text: body.message,
-                icon: "success",
-                timer: 3000
-            });
+            // Swal.fire({
+            //     title: "Success!",
+            //     text: body.message,
+            //     icon: "success",
+            //     timer: 3000
+            // });
             setValue("full_name", body.user.user_full_name);
             setValue("email", body.user.user_email);
             setValue("role", body.user.role);
@@ -339,9 +340,31 @@ function Page() {
         //eslint-disable-next-line
     }, []);
 
+    const breadcrumbsMenu = [
+        {
+            menu_item_id: 1,
+            menu_title: "Users",
+            menu_slug: "/admin/users",
+            clickable: true
+        },
+        {
+            menu_item_id: 2,
+            menu_title: "Edit User",
+            menu_slug: "",
+            clickable: false
+        }
+    ];
+
     return (
         <>
             <div className="py-[25px]">
+                <div className="pb-[25px]">
+                    <AdminBreadcrumbs
+                        home_slug="/admin"
+                        home_title="Admin Dashboard Home"
+                        menuItems={breadcrumbsMenu}
+                    />
+                </div>
                 <form onSubmit={handleSubmit(handleFormSubmit)}>
                     <div className="flex gap-[20px] items-start flex-col xl-s2:flex-row-reverse">
                         <div className="w-full xl-s2:flex-1 xl-s2:w-auto">

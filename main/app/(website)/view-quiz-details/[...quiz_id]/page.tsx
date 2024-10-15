@@ -53,7 +53,7 @@ export default function Page() {
     const [quizDescription, setQuizDescription] = useState<string>('');
     const [quizTerms, setQuizTerms] = useState<string[]>([]);
     const [relatedQuizes, setRelatedQuizes] = useState<QuizCardPropsTypes[]>([]);
-    const [alreadyPlayedByUser, setAlreadyPlayedByUser] = useState<boolean>(false);
+    const [alreadyPlayedByUser, setAlreadyPlayedByUser] = useState<boolean>(true);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isLoading0, setIsLoading0] = useState<boolean>(true);
     const [isAdminBlockedYou, setIsAdminBlockedYou] = useState<boolean>(false);
@@ -183,6 +183,9 @@ export default function Page() {
         if (AuthUserCh) {
             checkQuiz();
             checkIfBlock();
+        } else {
+            setIsLoading0(false);
+            setAlreadyPlayedByUser(false);
         }
         //eslint-disable-next-line
     }, [AuthUserCh]);

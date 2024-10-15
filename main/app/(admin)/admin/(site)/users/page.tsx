@@ -16,7 +16,8 @@ import { GrPowerReset } from "react-icons/gr";
 interface QF_User {
     user_id: string,
     user_name: string,
-    user_role: string
+    user_role: string,
+    user_block_status: string
 }
 
 function GFG(array: any, currPage: number, pageSize: number) {
@@ -62,6 +63,16 @@ function Page() {
         }
     }
 
+    const ust = (trm: string) => {
+        let text = '';
+        if (trm == "true") {
+            text = "Blocked"
+        } else {
+            text = "Unblocked"
+        }
+        return text;
+    }
+
     const handleSearchLogic = (e: any) => {
         e.preventDefault();
         if (srchInp == '') {
@@ -74,9 +85,8 @@ function Page() {
         } else {
 
             if (userList.length > 0) {
-
                 const res = userData.filter((item) => {
-                    const srch_res = item.user_name.toLowerCase().includes(srchInp.toLowerCase()) || item.user_role.toLowerCase().includes(srchInp.toLowerCase());
+                    const srch_res = item.user_name.toLowerCase().includes(srchInp.toLowerCase()) || item.user_role.toLowerCase().includes(srchInp.toLowerCase()) || ust(item.user_block_status).toLowerCase().includes(srchInp.toLowerCase());
                     return srch_res;
                 });
 

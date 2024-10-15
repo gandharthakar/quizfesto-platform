@@ -43,21 +43,21 @@ function Page() {
     const [quizData, setQuizData] = useState<QuizCardPropsTypes[]>([]);
     const [totalPages, setTotalPages] = useState<number>(Math.ceil(quizData.length / dataPerPage));
     const [quizList, setQuizList] = useState<QuizCardPropsTypes[]>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [catName, setCatName] = useState<string>('Category');
 
-    const handleSearchInputChange = (e:any) => {
+    const handleSearchInputChange = (e: any) => {
         setSrchInp(e.target.value);
-        if(srchInp.length === 1) {
+        if (srchInp.length === 1) {
             setCurrentPage(1);
             setQuizList(GFG(quizData, currentPage, dataPerPage));
             setTotalPages(Math.ceil(quizData.length / dataPerPage));
         }
     }
 
-    const handleSearchInputKeyDown = (e:any) => {
+    const handleSearchInputKeyDown = (e: any) => {
         setSrchInp(e.target.value);
-        if(e.key === "Backspace") {
+        if (e.key === "Backspace") {
             setCurrentPage(1);
             setQuizList(GFG(quizData, currentPage, dataPerPage));
             setTotalPages(Math.ceil(quizData.length / dataPerPage));
@@ -66,7 +66,7 @@ function Page() {
 
     const handleSearchLogic = (e: any) => {
         e.preventDefault();
-        if(srchInp == '') {
+        if (srchInp == '') {
             Swal.fire({
                 title: "Error!",
                 text: "Please enter search term first.",
@@ -75,27 +75,27 @@ function Page() {
             });
         } else {
 
-            if(quizList.length > 0) {
+            if (quizList.length > 0) {
 
                 const res = quizData.filter((item) => {
-                    const srch_res = 
-                        item.quiz_title.toLowerCase().includes(srchInp.toLowerCase()) || 
-                        item.quiz_summary.toLowerCase().includes(srchInp.toLowerCase()) || 
+                    const srch_res =
+                        item.quiz_title.toLowerCase().includes(srchInp.toLowerCase()) ||
+                        item.quiz_summary.toLowerCase().includes(srchInp.toLowerCase()) ||
                         item.quiz_categories?.some(item => item.category_slug.includes(srchInp.toLowerCase()))
                     return srch_res;
                 });
 
-                if(res.length > 0) {
+                if (res.length > 0) {
                     setCurrentPage(1);
                     setTotalPages(Math.ceil(res.length / dataPerPage));
                     setQuizList(GFG(res, currentPage, dataPerPage));
-                    if(srchInp == "") {
+                    if (srchInp == "") {
                         setCurrentPage(1);
                         setTotalPages(Math.ceil(quizData.length / dataPerPage));
                         setQuizList([]);
                     }
                 } else {
-                    if(srchInp == "") {
+                    if (srchInp == "") {
                         setCurrentPage(1);
                         setTotalPages(Math.ceil(quizData.length / dataPerPage));
                         setQuizList([]);
@@ -129,7 +129,7 @@ function Page() {
             next: { revalidate: 60 }
         });
         const body = await resp.json();
-        if(body.success) {
+        if (body.success) {
             setIsLoading(false);
             setQuizList(GFG(body.quizes, currentPage, dataPerPage));
             setQuizData(body.quizes);
@@ -159,21 +159,21 @@ function Page() {
                     <div className="pt-[20px] md:max-w-[350px] mx-auto">
                         <form onSubmit={handleSearchLogic}>
                             <div className="relative ">
-                                <input 
-                                    type="text" 
-                                    name="Search" 
-                                    id="search" 
-                                    placeholder="Search ..." 
-                                    autoComplete="off" 
-                                    className="transition-all delay-75 block w-full bg-white border-[2px] border-solid border-zinc-400 pl-[15px] pr-[42px] md:pr-[50px] py-[8px] md:py-[10px] font-noto_sans text-[16px] md:text-[18px] font-semibold text-zinc-800 rounded-full focus:outline-0 placeholder-zinc-400 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-200" 
-                                    value={srchInp} 
-                                    onChange={handleSearchInputChange} 
-                                    onKeyDown={handleSearchInputKeyDown} 
+                                <input
+                                    type="text"
+                                    name="Search"
+                                    id="search"
+                                    placeholder="Search ..."
+                                    autoComplete="off"
+                                    className="transition-all delay-75 block w-full bg-white border-[2px] border-solid border-zinc-400 pl-[15px] pr-[42px] md:pr-[50px] py-[8px] md:py-[10px] font-noto_sans text-[16px] md:text-[18px] font-semibold text-zinc-800 rounded-full focus:outline-0 placeholder-zinc-400 dark:bg-zinc-800 dark:border-zinc-600 dark:text-zinc-200"
+                                    value={srchInp}
+                                    onChange={handleSearchInputChange}
+                                    onKeyDown={handleSearchInputKeyDown}
                                 />
                                 <div className="absolute right-[16px] md:right-[18px] top-[12px] md:top-[13px] z-[2]">
-                                    <button 
-                                        type="submit" 
-                                        title="Search" 
+                                    <button
+                                        type="submit"
+                                        title="Search"
                                         className="transition-all delay-75 text-zinc-800 dark:text-zinc-200"
                                     >
                                         <RiSearch2Line size={25} className="w-[20px] h-[20px] md:w-[25px] md:h-[25px]" />
@@ -189,51 +189,51 @@ function Page() {
                 <div className="site-container">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[20px]">
                         {
-                            quizList.length > 0 ? 
-                            (
-                                <>
-                                    {
-                                        quizList.map((item) => (
-                                            <QuizCard 
-                                                key={item.quiz_id} 
-                                                quiz_id={item.quiz_id} 
-                                                quiz_title={item.quiz_title} 
-                                                quiz_cover_photo={item.quiz_cover_photo} 
-                                                quiz_categories={item.quiz_categories} 
-                                                quiz_summary={item.quiz_summary} 
-                                                quiz_total_question={item.quiz_total_question} 
-                                                quiz_total_marks={item.quiz_total_marks} 
-                                                quiz_display_time={item.quiz_display_time}
-                                                quiz_terms={item.quiz_terms}
-                                            />
-                                        ))
-                                    }
-                                </>
-                            ) 
-                            : 
-                            (
-                                <>
-                                    {
-                                        isLoading ? 
-                                        (<div className="spinner size-1"></div>) 
-                                        : 
-                                        (
-                                            <h1 className="transition-all delay-75 text-[16px] md:text-[18px] font-semibold text-zinc-800 dark:text-zinc-300">
-                                                No Quizes Found.
-                                            </h1>
-                                        )
-                                    }
-                                </>
-                            )
+                            quizList.length > 0 ?
+                                (
+                                    <>
+                                        {
+                                            quizList.map((item) => (
+                                                <QuizCard
+                                                    key={item.quiz_id}
+                                                    quiz_id={item.quiz_id}
+                                                    quiz_title={item.quiz_title}
+                                                    quiz_cover_photo={item.quiz_cover_photo}
+                                                    quiz_categories={item.quiz_categories}
+                                                    quiz_summary={item.quiz_summary}
+                                                    quiz_total_question={item.quiz_total_question}
+                                                    quiz_total_marks={item.quiz_total_marks}
+                                                    quiz_display_time={item.quiz_display_time}
+                                                    quiz_terms={item.quiz_terms}
+                                                />
+                                            ))
+                                        }
+                                    </>
+                                )
+                                :
+                                (
+                                    <>
+                                        {
+                                            isLoading ?
+                                                (<div className="spinner size-1"></div>)
+                                                :
+                                                (
+                                                    <h1 className="transition-all delay-75 text-[16px] md:text-[18px] font-semibold text-zinc-800 dark:text-zinc-300">
+                                                        No Quizes Found.
+                                                    </h1>
+                                                )
+                                        }
+                                    </>
+                                )
                         }
                     </div>
 
-                    <SitePagination 
-                        totalPages={totalPages} 
-                        dataPerPage={dataPerPage} 
-                        currentPage={currentPage} 
-                        parentClassList="pt-[50px]" 
-                        onPageChange={handlePageChange} 
+                    <SitePagination
+                        totalPages={totalPages}
+                        dataPerPage={dataPerPage}
+                        currentPage={currentPage}
+                        parentClassList="pt-[50px]"
+                        onPageChange={handlePageChange}
                     />
                 </div>
             </section>
